@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CupPrognoze - Прогнозы на спорт</title>
+
+  <!-- Подключаем стили -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ===== ШАПКА САЙТА ===== -->
+  <header class="header">
+    <div class="container">
+      <!-- Логотип (кликабельный) -->
+      <a href="#" class="logo" id="logoLink">
+        <span class="logo-icon">⚽</span>
+        <span class="logo-text">Cup<span class="logo-highlight">Prognoze</span></span>
+      </a>
+
+      <!-- Навигация -->
+      <nav class="nav" id="mainNav">
+        <ul class="nav-list">
+          <li><a href="#" class="nav-link active" data-tab="sources">Наши источники</a></li>
+          <li><a href="#" class="nav-link" data-tab="forecasts">Прогнозы</a></li>
+          <li><a href="#" class="nav-link" data-tab="rating">Рейтинг</a></li>
+          <li><a href="#" class="nav-link" data-tab="cappers">Капперы</a></li>
+          <li><a href="#" class="nav-link" data-tab="articles">Статьи</a></li>
+          <li><a href="#" class="nav-link" data-tab="shares">Складчины</a></li>
+          <li><a href="#" class="nav-link" data-tab="reviews">Отзывы</a></li>
+        </ul>
+      </nav>
+
+      <!-- Мобильное меню -->
+      <div class="burger" id="burgerBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
+  <main class="main">
+    <div class="container">
+
+      <!-- Фильтры по видам спорта (только для вкладки "Наши источники") -->
+      <section class="filters-section" id="filtersSection">
+        <div class="filter-tabs" id="filterTabs">
+          <button class="filter-btn active" data-filter="all">Все</button>
+          <button class="filter-btn" data-filter="football">⚽ Футбол</button>
+          <button class="filter-btn" data-filter="tennis">🎾 Теннис</button>
+          <button class="filter-btn" data-filter="cybersport">🖥️ Киберспорт</button>
+          <button class="filter-btn" data-filter="tabletennis">🏓 Наст. теннис</button>
+          <button class="filter-btn" data-filter="basketball">🏀 Баскетбол</button>
+          <button class="filter-btn" data-filter="hockey">🏒 Хоккей</button>
+          <button class="filter-btn" data-filter="volleyball">🏐 Волейбол</button>
+        </div>
+      </section>
+
+      <!-- ===== ВКЛАДКА: НАШИ ИСТОЧНИКИ ===== -->
+      <section class="tab-content" id="sourcesContent">
+        <section class="cards-section">
+          <h2 class="section-title">📡 Наши источники прогнозов</h2>
+          <div class="cards-grid" id="cardsGrid"></div>
+        </section>
+      </section>
+
+      <!-- ===== ВКЛАДКА: ПРОГНОЗЫ (API) ===== -->
+      <section class="tab-content" id="forecastsContent" style="display: none;">
+        <section class="forecasts-section">
+          <h2 class="section-title">📊 Актуальные прогнозы</h2>
+          <div id="forecastsContainer">
+            <div class="loading-spinner">
+              <div class="spinner"></div>
+              <p>Загрузка прогнозов...</p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- ===== ВКЛАДКА: РЕЙТИНГ ===== -->
+      <section class="tab-content" id="ratingContent" style="display: none;">
+        <section class="bookmakers-section">
+          <h2 class="section-title">🏆 Рейтинг букмекеров</h2>
+          <div class="bookmakers-grid" id="bookmakersGrid"></div>
+        </section>
+      </section>
+
+      <!-- ===== ВКЛАДКА: КАППЕРЫ ===== -->
+      <section class="tab-content" id="cappersContent" style="display: none;">
+        <section class="cappers-section">
+          <h2 class="section-title">🎯 Топ капперы</h2>
+          <div class="cappers-grid" id="cappersGrid"></div>
+        </section>
+      </section>
+
+      <!-- ===== ВКЛАДКА: СТАТЬИ ===== -->
+      <section class="tab-content" id="articlesContent" style="display: none;">
+        <section class="articles-section">
+          <h2 class="section-title">📰 Полезные статьи</h2>
+          <div class="articles-grid" id="articlesGrid"></div>
+        </section>
+      </section>
+
+      <!-- ===== ВКЛАДКА: СКЛАДЧИНЫ ===== -->
+      <section class="tab-content" id="sharesContent" style="display: none;">
+        <section class="shares-section">
+          <h2 class="section-title">🤝 Складчины</h2>
+          <div class="shares-grid" id="sharesGrid"></div>
+        </section>
+      </section>
+
+      <!-- ===== ВКЛАДКА: ОТЗЫВЫ ===== -->
+      <section class="tab-content" id="reviewsContent" style="display: none;">
+        <section class="reviews-section">
+          <h2 class="section-title">💬 Отзывы</h2>
+          <div class="reviews-grid" id="reviewsGrid"></div>
+        </section>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ===== ПОДВАЛ ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2026 CupPrognoze. Все права защищены. 18+</p>
+        <p class="footer-disclaimer">Сайт носит информационный характер и не является букмекерской конторой.</p>
+        <div class="footer-links">
+          <a href="#">Пользовательское соглашение</a>
+          <a href="#">Политика конфиденциальности</a>
+          <a href="#">Контакты</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Подключаем скрипты -->
+  <script src="script.js"></script>
+</body>
+
+</html>
