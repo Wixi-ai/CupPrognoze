@@ -6,13 +6,13 @@
  */
 
 // ============================================================
-//  1. ТЕЛЕГРАМ-КАНАЛЫ
+//  1. ТЕЛЕГРАМ-КАНАЛЫ (ВСЕ ВЕДУТ В ОДИН КАНАЛ)
 // ============================================================
 const channels = [
   {
     id: 1,
     name: 'CupBet Pro',
-    link: 'https://t.me/cupbetpro',
+    link: 'https://t.me/cup_prognoze_all',
     description: 'Ежедневные прогнозы на топ-матчи. Высокая проходимость, статистика за 3 месяца — 78%.',
     sport: 'football',
     rating: 4.8,
@@ -22,7 +22,7 @@ const channels = [
   {
     id: 2,
     name: 'Tennis Ace Insider',
-    link: 'https://t.me/tennisaceinsider',
+    link: 'https://t.me/cup_prognoze_all',
     description: 'Аналитика и прогнозы на ATP и WTA. Точные ставки на тоталы и форы.',
     sport: 'tennis',
     rating: 4.6,
@@ -32,7 +32,7 @@ const channels = [
   {
     id: 3,
     name: 'Cyber Strike',
-    link: 'https://t.me/cyberstrike',
+    link: 'https://t.me/cup_prognoze_all',
     description: 'Прогнозы на CS2, Dota 2, Valorant. Экспресс-ставки и лайв-советы.',
     sport: 'cybersport',
     rating: 4.9,
@@ -42,7 +42,7 @@ const channels = [
   {
     id: 4,
     name: 'Table Tennis Daily',
-    link: 'https://t.me/tabletennisdaily',
+    link: 'https://t.me/cup_prognoze_all',
     description: 'Настольный теннис: прогнозы на все турниры ITTF. Высокая точность.',
     sport: 'tabletennis',
     rating: 4.3,
@@ -52,7 +52,7 @@ const channels = [
   {
     id: 5,
     name: 'Basketball Master',
-    link: 'https://t.me/basketballmaster',
+    link: 'https://t.me/cup_prognoze_all',
     description: 'НБА, Евролига, Китай. Ставки на тоталы и форы с детальной статистикой.',
     sport: 'basketball',
     rating: 4.7,
@@ -62,7 +62,7 @@ const channels = [
   {
     id: 6,
     name: 'Hockey Pucks',
-    link: 'https://t.me/hockeypucks',
+    link: 'https://t.me/cup_prognoze_all',
     description: 'КХЛ, НХЛ. Прогнозы на матчи дня, анализ вратарей и спецбригад.',
     sport: 'hockey',
     rating: 4.4,
@@ -72,7 +72,7 @@ const channels = [
   {
     id: 7,
     name: 'Volley Pro',
-    link: 'https://t.me/volleypro',
+    link: 'https://t.me/cup_prognoze_all',
     description: 'Волейбольные прогнозы: мужские и женские лиги, плей-офф.',
     sport: 'volleyball',
     rating: 4.2,
@@ -82,7 +82,7 @@ const channels = [
   {
     id: 8,
     name: 'Footy Analytics',
-    link: 'https://t.me/footyanalytics',
+    link: 'https://t.me/cup_prognoze_all',
     description: 'Углубленный анализ футбольных матчей. Эксклюзивные инсайды.',
     sport: 'football',
     rating: 4.9,
@@ -92,7 +92,7 @@ const channels = [
   {
     id: 9,
     name: 'Tennis Betting Edge',
-    link: 'https://t.me/tennisbettingedge',
+    link: 'https://t.me/cup_prognoze_all',
     description: 'Профессиональные прогнозы на теннис. Стратегии на геймы и сеты.',
     sport: 'tennis',
     rating: 4.5,
@@ -102,7 +102,7 @@ const channels = [
   {
     id: 10,
     name: 'Cyber Odds',
-    link: 'https://t.me/cyberodds',
+    link: 'https://t.me/cup_prognoze_all',
     description: 'Киберспорт: аналитика коэффициентов, прогнозы на андердогов.',
     sport: 'cybersport',
     rating: 4.1,
@@ -112,7 +112,7 @@ const channels = [
 ];
 
 // ============================================================
-//  2. БУКМЕКЕРЫ (РЕЙТИНГ)
+//  2. БУКМЕКЕРЫ (РЕЙТИНГ) — ССЫЛКИ НЕ МЕНЯЕМ
 // ============================================================
 const bookmakers = [
   {
@@ -388,7 +388,7 @@ const reviews = [
     rating: 5,
     text: 'Отличный сайт! Пользуюсь уже полгода, прогнозы реально заходят. Капперы действительно профессионалы. Рекомендую!',
     source: 'Канал CupBet Pro',
-    sourceLink: 'https://t.me/cupbetpro'
+    sourceLink: 'https://t.me/cup_prognoze_all'
   },
   {
     id: 2,
@@ -397,7 +397,7 @@ const reviews = [
     rating: 5,
     text: 'Теннисные прогнозы просто бомба! Благодаря сайту подняла банк в 2 раза. Спасибо капперам за качественный анализ.',
     source: 'Канал Tennis Ace Insider',
-    sourceLink: 'https://t.me/tennisaceinsider'
+    sourceLink: 'https://t.me/cup_prognoze_all'
   },
   {
     id: 3,
@@ -406,7 +406,7 @@ const reviews = [
     rating: 4,
     text: 'Хороший сайт, удобный интерфейс. Прогнозы на футбол очень точные. Единственное - хотелось бы больше бесплатных прогнозов.',
     source: 'Канал Footy Analytics',
-    sourceLink: 'https://t.me/footyanalytics'
+    sourceLink: 'https://t.me/cup_prognoze_all'
   },
   {
     id: 4,
@@ -415,7 +415,7 @@ const reviews = [
     rating: 5,
     text: 'Киберспорт - это любовь! Благодаря прогнозам с этого сайта начал стабильно зарабатывать. Рекомендую всем.',
     source: 'Канал Cyber Strike',
-    sourceLink: 'https://t.me/cyberstrike'
+    sourceLink: 'https://t.me/cup_prognoze_all'
   },
   {
     id: 5,
@@ -424,7 +424,7 @@ const reviews = [
     rating: 5,
     text: 'Очень довольна сайтом. Прогнозы на баскетбол заходят в 80% случаев. Удобно, что есть рейтинг капперов.',
     source: 'Канал Basketball Master',
-    sourceLink: 'https://t.me/basketballmaster'
+    sourceLink: 'https://t.me/cup_prognoze_all'
   },
   {
     id: 6,
@@ -433,7 +433,7 @@ const reviews = [
     rating: 4,
     text: 'Хороший ресурс для беттинга. Особенно нравится раздел со статьями - много полезной информации для новичков.',
     source: 'CupPrognoze',
-    sourceLink: '#'
+    sourceLink: 'https://t.me/cup_prognoze_all'
   }
 ];
 
@@ -716,6 +716,7 @@ function loadForecasts() {
     </div>
   `;
 
+  // ===== АДРЕС ТВОЕГО API (ЗАМЕНИ ПОТОМ) =====
   const API_URL = 'http://localhost:3000/api';
 
   fetch(`${API_URL}/forecasts?limit=50`)
