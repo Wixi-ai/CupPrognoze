@@ -332,7 +332,7 @@ const shares = [
     price: '2 500 ₽',
     participants: 8,
     maxParticipants: 15,
-    status: 'active', // active, filled, closed
+    status: 'active',
     deadline: 'до 20 июня'
   },
   {
@@ -441,7 +441,6 @@ const reviews = [
 //  ФУНКЦИИ РЕНДЕРИНГА
 // ============================================================
 
-// ---------- РЕНДЕРИНГ КАНАЛОВ ----------
 function renderChannels(filter = 'all') {
   const grid = document.getElementById('cardsGrid');
   if (!grid) return;
@@ -453,10 +452,10 @@ function renderChannels(filter = 'all') {
 
   if (filtered.length === 0) {
     grid.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #6a5a5a; font-size: 18px;">
-                😕 Нет каналов по данному фильтру
-            </div>
-        `;
+      <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #6a5a5a; font-size: 18px;">
+        😕 Нет каналов по данному фильтру
+      </div>
+    `;
     return;
   }
 
@@ -466,33 +465,32 @@ function renderChannels(filter = 'all') {
     const sportIcon = getSportIcon(ch.sport);
 
     html += `
-            <div class="card" data-id="${ch.id}">
-                <div class="card-header">
-                    <div class="card-title">
-                        <a href="${ch.link}" target="_blank">${sportIcon} ${ch.name}</a>
-                    </div>
-                    <span class="card-badge">${ch.price}</span>
-                </div>
-                <div class="card-description">${ch.description}</div>
-                <div class="card-stats">
-                    <span>👥 ${ch.subscribers}</span>
-                    <span>🏷️ ${ch.sport.charAt(0).toUpperCase() + ch.sport.slice(1)}</span>
-                </div>
-                <div class="card-footer">
-                    <div class="card-rating">
-                        <span class="stars">${stars}</span>
-                        <span class="value">${ch.rating.toFixed(1)}</span>
-                    </div>
-                    <a href="${ch.link}" target="_blank" class="card-link">Перейти ➜</a>
-                </div>
-            </div>
-        `;
+      <div class="card" data-id="${ch.id}">
+        <div class="card-header">
+          <div class="card-title">
+            <a href="${ch.link}" target="_blank">${sportIcon} ${ch.name}</a>
+          </div>
+          <span class="card-badge">${ch.price}</span>
+        </div>
+        <div class="card-description">${ch.description}</div>
+        <div class="card-stats">
+          <span>👥 ${ch.subscribers}</span>
+          <span>🏷️ ${ch.sport.charAt(0).toUpperCase() + ch.sport.slice(1)}</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-rating">
+            <span class="stars">${stars}</span>
+            <span class="value">${ch.rating.toFixed(1)}</span>
+          </div>
+          <a href="${ch.link}" target="_blank" class="card-link">Перейти ➜</a>
+        </div>
+      </div>
+    `;
   });
 
   grid.innerHTML = html;
 }
 
-// ---------- РЕНДЕРИНГ БУКМЕКЕРОВ ----------
 function renderBookmakers() {
   const grid = document.getElementById('bookmakersGrid');
   if (!grid) return;
@@ -508,36 +506,35 @@ function renderBookmakers() {
       `<span class="logo-placeholder">${bm.name.charAt(0).toUpperCase()}</span>`;
 
     html += `
-            <div class="bookmaker-card" data-id="${bm.id}">
-                <div class="bookmaker-logo ${bm.logoColor || 'color-1'}">
-                    ${logoHtml}
-                </div>
-                <div class="card-header">
-                    <div class="card-title">
-                        <span class="highlight">🏆</span> ${bm.name}
-                    </div>
-                    <span class="bookmaker-rating-badge">${bm.rating.toFixed(1)} ★</span>
-                </div>
-                <div class="card-description">${bm.description}</div>
-                <div class="bookmaker-features">${featuresHtml}</div>
-                <div style="display:flex; gap:12px; flex-wrap:wrap; margin:6px 0 8px; font-size:13px; color:#8a7a7a;">
-                    <span class="bookmaker-bonus">🎁 ${bm.bonus}</span>
-                </div>
-                <div class="card-footer">
-                    <div class="card-rating">
-                        <span class="stars">${stars}</span>
-                        <span class="value">${bm.rating.toFixed(1)}</span>
-                    </div>
-                    <a href="${bm.link}" target="_blank" class="bookmaker-link">Перейти ➜</a>
-                </div>
-            </div>
-        `;
+      <div class="bookmaker-card" data-id="${bm.id}">
+        <div class="bookmaker-logo ${bm.logoColor || 'color-1'}">
+          ${logoHtml}
+        </div>
+        <div class="card-header">
+          <div class="card-title">
+            <span class="highlight">🏆</span> ${bm.name}
+          </div>
+          <span class="bookmaker-rating-badge">${bm.rating.toFixed(1)} ★</span>
+        </div>
+        <div class="card-description">${bm.description}</div>
+        <div class="bookmaker-features">${featuresHtml}</div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin:6px 0 8px; font-size:13px; color:#8a7a7a;">
+          <span class="bookmaker-bonus">🎁 ${bm.bonus}</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-rating">
+            <span class="stars">${stars}</span>
+            <span class="value">${bm.rating.toFixed(1)}</span>
+          </div>
+          <a href="${bm.link}" target="_blank" class="bookmaker-link">Перейти ➜</a>
+        </div>
+      </div>
+    `;
   });
 
   grid.innerHTML = html;
 }
 
-// ---------- РЕНДЕРИНГ КАППЕРОВ ----------
 function renderCappers() {
   const grid = document.getElementById('cappersGrid');
   if (!grid) return;
@@ -549,38 +546,37 @@ function renderCappers() {
     const stars = getStarsHtml(capper.rating);
 
     html += `
-            <div class="capper-card">
-                <div class="capper-avatar">${capper.avatar}</div>
-                <div class="capper-name">${capper.name}</div>
-                <div class="capper-sport">🎯 ${capper.sport}</div>
-                <div class="capper-stats">
-                    <div class="capper-stat">
-                        <div class="number">${capper.wins}</div>
-                        <div class="label">✅ Побед</div>
-                    </div>
-                    <div class="capper-stat">
-                        <div class="number">${capper.loses}</div>
-                        <div class="label">❌ Поражений</div>
-                    </div>
-                    <div class="capper-stat">
-                        <div class="number">${capper.roi}</div>
-                        <div class="label">📈 ROI</div>
-                    </div>
-                </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin: 8px 0;">
-                    <span style="color:#8a7a7a; font-size:13px;">Рейтинг</span>
-                    <span style="color:#ffb800; font-size:18px; font-weight:700;">${stars}</span>
-                </div>
-                <div style="font-size:13px; color:#8a7a7a; margin-bottom:8px; text-align:center;">${capper.description}</div>
-                <a href="${capper.link}" target="_blank" class="capper-link">📲 Подписаться</a>
-            </div>
-        `;
+      <div class="capper-card">
+        <div class="capper-avatar">${capper.avatar}</div>
+        <div class="capper-name">${capper.name}</div>
+        <div class="capper-sport">🎯 ${capper.sport}</div>
+        <div class="capper-stats">
+          <div class="capper-stat">
+            <div class="number">${capper.wins}</div>
+            <div class="label">✅ Побед</div>
+          </div>
+          <div class="capper-stat">
+            <div class="number">${capper.loses}</div>
+            <div class="label">❌ Поражений</div>
+          </div>
+          <div class="capper-stat">
+            <div class="number">${capper.roi}</div>
+            <div class="label">📈 ROI</div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin: 8px 0;">
+          <span style="color:#8a7a7a; font-size:13px;">Рейтинг</span>
+          <span style="color:#ffb800; font-size:18px; font-weight:700;">${stars}</span>
+        </div>
+        <div style="font-size:13px; color:#8a7a7a; margin-bottom:8px; text-align:center;">${capper.description}</div>
+        <a href="${capper.link}" target="_blank" class="capper-link">📲 Подписаться</a>
+      </div>
+    `;
   });
 
   grid.innerHTML = html;
 }
 
-// ---------- РЕНДЕРИНГ СТАТЕЙ ----------
 function renderArticles() {
   const grid = document.getElementById('articlesGrid');
   if (!grid) return;
@@ -588,23 +584,22 @@ function renderArticles() {
   let html = '';
   articles.forEach(article => {
     html += `
-            <div class="article-card">
-                <div class="article-image">${article.icon}</div>
-                <div class="article-title">${article.title}</div>
-                <div class="article-excerpt">${article.excerpt}</div>
-                <div class="article-meta">
-                    <span>📅 ${article.date}</span>
-                    <span>⏱️ ${article.readTime}</span>
-                    <a href="${article.link}" class="article-read-link">Читать →</a>
-                </div>
-            </div>
-        `;
+      <div class="article-card">
+        <div class="article-image">${article.icon}</div>
+        <div class="article-title">${article.title}</div>
+        <div class="article-excerpt">${article.excerpt}</div>
+        <div class="article-meta">
+          <span>📅 ${article.date}</span>
+          <span>⏱️ ${article.readTime}</span>
+          <a href="${article.link}" class="article-read-link">Читать →</a>
+        </div>
+      </div>
+    `;
   });
 
   grid.innerHTML = html;
 }
 
-// ---------- РЕНДЕРИНГ СКЛАДЧИН ----------
 function renderShares() {
   const grid = document.getElementById('sharesGrid');
   if (!grid) return;
@@ -624,33 +619,32 @@ function renderShares() {
     };
 
     html += `
-            <div class="share-card">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                    <div class="share-title">${share.title}</div>
-                    <span class="share-status ${statusClassMap[share.status]}">${statusMap[share.status]}</span>
-                </div>
-                <div class="share-description">${share.description}</div>
-                <div class="share-details">
-                    <span class="share-detail">💰 <strong>${share.price}</strong></span>
-                    <span class="share-detail">👥 <strong>${share.participants}/${share.maxParticipants}</strong></span>
-                    <span class="share-detail">⏰ <strong>${share.deadline}</strong></span>
-                </div>
-                <div class="share-progress">
-                    <div class="share-progress-bar" style="width: ${progress}%;"></div>
-                </div>
-                <button class="share-join-btn" ${share.status === 'closed' ? 'disabled' : ''}>
-                    ${share.status === 'closed' ? '❌ Недоступно' :
+      <div class="share-card">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div class="share-title">${share.title}</div>
+          <span class="share-status ${statusClassMap[share.status]}">${statusMap[share.status]}</span>
+        </div>
+        <div class="share-description">${share.description}</div>
+        <div class="share-details">
+          <span class="share-detail">💰 <strong>${share.price}</strong></span>
+          <span class="share-detail">👥 <strong>${share.participants}/${share.maxParticipants}</strong></span>
+          <span class="share-detail">⏰ <strong>${share.deadline}</strong></span>
+        </div>
+        <div class="share-progress">
+          <div class="share-progress-bar" style="width: ${progress}%;"></div>
+        </div>
+        <button class="share-join-btn" ${share.status === 'closed' ? 'disabled' : ''}>
+          ${share.status === 'closed' ? '❌ Недоступно' :
         share.status === 'filled' ? '🔒 Мест нет' :
           '🚀 Участвовать'}
-                </button>
-            </div>
-        `;
+        </button>
+      </div>
+    `;
   });
 
   grid.innerHTML = html;
 }
 
-// ---------- РЕНДЕРИНГ ОТЗЫВОВ ----------
 function renderReviews() {
   const grid = document.getElementById('reviewsGrid');
   if (!grid) return;
@@ -660,21 +654,21 @@ function renderReviews() {
     const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
 
     html += `
-            <div class="review-card">
-                <div class="review-header">
-                    <div class="review-avatar">${review.name.charAt(0)}</div>
-                    <div class="review-user">
-                        <div class="review-name">${review.name}</div>
-                        <div class="review-date">${review.date}</div>
-                    </div>
-                    <div class="review-rating">${stars}</div>
-                </div>
-                <div class="review-text">"${review.text}"</div>
-                <div class="review-source">
-                    📌 Источник: <a href="${review.sourceLink}" target="_blank">${review.source}</a>
-                </div>
-            </div>
-        `;
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">${review.name.charAt(0)}</div>
+          <div class="review-user">
+            <div class="review-name">${review.name}</div>
+            <div class="review-date">${review.date}</div>
+          </div>
+          <div class="review-rating">${stars}</div>
+        </div>
+        <div class="review-text">"${review.text}"</div>
+        <div class="review-source">
+          📌 Источник: <a href="${review.sourceLink}" target="_blank">${review.source}</a>
+        </div>
+      </div>
+    `;
   });
 
   grid.innerHTML = html;
@@ -708,7 +702,7 @@ function getSportIcon(sport) {
 }
 
 // ============================================================
-//  ПРОГНОЗЫ (ЗАГЛУШКА ДЛЯ API)
+//  ПРОГНОЗЫ (РЕАЛЬНЫЙ API)
 // ============================================================
 
 function loadForecasts() {
@@ -716,56 +710,123 @@ function loadForecasts() {
   if (!container) return;
 
   container.innerHTML = `
-        <div class="loading-spinner">
-            <div class="spinner"></div>
-            <p>Загрузка прогнозов...</p>
-        </div>
-    `;
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Загрузка прогнозов...</p>
+    </div>
+  `;
 
-  // Имитация загрузки с API
-  setTimeout(() => {
-    // 🔥 РАСКОММЕНТИРУЙ ДЛЯ ПОДКЛЮЧЕНИЯ РЕАЛЬНОГО API:
-    /*
-    fetch('https://ваш-апи/forecasts')
-        .then(response => response.json())
-        .then(data => {
-            container.innerHTML = renderForecastData(data);
-        })
-        .catch(error => {
-            container.innerHTML = `
-                <div style="text-align:center; padding:40px; color:#ff4444;">
-                    ❌ Ошибка загрузки прогнозов: ${error.message}
-                </div>
-            `;
-        });
-    */
+  const API_URL = 'http://localhost:3000/api';
 
-    // Пока заглушка
-    container.innerHTML = `
-            <div style="text-align: center; padding: 40px 20px; color: #6a5a5a; background: #161010; border-radius: 16px; border: 1px solid #2a1818;">
-                <div style="font-size: 48px; margin-bottom: 20px;">📊</div>
-                <h3 style="color: #f0e0e0; margin-bottom: 10px;">Прогнозы будут здесь</h3>
-                <p style="font-size: 16px; color: #8a7a7a;">Подключение к API для автоматического обновления прогнозов</p>
-                <div style="margin-top: 20px; padding: 15px; background: #1a1111; border-radius: 8px; text-align: left; font-size: 13px; color: #6a5a5a;">
-                    <code style="display: block; color: #8a7a7a; white-space: pre-wrap;">
-// Пример данных с API
-{
-    "id": 1,
-    "title": "Реал Мадрид - Барселона",
-    "prediction": "Тотал больше 2.5",
-    "odds": 1.85,
-    "date": "2026-06-18 22:00",
-    "channel": "CupBet Pro",
-    "status": "active"
-}
-                    </code>
-                </div>
-                <div style="margin-top: 15px; font-size: 13px; color: #4a3a3a;">
-                    💡 Инструкция по подключению API в файле README.txt
-                </div>
-            </div>
+  fetch(`${API_URL}/forecasts?limit=50`)
+    .then(response => {
+      if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      if (data.success && data.data && data.data.length > 0) {
+        container.innerHTML = renderForecastCards(data.data);
+      } else {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px 20px; color: #6a5a5a; background: #161010; border-radius: 16px; border: 1px solid #2a1818;">
+            <div style="font-size: 48px; margin-bottom: 20px;">📭</div>
+            <h3 style="color: #f0e0e0; margin-bottom: 10px;">Пока нет прогнозов</h3>
+            <p style="font-size: 16px; color: #8a7a7a;">Подпишись на каналы, чтобы видеть прогнозы здесь!</p>
+          </div>
         `;
-  }, 1500);
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка загрузки прогнозов:', error);
+      container.innerHTML = `
+        <div style="text-align: center; padding: 40px 20px; color: #ff4444; background: #161010; border-radius: 16px; border: 1px solid #2a1818;">
+          <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
+          <h3 style="color: #f0e0e0; margin-bottom: 10px;">Ошибка загрузки</h3>
+          <p style="font-size: 14px; color: #8a7a7a;">Не удалось загрузить прогнозы. Проверь, что сервер запущен.</p>
+          <p style="font-size: 12px; color: #6a5a5a; margin-top: 10px;">${error.message}</p>
+        </div>
+      `;
+    });
+}
+
+// ============================================================
+//  ОТРИСОВКА КАРТОЧЕК ПРОГНОЗОВ (ФУТБОЛЬНЫЙ СТИЛЬ)
+// ============================================================
+
+function renderForecastCards(forecasts) {
+  if (!forecasts || forecasts.length === 0) return '';
+
+  let html = '<div class="forecasts-grid">';
+
+  forecasts.forEach(f => {
+    const statusColors = {
+      'Завершен': '#ff4444',
+      'Идет': '#00ff88',
+      'Скоро': '#ffd700',
+      'Перерыв': '#ff6b6b'
+    };
+    const statusEmoji = {
+      'Завершен': '⏹️',
+      'Идет': '🔴',
+      'Скоро': '⏳',
+      'Перерыв': '⏸️'
+    };
+
+    const statusColor = statusColors[f.status] || '#6a5a5a';
+    const statusEmojiIcon = statusEmoji[f.status] || '⚪';
+
+    let scoreDisplay = '—';
+    if (f.homeScore !== null && f.homeScore !== undefined &&
+      f.awayScore !== null && f.awayScore !== undefined) {
+      scoreDisplay = `${f.homeScore}-${f.awayScore}`;
+    }
+
+    const statsDisplay = f.stats || '';
+
+    html += `
+      <div class="forecast-card match-card">
+        <div class="match-header">
+          <div class="match-tournament">${f.tournament || 'Футбол'}</div>
+          <div class="match-time">${f.matchTime || 'Время не указано'}</div>
+        </div>
+
+        <div class="match-source">Источник: ${f.source || f.channel || '—'}</div>
+
+        <div class="match-main">
+          <div class="match-teams">
+            <div class="team home">
+              <span class="team-name">${f.homeTeam || 'Команда 1'}</span>
+            </div>
+            <div class="match-score-wrapper">
+              <div class="match-score" style="color: ${statusColor}">
+                ${scoreDisplay}
+              </div>
+              <div class="match-status" style="color: ${statusColor}">
+                ${statusEmojiIcon} ${f.status || 'Скоро'}
+              </div>
+            </div>
+            <div class="team away">
+              <span class="team-name">${f.awayTeam || 'Команда 2'}</span>
+            </div>
+          </div>
+        </div>
+
+        ${statsDisplay ? `
+        <div class="match-stats">
+          <span>Детальная статистика</span>
+          <span class="stats-numbers">${statsDisplay}</span>
+        </div>
+        ` : ''}
+
+        <div class="match-footer">
+          <a href="${f.link || '#'}" target="_blank" class="match-link">📊 Смотреть прогноз →</a>
+        </div>
+      </div>
+    `;
+  });
+
+  html += '</div>';
+  return html;
 }
 
 // ============================================================
@@ -776,7 +837,6 @@ function initTabs() {
   const navLinks = document.querySelectorAll('.nav-link');
   if (!navLinks.length) return;
 
-  // Все контейнеры вкладок
   const tabs = {
     sources: document.getElementById('sourcesContent'),
     forecasts: document.getElementById('forecastsContent'),
@@ -790,26 +850,21 @@ function initTabs() {
   const filtersSection = document.getElementById('filtersSection');
 
   function showTab(tabName) {
-    // Скрываем все
     Object.values(tabs).forEach(el => {
       if (el) el.style.display = 'none';
     });
 
-    // Показываем нужную
     if (tabs[tabName]) {
       tabs[tabName].style.display = 'block';
     }
 
-    // Фильтры показываем только для "sources"
     if (filtersSection) {
       filtersSection.style.display = tabName === 'sources' ? 'block' : 'none';
     }
 
-    // Загружаем контент для конкретной вкладки
     switch (tabName) {
       case 'sources':
         renderChannels('all');
-        // Сбрасываем фильтры
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         const allBtn = document.querySelector('.filter-btn[data-filter="all"]');
         if (allBtn) allBtn.classList.add('active');
@@ -835,7 +890,6 @@ function initTabs() {
     }
   }
 
-  // Обработчики кликов
   navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
@@ -846,7 +900,6 @@ function initTabs() {
     });
   });
 
-  // По умолчанию показываем "Наши источники"
   showTab('sources');
 }
 

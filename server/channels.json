@@ -1,0 +1,11 @@
+{
+  "channels": [
+    {
+      "id": "cup_prognoze_test",
+      "username": "@cup_prognoze_test",
+      "name": "CupPrognoze Test",
+      "sport": "football",
+      "enabled": true
+    }
+  ]
+}
