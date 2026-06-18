@@ -1873,3 +1873,360 @@ body {
 .page-content .back-btn:hover {
   background: #b31b1b;
 }
+/* ============================================================
+   АНИМАЦИИ И HOVER-ЭФФЕКТЫ
+   ============================================================ */
+
+/* ===== ПЛАВНОЕ ПОЯВЛЕНИЕ КАРТОЧЕК ===== */
+.card,
+.bookmaker-card,
+.capper-card,
+.article-card,
+.share-card,
+.review-card,
+.forecast-card {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Задержки для каждой карточки (эффект волны) */
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.10s; }
+.card:nth-child(3) { animation-delay: 0.15s; }
+.card:nth-child(4) { animation-delay: 0.20s; }
+.card:nth-child(5) { animation-delay: 0.25s; }
+.card:nth-child(6) { animation-delay: 0.30s; }
+.card:nth-child(7) { animation-delay: 0.35s; }
+.card:nth-child(8) { animation-delay: 0.40s; }
+.card:nth-child(9) { animation-delay: 0.45s; }
+.card:nth-child(10) { animation-delay: 0.50s; }
+
+.bookmaker-card:nth-child(1) { animation-delay: 0.05s; }
+.bookmaker-card:nth-child(2) { animation-delay: 0.10s; }
+.bookmaker-card:nth-child(3) { animation-delay: 0.15s; }
+.bookmaker-card:nth-child(4) { animation-delay: 0.20s; }
+.bookmaker-card:nth-child(5) { animation-delay: 0.25s; }
+.bookmaker-card:nth-child(6) { animation-delay: 0.30s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== HOVER-ЭФФЕКТЫ ДЛЯ КАРТОЧЕК ===== */
+.card:hover,
+.bookmaker-card:hover,
+.capper-card:hover,
+.article-card:hover,
+.share-card:hover,
+.review-card:hover,
+.forecast-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 12px 40px rgba(179, 27, 27, 0.25);
+  border-color: #d42a2a;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== ПУЛЬСАЦИЯ ДЛЯ СТАТУСА "ИДЕТ" ===== */
+.match-status:contains("Идет") {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ ЛОГОТИПА ===== */
+.logo {
+  transition: all 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.logo:hover .logo-highlight {
+  text-shadow: 0 0 30px rgba(212, 42, 42, 0.8);
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ КНОПОК ===== */
+.btn,
+.filter-btn,
+.card-link,
+.bookmaker-link,
+.capper-link,
+.share-join-btn,
+.match-link,
+.article-read-link {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover,
+.filter-btn:hover,
+.card-link:hover,
+.bookmaker-link:hover,
+.capper-link:hover,
+.share-join-btn:hover,
+.match-link:hover,
+.article-read-link:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* ===== ЭФФЕКТ РИПЛА ДЛЯ КНОПОК ===== */
+.btn::after,
+.filter-btn::after,
+.card-link::after,
+.bookmaker-link::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::after,
+.filter-btn:hover::after,
+.card-link:hover::after,
+.bookmaker-link:hover::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ ЗВЁЗД РЕЙТИНГА ===== */
+.card-rating .stars {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.card:hover .card-rating .stars {
+  transform: scale(1.1);
+  color: #ffd700;
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ ПРОГРЕСС-БАРА СКЛАДЧИН ===== */
+.share-progress-bar {
+  transition: width 1s ease;
+}
+
+.share-card:hover .share-progress-bar {
+  background: linear-gradient(90deg, #ffd700, #ff6b00);
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ АВАТАРОВ КАППЕРОВ ===== */
+.capper-avatar {
+  transition: all 0.5s ease;
+}
+
+.capper-card:hover .capper-avatar {
+  transform: rotate(10deg) scale(1.1);
+  border-color: #ffd700;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ ЛОГОТИПОВ БУКМЕКЕРОВ ===== */
+.bookmaker-logo {
+  transition: all 0.4s ease;
+}
+
+.bookmaker-card:hover .bookmaker-logo {
+  transform: scale(1.03);
+  border-color: #ffd700;
+  box-shadow: 0 0 30px rgba(212, 160, 32, 0.2);
+}
+
+.bookmaker-logo .logo-placeholder {
+  transition: all 0.3s ease;
+}
+
+.bookmaker-card:hover .bookmaker-logo .logo-placeholder {
+  color: #ffd700;
+  text-shadow: 0 0 30px rgba(212, 160, 32, 0.3);
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ КАРТИНОК СТАТЕЙ ===== */
+.article-img {
+  transition: all 0.5s ease;
+}
+
+.article-card:hover .article-img {
+  transform: scale(1.08);
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ ОТЗЫВОВ ===== */
+.review-card .review-text {
+  transition: all 0.3s ease;
+}
+
+.review-card:hover .review-text {
+  color: #f0e0e0;
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ ФИЛЬТРОВ ===== */
+.filter-btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+.filter-btn.active {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(179, 27, 27, 0.4);
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ НАВИГАЦИИ ===== */
+.nav-link {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: #d42a2a;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 80%;
+}
+
+.nav-link:hover {
+  color: #ff4d4d;
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ ЗАГОЛОВКОВ ===== */
+.section-title {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-title::after {
+  transition: width 0.6s ease;
+}
+
+.section-title:hover::after {
+  width: 150px;
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ КНОПКИ "НАЗАД" ===== */
+.back-btn {
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  transform: translateX(-5px);
+  background: #b31b1b;
+}
+
+/* ===== СВЕТЯЩАЯСЯ ГРАНИЦА ДЛЯ АКТИВНЫХ КАРТОЧЕК ===== */
+.card.active-card,
+.bookmaker-card.active-card {
+  border-color: #ffd700;
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.15);
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.25); }
+  100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.1); }
+}
+
+/* ===== ПЛАВНАЯ ПРОКРУТКА ===== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===== ЭФФЕКТ ПРИ НАВЕДЕНИИ НА СЧЁТ ===== */
+.match-score {
+  transition: all 0.3s ease;
+}
+
+.match-card:hover .match-score {
+  transform: scale(1.05);
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ СТАТУСА МАТЧА ===== */
+.match-status {
+  transition: all 0.3s ease;
+}
+
+.match-card:hover .match-status {
+  transform: scale(1.05);
+}
+
+/* ===== ЭФФЕКТ ЗАТУХАНИЯ ДЛЯ СТАРЫХ ПРОГНОЗОВ ===== */
+.forecast-card[data-old="true"] {
+  opacity: 0.7;
+  filter: grayscale(0.3);
+}
+
+/* ===== АНИМАЦИЯ ПОЯВЛЕНИЯ КНОПОК ===== */
+.btn-primary,
+.bookmaker-link,
+.capper-link,
+.share-join-btn {
+  animation: fadeInButton 0.8s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInButton {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ СТРЕЛОК ===== */
+.card-link .arrow,
+.bookmaker-link .arrow,
+.match-link .arrow {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.card-link:hover .arrow,
+.bookmaker-link:hover .arrow,
+.match-link:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* ===== АНИМАЦИЯ ДЛЯ ИКОНОК В КАРТОЧКАХ ===== */
+.card-title .sport-icon,
+.forecast-sport {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.card:hover .card-title .sport-icon,
+.forecast-card:hover .forecast-sport {
+  transform: rotate(10deg) scale(1.1);
+}
