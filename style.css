@@ -2,25 +2,130 @@
    ГЛОБАЛЬНЫЕ СТИЛИ
    ============================================================ */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #0d0a0a;
-    color: #e0d6d6;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #0a0a0a;
+  color: #e0d6d6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
+/* ===== ФОНОВЫЕ ЭФФЕКТЫ ===== */
+
+/* 1. ОСНОВНОЙ ГРАДИЕНТ ФОНА */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(179, 27, 27, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(212, 42, 42, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(100, 0, 0, 0.1) 0%, transparent 50%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 2. СВЕТЯЩИЕСЯ ТОЧКИ (ПАТТЕРН) */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(2px 2px at 10% 20%, rgba(255, 255, 255, 0.08), transparent),
+    radial-gradient(2px 2px at 30% 60%, rgba(255, 255, 255, 0.06), transparent),
+    radial-gradient(2px 2px at 50% 10%, rgba(255, 255, 255, 0.07), transparent),
+    radial-gradient(2px 2px at 70% 80%, rgba(255, 255, 255, 0.05), transparent),
+    radial-gradient(2px 2px at 90% 40%, rgba(255, 255, 255, 0.06), transparent),
+    radial-gradient(3px 3px at 15% 90%, rgba(212, 42, 42, 0.08), transparent),
+    radial-gradient(3px 3px at 85% 15%, rgba(212, 42, 42, 0.06), transparent);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 3. СВЕТЯЩИЙСЯ ОРЕОЛ В ЦЕНТРЕ */
+.glow-effect {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(ellipse, rgba(179, 27, 27, 0.06) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+}
+
+/* ===== КОНТЕЙНЕР ПОВЕРХ ФОНА ===== */
 .container {
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 0 20px;
-    width: 100%;
+  position: relative;
+  z-index: 1;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+/* ===== ШАПКА С ПРОЗРАЧНОСТЬЮ ===== */
+.header {
+  background: rgba(26, 15, 15, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(122, 31, 31, 0.3);
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== КАРТОЧКИ С ПРОЗРАЧНОСТЬЮ ===== */
+.card,
+.bookmaker-card,
+.capper-card,
+.article-card,
+.share-card,
+.review-card,
+.forecast-card {
+  background: rgba(22, 16, 16, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(42, 24, 24, 0.5);
+}
+
+/* ===== ПОДВАЛ С ПРОЗРАЧНОСТЬЮ ===== */
+.footer {
+  background: rgba(16, 10, 10, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(42, 20, 20, 0.3);
+}
+
+/* ===== ФИЛЬТРЫ С ПРОЗРАЧНОСТЬЮ ===== */
+.filter-tabs {
+  background: rgba(26, 17, 17, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(58, 26, 26, 0.3);
 }
 
 /* ============================================================
@@ -2229,4 +2334,264 @@ html {
 .card:hover .card-title .sport-icon,
 .forecast-card:hover .forecast-sport {
   transform: rotate(10deg) scale(1.1);
+}
+
+/* ============================================================
+   ДИНАМИЧЕСКИЙ ГРАДИЕНТ (ОПЦИОНАЛЬНО)
+   ============================================================ */
+.dynamic-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background: linear-gradient(-45deg, #0a0a0a, #1a0a0a, #0d0a0a, #1a0f0f);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============================================================
+   ДОПОЛНИТЕЛЬНЫЕ ВИЗУАЛЬНЫЕ УЛУЧШЕНИЯ
+   ============================================================ */
+
+/* ===== 1. НЕОНОВЫЕ ГРАДИЕНТЫ ДЛЯ ЗАГОЛОВКОВ ===== */
+.section-title {
+  background: linear-gradient(135deg, #f0e0e0 0%, #d42a2a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  border-bottom: 2px solid rgba(42, 24, 24, 0.3);
+  padding-bottom: 12px;
+}
+
+.section-title::after {
+  background: linear-gradient(90deg, #d42a2a, transparent);
+}
+
+/* ===== 2. НЕОНОВОЕ СВЕЧЕНИЕ КНОПОК ===== */
+.filter-btn.active {
+  box-shadow: 0 0 30px rgba(179, 27, 27, 0.5),
+              inset 0 0 30px rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, #7a1f1f, #b31b1b);
+  border-color: #ff4d4d;
+}
+
+.card-link:hover,
+.bookmaker-link:hover,
+.capper-link:hover,
+.match-link:hover,
+.article-read-link:hover {
+  box-shadow: 0 0 30px rgba(179, 27, 27, 0.4);
+}
+
+/* ===== 3. СВЕТЯЩАЯСЯ ГРАНИЦА КАРТОЧЕК ===== */
+.card,
+.bookmaker-card,
+.capper-card,
+.article-card,
+.share-card,
+.review-card,
+.forecast-card {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.card::before,
+.bookmaker-card::before,
+.capper-card::before,
+.article-card::before,
+.share-card::before,
+.review-card::before,
+.forecast-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #7a1f1f, #d42a2a, #ff4d4d, #7a1f1f);
+  background-size: 300% 300%;
+  border-radius: 18px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.card:hover::before,
+.bookmaker-card:hover::before,
+.capper-card:hover::before,
+.article-card:hover::before,
+.share-card:hover::before,
+.review-card:hover::before,
+.forecast-card:hover::before {
+  opacity: 1;
+  animation: borderGlow 3s ease infinite;
+}
+
+@keyframes borderGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== 4. КАСТОМНЫЙ СКРОЛЛБАР ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d0a0a;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7a1f1f, #d42a2a);
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d42a2a;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d42a2a #0d0a0a;
+}
+
+/* ===== 5. ГРАДИЕНТНЫЕ СТАТУС-БЕЙДЖИ ===== */
+.match-status {
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 12px;
+  display: inline-block;
+}
+
+.match-status.Завершен {
+  background: linear-gradient(135deg, #ff4444, #cc0000);
+  color: #fff;
+}
+
+.match-status.Идет {
+  background: linear-gradient(135deg, #00ff88, #00cc66);
+  color: #000;
+  animation: pulse-status 2s ease-in-out infinite;
+}
+
+@keyframes pulse-status {
+  0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(0, 255, 136, 0.6); }
+}
+
+.match-status.Скоро {
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  color: #000;
+}
+
+/* ===== 6. ДОПОЛНИТЕЛЬНЫЕ HOVER-ЭФФЕКТЫ ===== */
+
+/* Карточки приподнимаются и масштабируются */
+.card:hover,
+.bookmaker-card:hover,
+.capper-card:hover,
+.article-card:hover,
+.share-card:hover,
+.review-card:hover,
+.forecast-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 12px 40px rgba(179, 27, 27, 0.25);
+  border-color: #d42a2a;
+}
+
+/* Звёзды рейтинга увеличиваются */
+.card:hover .card-rating .stars {
+  transform: scale(1.15);
+  color: #ffd700;
+}
+
+/* Иконки спорта вращаются */
+.card-title .sport-icon,
+.forecast-sport {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.card:hover .card-title .sport-icon,
+.forecast-card:hover .forecast-sport {
+  transform: rotate(10deg) scale(1.1);
+}
+
+/* Аватарки капперов */
+.capper-avatar {
+  transition: all 0.5s ease;
+}
+
+.capper-card:hover .capper-avatar {
+  transform: rotate(10deg) scale(1.1);
+  border-color: #ffd700;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+/* Картинки статей увеличиваются */
+.article-img {
+  transition: all 0.5s ease;
+}
+
+.article-card:hover .article-img {
+  transform: scale(1.08);
+}
+
+/* Прогресс-бар складчин */
+.share-card:hover .share-progress-bar {
+  background: linear-gradient(90deg, #ffd700, #ff6b00);
+}
+
+/* ===== 7. НЕЙРОМОРФНЫЙ ЭФФЕКТ ===== */
+.card,
+.bookmaker-card,
+.capper-card,
+.article-card,
+.share-card,
+.review-card,
+.forecast-card {
+  box-shadow:
+    8px 8px 16px rgba(0, 0, 0, 0.6),
+    -4px -4px 12px rgba(60, 30, 30, 0.05);
+}
+
+.card:hover,
+.bookmaker-card:hover,
+.capper-card:hover,
+.article-card:hover,
+.share-card:hover,
+.review-card:hover,
+.forecast-card:hover {
+  box-shadow:
+    4px 4px 8px rgba(0, 0, 0, 0.6),
+    -2px -2px 8px rgba(60, 30, 30, 0.1),
+    0 0 40px rgba(179, 27, 27, 0.08);
+}
+
+/* ===== 8. ПЛАВНАЯ ПРОКРУТКА ===== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===== 9. АНИМАЦИЯ ДЛЯ СЧЁТА ===== */
+.match-score {
+  transition: all 0.3s ease;
+}
+
+.match-card:hover .match-score {
+  transform: scale(1.05);
 }
