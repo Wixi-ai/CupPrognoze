@@ -717,7 +717,7 @@ function loadForecasts() {
   `;
 
   // ===== АДРЕС ТВОЕГО API (ЗАМЕНИ ПОТОМ) =====
-  const API_URL = 'http://localhost:3000/api';
+  const API_URL = 'https://cupprognoze.onrender.com/api';
 
   fetch(`${API_URL}/forecasts?limit=50`)
     .then(response => {
