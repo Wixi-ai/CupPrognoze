@@ -267,14 +267,14 @@ const cappers = [
 ];
 
 // ============================================================
-//  4. СТАТЬИ
+//  4. СТАТЬИ (С ИЗОБРАЖЕНИЯМИ)
 // ============================================================
 const articles = [
   {
     id: 1,
     title: 'Как анализировать футбольные матчи: полное руководство',
     excerpt: 'Узнайте, как профессиональные капперы анализируют матчи, на что обращают внимание и как находить валуйные ставки.',
-    icon: '⚽',
+    image: 'images/articles/football-guide.jpg',
     date: '15 июня 2026',
     readTime: '12 мин',
     link: '#'
@@ -283,7 +283,7 @@ const articles = [
     id: 2,
     title: 'Топ-5 стратегий ставок на теннис в 2026 году',
     excerpt: 'Разбираем самые эффективные стратегии для ставок на теннис. От классических флэтов до современных систем.',
-    icon: '🎾',
+    image: 'images/articles/tennis-strategy.jpg',
     date: '12 июня 2026',
     readTime: '8 мин',
     link: '#'
@@ -292,7 +292,7 @@ const articles = [
     id: 3,
     title: 'Киберспорт: как зарабатывать на CS2 и Dota 2',
     excerpt: 'Полный гайд по ставкам на киберспорт. Анализ команд, мета-игры и психология игроков.',
-    icon: '🖥️',
+    image: 'images/articles/cybersport-guide.jpg',
     date: '10 июня 2026',
     readTime: '15 мин',
     link: '#'
@@ -301,7 +301,7 @@ const articles = [
     id: 4,
     title: 'Психология ставок: как не проигрывать эмоционально',
     excerpt: 'Важнейший аспект успешного беттинга — контроль эмоций. Узнайте, как сохранять холодный рассудок.',
-    icon: '🧠',
+    image: 'images/articles/betting-psychology.jpg',
     date: '8 июня 2026',
     readTime: '10 мин',
     link: '#'
@@ -310,7 +310,7 @@ const articles = [
     id: 5,
     title: 'Самые прибыльные турниры для ставок на хоккей',
     excerpt: 'Какие хоккейные турниры дают лучшую проходимость? Анализ статистики за последние годы.',
-    icon: '🏒',
+    image: 'images/articles/hockey-tournaments.jpg',
     date: '5 июня 2026',
     readTime: '7 мин',
     link: '#'
@@ -319,7 +319,7 @@ const articles = [
     id: 6,
     title: 'БК с лучшими коэффициентами: рейтинг 2026',
     excerpt: 'Сравнительный обзор букмекерских контор по коэффициентам на топ-события. Где выгоднее ставить?',
-    icon: '📊',
+    image: 'images/articles/bookmaker-rating.jpg',
     date: '3 июня 2026',
     readTime: '9 мин',
     link: '#'
@@ -588,15 +588,24 @@ function renderArticles() {
 
   let html = '';
   articles.forEach(article => {
+    // Если есть изображение — показываем его, иначе — иконку
+    const imageHtml = article.image
+      ? `<img src="${article.image}" alt="${article.title}" class="article-img">`
+      : `<div class="article-image">${article.icon || '📰'}</div>`;
+
     html += `
       <div class="article-card">
-        <div class="article-image">${article.icon}</div>
-        <div class="article-title">${article.title}</div>
-        <div class="article-excerpt">${article.excerpt}</div>
-        <div class="article-meta">
-          <span>📅 ${article.date}</span>
-          <span>⏱️ ${article.readTime}</span>
-          <a href="${article.link}" class="article-read-link">Читать →</a>
+        <div class="article-image-wrapper">
+          ${imageHtml}
+        </div>
+        <div class="article-content">
+          <div class="article-title">${article.title}</div>
+          <div class="article-excerpt">${article.excerpt}</div>
+          <div class="article-meta">
+            <span>📅 ${article.date}</span>
+            <span>⏱️ ${article.readTime}</span>
+            <a href="${article.link}" class="article-read-link">Читать →</a>
+          </div>
         </div>
       </div>
     `;
