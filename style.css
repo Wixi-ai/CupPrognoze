@@ -1794,3 +1794,82 @@ body {
 .article-read-link:hover {
   color: #ff4d4d;
 }
+/* ============================================================
+   СТРАНИЦЫ (СОГЛАШЕНИЕ, ПОЛИТИКА)
+   ============================================================ */
+.page-content {
+  display: none;
+  padding: 40px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  background: #161010;
+  border-radius: 16px;
+  border: 1px solid #2a1818;
+  margin-top: 30px;
+  margin-bottom: 40px;
+}
+
+.page-content.active {
+  display: block;
+}
+
+.page-content h1 {
+  font-size: 28px;
+  color: #f0e0e0;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #2a1818;
+  padding-bottom: 10px;
+}
+
+.page-content h2 {
+  font-size: 20px;
+  color: #e0d0d0;
+  margin-top: 25px;
+  margin-bottom: 12px;
+}
+
+.page-content p {
+  font-size: 15px;
+  color: #b0a0a0;
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+.page-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.page-content ul li {
+  font-size: 15px;
+  color: #b0a0a0;
+  line-height: 1.8;
+  padding-left: 20px;
+  position: relative;
+  margin-bottom: 6px;
+}
+
+.page-content ul li::before {
+  content: '•';
+  color: #d42a2a;
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+}
+
+.page-content .back-btn {
+  display: inline-block;
+  margin-top: 25px;
+  padding: 10px 25px;
+  background: #7a1f1f;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.page-content .back-btn:hover {
+  background: #b31b1b;
+}
