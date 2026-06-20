@@ -1113,3 +1113,165 @@ function getPrivacyPage() {
     <button class="back-btn" onclick="closePage()">← Назад</button>
   `;
 }
+// ============================================================
+//  ДЕТАЛЬНАЯ СТРАНИЦА ПРОГНОЗА
+// ============================================================
+
+function openForecast(id) {
+  // Показываем страницу прогноза
+  const page = document.getElementById('forecastPage');
+  if (!page) {
+    // Если страницы нет — создаём
+    createForecastPage();
+  }
+
+  // Скрываем все основные секции
+  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.filters-section').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+
+  // Показываем страницу прогноза
+  const forecastPage = document.getElementById('forecastPage');
+  forecastPage.style.display = 'block';
+
+  // Загружаем данные прогноза
+  loadForecastDetails(id);
+
+  // Прокрутка наверх
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function createForecastPage() {
+  const container = document.querySelector('.main .container');
+
+  const page = document.createElement('div');
+  page.id = 'forecastPage';
+  page.className = 'forecast-detail-page';
+  page.style.display = 'none';
+
+  page.innerHTML = `
+        <div class="forecast-detail-content">
+            <!-- Хлебные крошки -->
+            <div class="breadcrumb">
+                <a href="#" onclick="closeForecast()">← Назад к прогнозам</a>
+                <span> / </span>
+                <span id="breadcrumbMatch">Матч</span>
+            </div>
+
+            <!-- Карточка прогноза -->
+            <div class="forecast-detail-card">
+                <div class="detail-header">
+                    <div class="detail-tournament" id="detailTournament">Чемпионат мира 2026</div>
+                    <div class="detail-time" id="detailTime">00:59</div>
+                </div>
+
+                <div class="detail-teams">
+                    <div class="detail-team home">
+                        <span class="detail-team-name" id="detailHomeTeam">Шотландия</span>
+                        <span class="detail-team-date" id="detailHomeDate">20 Июль, 2026г</span>
+                    </div>
+                    <div class="detail-score-wrapper">
+                        <div class="detail-score" id="detailScore">0-1</div>
+                        <div class="detail-status" id="detailStatus">Завершен</div>
+                    </div>
+                    <div class="detail-team away">
+                        <span class="detail-team-name" id="detailAwayTeam">Марокко</span>
+                        <span class="detail-team-date" id="detailAwayDate">00:00</span>
+                    </div>
+                </div>
+
+                <div class="detail-title" id="detailTitle">
+                    ШОТЛАНДИЯ МАРОККО ПРОГНОЗ И СТАВКА НА МАТЧ 20 ИЮНЯ 2026 ГОДА В 00:59
+                </div>
+
+                <div class="detail-meta">
+                    <span>📅 Опубликовано: <span id="detailPublished">20 июня 2026, 01:12</span></span>
+                    <span>🔄 Обновлено: <span id="detailUpdated">20 июня 2026, 01:12</span></span>
+                </div>
+
+                <div class="detail-actions">
+                    <a href="#" class="detail-btn" id="detailStats">📊 Статистика</a>
+                    <a href="#" class="detail-btn" id="detailOverview">📋 Обзор</a>
+                </div>
+            </div>
+        </div>
+    `;
+
+  container.appendChild(page);
+}
+
+function loadForecastDetails(id) {
+  // Загружаем прогнозы с API
+  fetch(`${API_URL}/forecasts?limit=100`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.success && data.data) {
+        const forecast = data.data.find(f => f.id === id);
+        if (forecast) {
+          renderForecastDetail(forecast);
+        } else {
+          document.getElementById('detailTitle').textContent = 'Прогноз не найден';
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка загрузки прогноза:', error);
+    });
+}
+
+function renderForecastDetail(forecast) {
+  document.getElementById('breadcrumbMatch').textContent = `${forecast.homeTeam || 'Команда 1'} — ${forecast.awayTeam || 'Команда 2'}`;
+  document.getElementById('detailTournament').textContent = forecast.tournament || 'Футбол';
+  document.getElementById('detailTime').textContent = forecast.matchTime || '00:00';
+  document.getElementById('detailHomeTeam').textContent = forecast.homeTeam || 'Команда 1';
+  document.getElementById('detailAwayTeam').textContent = forecast.awayTeam || 'Команда 2';
+  document.getElementById('detailHomeDate').textContent = forecast.homeDate || '—';
+  document.getElementById('detailAwayDate').textContent = forecast.awayDate || '—';
+
+  // Счет
+  let scoreDisplay = '—';
+  if (forecast.homeScore !== null && forecast.homeScore !== undefined &&
+    forecast.awayScore !== null && forecast.awayScore !== undefined) {
+    scoreDisplay = `${forecast.homeScore}-${forecast.awayScore}`;
+  }
+  document.getElementById('detailScore').textContent = scoreDisplay;
+
+  // Статус с цветом
+  const statusEl = document.getElementById('detailStatus');
+  const statusColors = {
+    'Завершен': '#ff4444',
+    'Идет': '#00ff88',
+    'Скоро': '#ffd700',
+    'Перерыв': '#ff6b6b'
+  };
+  statusEl.textContent = forecast.status || 'Скоро';
+  statusEl.style.color = statusColors[forecast.status] || '#6a5a5a';
+
+  // Заголовок
+  const title = `${forecast.homeTeam || ''} ${forecast.awayTeam || ''} прогноз и ставка на матч ${forecast.matchTime || ''}`.trim();
+  document.getElementById('detailTitle').textContent = title || 'Прогноз на матч';
+
+  // Даты
+  const now = new Date().toLocaleString('ru-RU');
+  document.getElementById('detailPublished').textContent = forecast.dateDisplay || now;
+  document.getElementById('detailUpdated').textContent = now;
+
+  // Кнопки
+  document.getElementById('detailStats').href = forecast.link || '#';
+  document.getElementById('detailOverview').href = forecast.link || '#';
+}
+
+function closeForecast() {
+  const page = document.getElementById('forecastPage');
+  if (page) {
+    page.style.display = 'none';
+  }
+
+  // Возвращаемся на вкладку прогнозов
+  const forecastsTab = document.querySelector('.nav-link[data-tab="forecasts"]');
+  if (forecastsTab) {
+    forecastsTab.click();
+  }
+
+  document.title = 'CupPrognoze — Прогнозы на спорт';
+}
