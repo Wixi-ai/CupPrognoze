@@ -228,61 +228,47 @@ function extractTeamStats(text) {
     return stats.length > 0 ? stats : null;
 }
 
-// ========== ПАРСИНГ ДЕТАЛЬНОЙ СТАТИСТИКИ КОМАНД ==========
+// ========== ПРОСТОЙ ПАРСИНГ СТАТИСТИКИ ==========
 function extractTeamStatsDetailed(text) {
     if (!text) return null;
 
     const lines = text.split('\n');
     const teams = {};
-    let inStatsBlock = false;
+    let currentStat = null;
 
+    // Просто собираем все строки, которые выглядят как статистика
     for (const line of lines) {
         const trimmed = line.trim();
 
-        if (trimmed.includes('Атака:') || trimmed.includes('Защита:') || trimmed.includes('Форма:')) {
-            inStatsBlock = true;
-        }
-
-        if (!inStatsBlock) continue;
-
-        let match = trimmed.match(/^([А-Яа-яA-Za-z\s]+)[:.]?\s*(\d+)/);
+        // Ищем статистику команд с двоеточием
+        let match = trimmed.match(/^([А-Яа-яA-Za-z\s]+)[:.]?\s*(\d+)\s*[-–—]\s*(\d+)/);
         if (match) {
             const teamName = match[1].trim();
-            const value = parseInt(match[2]);
-
-            if (!teams[teamName]) teams[teamName] = {};
-
-            if (trimmed.includes('Атака')) {
-                teams[teamName].attack = value;
-            } else if (trimmed.includes('Защита')) {
-                teams[teamName].defense = value;
-            } else if (trimmed.includes('Форма')) {
-                teams[teamName].form = value;
-            }
+            if (!teams[teamName]) teams[teamName] = { record: `${match[2]}-${match[3]}` };
             continue;
         }
 
-        let goalsMatch = trimmed.match(/Голы[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)\s*\(([\d.]+)\)/);
-        if (goalsMatch) {
-            const teamName = goalsMatch[1].trim();
+        // Ищем: Атака: Ливерпуль 56
+        match = trimmed.match(/(Атака|Защита|Форма|Голы|Пропущено)[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)/i);
+        if (match) {
+            const statType = match[1];
+            const teamName = match[2].trim();
+            const value = match[3];
+
             if (!teams[teamName]) teams[teamName] = {};
-            teams[teamName].goalsScored = parseInt(goalsMatch[2]);
-            teams[teamName].goalsAvg = parseFloat(goalsMatch[3]);
+            teams[teamName][statType] = value;
             continue;
         }
 
-        let concededMatch = trimmed.match(/Пропущено[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)\s*\(([\d.]+)\)/);
-        if (concededMatch) {
-            const teamName = concededMatch[1].trim();
-            if (!teams[teamName]) teams[teamName] = {};
-            teams[teamName].goalsConceded = parseInt(concededMatch[2]);
-            teams[teamName].concededAvg = parseFloat(concededMatch[3]);
-            continue;
-        }
+        // Ищем: Голы: Ливерпуль 8 (1.6)
+        match = trimmed.match(/(Голы|Пропущено)[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)\s*\(([\d.]+)\)/i);
+        if (match) {
+            const statType = match[1];
+            const teamName = match[2].trim();
+            const value = `${match[3]} (${match[4]})`;
 
-        let statsMatch = trimmed.match(/Статистика матча[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)\s*[-–—]\s*(\d+)/i);
-        if (statsMatch) {
-            // Игнорируем, это уже обработано в extractStats
+            if (!teams[teamName]) teams[teamName] = {};
+            teams[teamName][statType] = value;
             continue;
         }
     }
@@ -295,51 +281,29 @@ function extractTeamStatsDetailed(text) {
     return result.length > 0 ? result : null;
 }
 
-// ========== ПАРСИНГ СТАТИСТИКИ ЛИГИ ==========
+
+// ========== ПРОСТОЙ ПАРСИНГ ЛИГИ ==========
 function extractLeagueStats(text) {
     if (!text) return null;
 
     const lines = text.split('\n');
-    let stats = { played: 0, wins: 0, draws: 0, losses: 0 };
-    let inLeagueSection = false;
+    let stats = {};
 
     for (const line of lines) {
         const trimmed = line.trim();
 
-        if (trimmed.includes('ЛИГА') || trimmed.includes('Сезон')) {
-            inLeagueSection = true;
-            continue;
-        }
-
-        if (!inLeagueSection) continue;
-
-        let match = trimmed.match(/Сыграно[:.]?\s*(\d+)/i);
+        let match = trimmed.match(/(Сыграно|В|Н|П)[:.]?\s*(\d+)/i);
         if (match) {
-            stats.played = parseInt(match[1]);
-            continue;
-        }
-
-        match = trimmed.match(/В[:.]?\s*(\d+)/i);
-        if (match) {
-            stats.wins = parseInt(match[1]);
-            continue;
-        }
-
-        match = trimmed.match(/Н[:.]?\s*(\d+)/i);
-        if (match) {
-            stats.draws = parseInt(match[1]);
-            continue;
-        }
-
-        match = trimmed.match(/П[:.]?\s*(\d+)/i);
-        if (match) {
-            stats.losses = parseInt(match[1]);
+            const key = match[1].toLowerCase();
+            const value = parseInt(match[2]);
+            stats[key] = value;
             continue;
         }
     }
 
-    return (stats.played > 0 || stats.wins > 0 || stats.draws > 0 || stats.losses > 0) ? stats : null;
+    return Object.keys(stats).length > 0 ? stats : null;
 }
+
 
 // ========== ВЕБХУК ==========
 app.post(`/webhook/${TOKEN}`, (req, res) => {
