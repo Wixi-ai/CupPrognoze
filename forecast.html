@@ -182,19 +182,20 @@
     }
 
     function renderStats(forecast) {
+      // Заполняем названия команд
       document.getElementById('statsHomeName').textContent = forecast.homeTeam || 'Команда 1';
       document.getElementById('statsAwayName').textContent = forecast.awayTeam || 'Команда 2';
 
       // Если нет данных — показываем "—"
       if (!forecast.teamStatsDetailed || forecast.teamStatsDetailed.length === 0) {
-        document.getElementById('statsHomeAttack').textContent = '—';
-        document.getElementById('statsHomeDefense').textContent = '—';
-        document.getElementById('statsHomeForm').textContent = '—';
+        // Показываем пустые полоски
+        ['HomeAttack', 'HomeDefense', 'HomeForm', 'AwayAttack', 'AwayDefense', 'AwayForm'].forEach(id => {
+          const el = document.getElementById('stats' + id);
+          if (el) el.innerHTML = createProgressBar(0);
+        });
+
         document.getElementById('statsHomeGoals').textContent = '—';
         document.getElementById('statsHomeConceded').textContent = '—';
-        document.getElementById('statsAwayAttack').textContent = '—';
-        document.getElementById('statsAwayDefense').textContent = '—';
-        document.getElementById('statsAwayForm').textContent = '—';
         document.getElementById('statsAwayGoals').textContent = '—';
         document.getElementById('statsAwayConceded').textContent = '—';
 
@@ -210,18 +211,34 @@
       const homeStats = home.stats || {};
       const awayStats = away.stats || {};
 
-      document.getElementById('statsHomeAttack').textContent = homeStats.Атака || homeStats.attack || '—';
-      document.getElementById('statsHomeDefense').textContent = homeStats.Защита || homeStats.defense || '—';
-      document.getElementById('statsHomeForm').textContent = homeStats.Форма || homeStats.form || '—';
+      // Функция для создания полоски
+      function createProgressBar(value, max = 100) {
+        const percent = Math.min(Math.max((value / max) * 100, 0), 100);
+        const color = percent > 70 ? '#00ff88' : percent > 40 ? '#ffd700' : '#ff4444';
+        return `
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: ${percent}%; background: ${color};"></div>
+                <span class="progress-bar-value">${value}</span>
+            </div>
+        `;
+      }
+
+      // Полоски для атаки/защиты/формы
+      document.getElementById('statsHomeAttack').innerHTML = createProgressBar(homeStats.Атака || homeStats.attack || 0);
+      document.getElementById('statsHomeDefense').innerHTML = createProgressBar(homeStats.Защита || homeStats.defense || 0);
+      document.getElementById('statsHomeForm').innerHTML = createProgressBar(homeStats.Форма || homeStats.form || 0);
+
+      document.getElementById('statsAwayAttack').innerHTML = createProgressBar(awayStats.Атака || awayStats.attack || 0);
+      document.getElementById('statsAwayDefense').innerHTML = createProgressBar(awayStats.Защита || awayStats.defense || 0);
+      document.getElementById('statsAwayForm').innerHTML = createProgressBar(awayStats.Форма || awayStats.form || 0);
+
+      // Голы и пропущенные
       document.getElementById('statsHomeGoals').textContent = homeStats.Голы || homeStats.goalsScored || '—';
       document.getElementById('statsHomeConceded').textContent = homeStats.Пропущено || homeStats.goalsConceded || '—';
-
-      document.getElementById('statsAwayAttack').textContent = awayStats.Атака || awayStats.attack || '—';
-      document.getElementById('statsAwayDefense').textContent = awayStats.Защита || awayStats.defense || '—';
-      document.getElementById('statsAwayForm').textContent = awayStats.Форма || awayStats.form || '—';
       document.getElementById('statsAwayGoals').textContent = awayStats.Голы || awayStats.goalsScored || '—';
       document.getElementById('statsAwayConceded').textContent = awayStats.Пропущено || awayStats.goalsConceded || '—';
 
+      // Лига — сезон
       if (forecast.leagueStats) {
         document.getElementById('statsPlayed').textContent = forecast.leagueStats.сыграно || forecast.leagueStats.played || '—';
         document.getElementById('statsWins').textContent = forecast.leagueStats.в || forecast.leagueStats.wins || '—';
