@@ -2849,3 +2849,40 @@ html {
     justify-content: center;
   }
 }
+
+/* ============================================================
+   СТАТЬИ — ТОЛЬКО ОБВОДКА ПРИ НАВЕДЕНИИ
+   ============================================================ */
+
+.article-card {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(42, 24, 24, 0.4);
+}
+
+.article-card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: #d42a2a;
+  background: rgba(22, 16, 16, 0.85);
+}
+
+/* Отключаем увеличение картинок */
+.article-card:hover .article-img {
+  transform: none !important;
+}
+
+/* Отключаем подъём карточки */
+.article-card:hover {
+  transform: translateY(0) !important;
+}
+
+/* Убираем свечение границы */
+.article-card::before {
+  display: none !important;
+}
+
+/* Оставляем только обводку */
+.article-card:hover {
+  border: 1px solid #d42a2a;
+  box-shadow: 0 0 15px rgba(212, 42, 42, 0.1);
+}
