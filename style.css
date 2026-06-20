@@ -1816,7 +1816,7 @@ html {
     }
 }
 /* ============================================================
-   ПОЛОСКИ СТАТИСТИКИ (цифра сверху)
+   ПОЛОСКИ СТАТИСТИКИ
    ============================================================ */
 .stat-bar-wrapper {
     display: flex;
@@ -1873,5 +1873,73 @@ html {
     }
     .stat-bar-number {
         font-size: 11px;
+    }
+}
+/* ============================================================
+   СТАТИСТИКА (цифры под словами)
+   ============================================================ */
+.stats-team-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.stats-team-goals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(42, 24, 24, 0.3);
+}
+
+.stats-league-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.stats-item {
+    text-align: center;
+    background: rgba(26, 17, 17, 0.4);
+    padding: 6px 4px;
+    border-radius: 8px;
+    border: 1px solid rgba(42, 24, 24, 0.2);
+}
+
+.stats-item-label {
+    display: block;
+    font-size: 11px;
+    color: #6a5a5a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.stats-item-value {
+    display: block;
+    font-size: 20px;
+    font-weight: 800;
+    color: #ffd700;
+    margin-top: 2px;
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 600px) {
+    .stats-team-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 4px;
+    }
+    .stats-team-goals {
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+    }
+    .stats-league-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+    }
+    .stats-item-value {
+        font-size: 16px;
     }
 }

@@ -88,50 +88,58 @@
             <!-- Команда 1 -->
             <div class="stats-team" id="statsHomeTeam">
               <div class="stats-team-name" id="statsHomeName">—</div>
-              <div class="stats-team-params">
-                <div class="stats-param">
-                  <span class="stats-param-label">Атака</span>
-                  <span class="stats-param-value" id="statsHomeAttack"></span>
+              <div class="stats-team-grid">
+                <div class="stats-item">
+                  <span class="stats-item-label">Атака</span>
+                  <span class="stats-item-value" id="statsHomeAttack">—</span>
                 </div>
-                <div class="stats-param">
-                  <span class="stats-param-label">Защита</span>
-                  <span class="stats-param-value" id="statsHomeDefense"></span>
+                <div class="stats-item">
+                  <span class="stats-item-label">Защита</span>
+                  <span class="stats-item-value" id="statsHomeDefense">—</span>
                 </div>
-                <div class="stats-param">
-                  <span class="stats-param-label">Форма</span>
-                  <span class="stats-param-value" id="statsHomeForm"></span>
+                <div class="stats-item">
+                  <span class="stats-item-label">Форма</span>
+                  <span class="stats-item-value" id="statsHomeForm">—</span>
                 </div>
               </div>
-              <div class="stats-goals">
-                <span class="stats-goals-label">⚽ Голы</span>
-                <span class="stats-goals-value" id="statsHomeGoals">—</span>
-                <span class="stats-goals-label">🚫 Проп.</span>
-                <span class="stats-goals-value" id="statsHomeConceded">—</span>
+              <div class="stats-team-goals">
+                <div class="stats-item">
+                  <span class="stats-item-label">⚽ Голы</span>
+                  <span class="stats-item-value" id="statsHomeGoals">—</span>
+                </div>
+                <div class="stats-item">
+                  <span class="stats-item-label">🚫 Проп.</span>
+                  <span class="stats-item-value" id="statsHomeConceded">—</span>
+                </div>
               </div>
             </div>
 
             <!-- Команда 2 -->
             <div class="stats-team" id="statsAwayTeam">
               <div class="stats-team-name" id="statsAwayName">—</div>
-              <div class="stats-team-params">
-                <div class="stats-param">
-                  <span class="stats-param-label">Атака</span>
-                  <span class="stats-param-value" id="statsAwayAttack"></span>
+              <div class="stats-team-grid">
+                <div class="stats-item">
+                  <span class="stats-item-label">Атака</span>
+                  <span class="stats-item-value" id="statsAwayAttack">—</span>
                 </div>
-                <div class="stats-param">
-                  <span class="stats-param-label">Защита</span>
-                  <span class="stats-param-value" id="statsAwayDefense"></span>
+                <div class="stats-item">
+                  <span class="stats-item-label">Защита</span>
+                  <span class="stats-item-value" id="statsAwayDefense">—</span>
                 </div>
-                <div class="stats-param">
-                  <span class="stats-param-label">Форма</span>
-                  <span class="stats-param-value" id="statsAwayForm"></span>
+                <div class="stats-item">
+                  <span class="stats-item-label">Форма</span>
+                  <span class="stats-item-value" id="statsAwayForm">—</span>
                 </div>
               </div>
-              <div class="stats-goals">
-                <span class="stats-goals-label">⚽ Голы</span>
-                <span class="stats-goals-value" id="statsAwayGoals">—</span>
-                <span class="stats-goals-label">🚫 Проп.</span>
-                <span class="stats-goals-value" id="statsAwayConceded">—</span>
+              <div class="stats-team-goals">
+                <div class="stats-item">
+                  <span class="stats-item-label">⚽ Голы</span>
+                  <span class="stats-item-value" id="statsAwayGoals">—</span>
+                </div>
+                <div class="stats-item">
+                  <span class="stats-item-label">🚫 Проп.</span>
+                  <span class="stats-item-value" id="statsAwayConceded">—</span>
+                </div>
               </div>
             </div>
           </div>
@@ -139,31 +147,23 @@
           <!-- Лига — Сезон -->
           <div class="stats-league">
             <div class="stats-league-title">🏆 ЛИГА — СЕЗОН</div>
-            <div class="stats-league-table">
-              <div class="stats-league-row">
-                <span class="stats-league-label">Сыграно</span>
-                <span class="stats-league-value" id="statsPlayed">—</span>
+            <div class="stats-league-grid">
+              <div class="stats-item">
+                <span class="stats-item-label">Сыграно</span>
+                <span class="stats-item-value" id="statsPlayed">—</span>
               </div>
-              <div class="stats-league-row">
-                <span class="stats-league-label">В</span>
-                <span class="stats-league-value" id="statsWins">—</span>
+              <div class="stats-item">
+                <span class="stats-item-label">В</span>
+                <span class="stats-item-value" id="statsWins">—</span>
               </div>
-              <div class="stats-league-row">
-                <span class="stats-league-label">Н</span>
-                <span class="stats-league-value" id="statsDraws">—</span>
+              <div class="stats-item">
+                <span class="stats-item-label">Н</span>
+                <span class="stats-item-value" id="statsDraws">—</span>
               </div>
-              <div class="stats-league-row">
-                <span class="stats-league-label">П</span>
-                <span class="stats-league-value" id="statsLosses">—</span>
+              <div class="stats-item">
+                <span class="stats-item-label">П</span>
+                <span class="stats-item-value" id="statsLosses">—</span>
               </div>
-            </div>
-          </div>
-
-          <!-- Очные встречи -->
-          <div class="stats-head-to-head">
-            <div class="stats-h2h-title">🔄 ОЧНЫЕ ВСТРЕЧИ (ПОСЛЕДНИЕ)</div>
-            <div class="stats-h2h-list" id="statsH2H">
-              <div class="stats-h2h-empty">Нет данных об очных встречах</div>
             </div>
           </div>
         </div>
@@ -188,36 +188,16 @@
       return params.get('id');
     }
 
-    // ===== ПОЛОСКА С ЦИФРОЙ СВЕРХУ =====
-    function createProgressBar(value) {
-      const num = parseInt(value) || 0;
-      const percent = Math.min(Math.max(num, 0), 100);
-
-      let color = '#ff4444';
-      if (percent >= 70) color = '#00ff88';
-      else if (percent >= 40) color = '#ffd700';
-
-      return `
-                <div class="stat-bar-wrapper">
-                    <span class="stat-bar-number">${num}</span>
-                    <div class="stat-bar">
-                        <div class="stat-bar-fill" style="width: ${percent}%; background: ${color};"></div>
-                    </div>
-                </div>
-            `;
-    }
-
     // ===== ОСНОВНАЯ ФУНКЦИЯ СТАТИСТИКИ =====
     function renderStats(forecast) {
       // Названия команд
       document.getElementById('statsHomeName').textContent = forecast.homeTeam || 'Команда 1';
       document.getElementById('statsAwayName').textContent = forecast.awayTeam || 'Команда 2';
 
-      // Если нет данных — пустые полоски
+      // Если нет данных — пусто
       if (!forecast.teamStatsDetailed || forecast.teamStatsDetailed.length === 0) {
         ['HomeAttack', 'HomeDefense', 'HomeForm', 'AwayAttack', 'AwayDefense', 'AwayForm'].forEach(id => {
-          const el = document.getElementById('stats' + id);
-          if (el) el.innerHTML = createProgressBar(0);
+          document.getElementById('stats' + id).textContent = '—';
         });
         ['HomeGoals', 'HomeConceded', 'AwayGoals', 'AwayConceded'].forEach(id => {
           document.getElementById('stats' + id).textContent = '—';
@@ -228,24 +208,31 @@
         return;
       }
 
-      const home = forecast.teamStatsDetailed[0] || {};
-      const away = forecast.teamStatsDetailed[1] || {};
-      const homeStats = home.stats || {};
-      const awayStats = away.stats || {};
+      // Собираем данные по названиям команд
+      const teams = {};
+      forecast.teamStatsDetailed.forEach(item => {
+        const name = item.name.trim();
+        const stats = item.stats || {};
+        teams[name] = stats;
+      });
 
-      // Полоски для хозяев
-      document.getElementById('statsHomeAttack').innerHTML = createProgressBar(homeStats.Атака || homeStats.attack || 0);
-      document.getElementById('statsHomeDefense').innerHTML = createProgressBar(homeStats.Защита || homeStats.defense || 0);
-      document.getElementById('statsHomeForm').innerHTML = createProgressBar(homeStats.Форма || homeStats.form || 0);
+      const homeName = forecast.homeTeam || 'Команда 1';
+      const awayName = forecast.awayTeam || 'Команда 2';
 
-      // Полоски для гостей
-      document.getElementById('statsAwayAttack').innerHTML = createProgressBar(awayStats.Атака || awayStats.attack || 0);
-      document.getElementById('statsAwayDefense').innerHTML = createProgressBar(awayStats.Защита || awayStats.defense || 0);
-      document.getElementById('statsAwayForm').innerHTML = createProgressBar(awayStats.Форма || awayStats.form || 0);
+      const homeStats = teams[homeName] || {};
+      const awayStats = teams[awayName] || {};
 
-      // Голы и пропущенные
+      // Данные для хозяев
+      document.getElementById('statsHomeAttack').textContent = homeStats.Атака || homeStats.attack || '—';
+      document.getElementById('statsHomeDefense').textContent = homeStats.Защита || homeStats.defense || '—';
+      document.getElementById('statsHomeForm').textContent = homeStats.Форма || homeStats.form || '—';
       document.getElementById('statsHomeGoals').textContent = homeStats.Голы || homeStats.goalsScored || '—';
       document.getElementById('statsHomeConceded').textContent = homeStats.Пропущено || homeStats.goalsConceded || '—';
+
+      // Данные для гостей
+      document.getElementById('statsAwayAttack').textContent = awayStats.Атака || awayStats.attack || '—';
+      document.getElementById('statsAwayDefense').textContent = awayStats.Защита || awayStats.defense || '—';
+      document.getElementById('statsAwayForm').textContent = awayStats.Форма || awayStats.form || '—';
       document.getElementById('statsAwayGoals').textContent = awayStats.Голы || awayStats.goalsScored || '—';
       document.getElementById('statsAwayConceded').textContent = awayStats.Пропущено || awayStats.goalsConceded || '—';
 
@@ -267,21 +254,17 @@
     function renderForecast(forecast) {
       document.title = `${forecast.homeTeam || 'Матч'} — ${forecast.awayTeam || 'Матч'} | CupPrognoze`;
 
-      // Хлебные крошки
       document.getElementById('breadcrumbMatch').textContent =
         `${forecast.homeTeam || 'Команда 1'} — ${forecast.awayTeam || 'Команда 2'}`;
 
-      // Шапка
       document.getElementById('detailTournament').textContent = forecast.tournament || 'Футбол';
       document.getElementById('detailTime').textContent = forecast.matchTime || '—';
 
-      // Команды
       document.getElementById('detailHomeTeam').textContent = forecast.homeTeam || 'Команда 1';
       document.getElementById('detailAwayTeam').textContent = forecast.awayTeam || 'Команда 2';
       document.getElementById('detailHomeDate').textContent = forecast.homeDate || '—';
       document.getElementById('detailAwayDate').textContent = forecast.awayDate || '—';
 
-      // Счет
       let scoreDisplay = '—';
       if (forecast.homeScore !== null && forecast.homeScore !== undefined &&
         forecast.awayScore !== null && forecast.awayScore !== undefined) {
@@ -289,7 +272,6 @@
       }
       document.getElementById('detailScore').textContent = scoreDisplay;
 
-      // Статус
       const statusEl = document.getElementById('detailStatus');
       const statusColors = {
         'Завершен': '#ff4444',
@@ -329,24 +311,19 @@
       }
       document.getElementById('detailForm').innerHTML = statsHtml;
 
-      // Заголовок прогноза
       const title = `${forecast.homeTeam || ''} ${forecast.awayTeam || ''} прогноз и ставка на матч ${forecast.matchTime || ''}`.trim();
       document.getElementById('detailTitle').textContent = title || 'Прогноз на матч';
 
-      // Даты публикации
       const now = new Date().toLocaleString('ru-RU');
       document.getElementById('detailPublished').textContent = forecast.dateDisplay || now;
       document.getElementById('detailUpdated').textContent = now;
 
-      // Кнопки
       document.getElementById('detailStats').href = forecast.link || '#';
       document.getElementById('detailOverview').href = forecast.link || '#';
 
-      // Статистика
       renderStats(forecast);
     }
 
-    // ===== ЗАГРУЗКА =====
     function loadForecast() {
       const id = getForecastId();
       if (!id) {
@@ -374,7 +351,6 @@
         });
     }
 
-    // ===== МОБИЛЬНОЕ МЕНЮ =====
     document.addEventListener('DOMContentLoaded', () => {
       const burger = document.getElementById('burgerBtn');
       const nav = document.querySelector('.nav');
