@@ -90,18 +90,12 @@ function autoDeleteOldForecasts() {
 // ========== ИЗВЛЕЧЕНИЕ КОМАНД ==========
 function extractTeams(text) {
     if (!text) return null;
-    const patterns = [
-        /([А-Яа-яA-Za-z\s]+)\s*[-–—]\s*([А-Яа-яA-Za-z\s]+)/,
-        /([А-Яа-яA-Za-z\s]+)\s+vs\s+([А-Яа-яA-Za-z\s]+)/i,
-    ];
-    for (const pattern of patterns) {
-        const match = text.match(pattern);
-        if (match && match[1] && match[2]) {
-            return {
-                home: match[1].trim(),
-                away: match[2].trim()
-            };
-        }
+    const match = text.match(/([А-Яа-яA-Za-z\s]+)\s*[-–—]\s*([А-Яа-яA-Za-z\s]+)/);
+    if (match && match[1] && match[2]) {
+        return {
+            home: match[1].trim(),
+            away: match[2].trim()
+        };
     }
     return null;
 }
@@ -122,21 +116,11 @@ function extractScore(text) {
 // ========== ИЗВЛЕЧЕНИЕ СТАТУСА ==========
 function extractStatus(text) {
     if (!text) return null;
-    const statuses = ['завершен', 'идет', 'скоро', 'live', 'finished', 'в перерыве'];
     const lower = text.toLowerCase();
-    for (const status of statuses) {
-        if (lower.includes(status)) {
-            const map = {
-                'завершен': 'Завершен',
-                'finished': 'Завершен',
-                'идет': 'Идет',
-                'live': 'Идет',
-                'скоро': 'Скоро',
-                'в перерыве': 'Перерыв'
-            };
-            return map[status] || status;
-        }
-    }
+    if (lower.includes('завершен') || lower.includes('finished')) return 'Завершен';
+    if (lower.includes('идет') || lower.includes('live')) return 'Идет';
+    if (lower.includes('скоро')) return 'Скоро';
+    if (lower.includes('перерыв')) return 'Перерыв';
     return null;
 }
 
@@ -156,154 +140,103 @@ function extractSource(text) {
     return null;
 }
 
-// ========== ИЗВЛЕЧЕНИЕ СТАТИСТИКИ ==========
-function extractStats(text) {
-    if (!text) return null;
-    const match = text.match(/[+-]?\d+\s*[-–—]\s*[+-]?\d+/);
-    if (match) return match[0];
-    return null;
-}
-
 // ========== ИЗВЛЕЧЕНИЕ ВРЕМЕНИ ==========
 function extractMatchTime(text) {
     if (!text) return null;
-    const patterns = [
-        /(\d{2}\.\d{2}\.\d{4})\s+(\d{2}:\d{2})/,
-        /(\d{2}\/\d{2}\/\d{4})\s+(\d{2}:\d{2})/,
-        /(\d{2}:\d{2})\s+(\d{2}\.\d{2}\.\d{4})/,
-        /в\s+(\d{2}:\d{2})/i,
-        /начало\s+(\d{2}:\d{2})/i,
-    ];
-    for (const pattern of patterns) {
-        const match = text.match(pattern);
-        if (match) {
-            if (match.length >= 3) {
-                let dateStr = match[1].replace(/\//g, '.').replace(/-/g, '.');
-                let timeStr = match[2];
-                if (dateStr.match(/^\d{2}\.\d{2}\.\d{4}$/)) {
-                    return `${dateStr} ${timeStr}`;
-                }
-            }
-            if (match.length === 2 && match[1].match(/^\d{2}:\d{2}$/)) {
-                const today = new Date();
-                const dateStr = today.toLocaleDateString('ru-RU', {
-                    day: '2-digit', month: '2-digit', year: 'numeric'
-                });
-                return `${dateStr} ${match[1]}`;
-            }
-        }
-    }
+    const match = text.match(/(\d{2}\.\d{2}\.\d{4})\s+(\d{2}:\d{2})/);
+    if (match) return `${match[1]} ${match[2]}`;
     return null;
 }
 
-// ========== ИЗВЛЕЧЕНИЕ СТАТИСТИКИ КОМАНД (ДЛЯ КРУЖКОВ) ==========
-function extractTeamStats(text) {
-    if (!text) return null;
+// ========== ГЛАВНАЯ ФУНКЦИЯ — ПАРСИНГ СТАТИСТИКИ ==========
+function parseStats(text) {
+    if (!text) return { teams: {}, league: {} };
 
     const lines = text.split('\n');
-    const stats = [];
-
-    for (const line of lines) {
-        let match = line.match(/([А-Яа-яA-Za-z\s]+)[:.]?\s*победы\s*(\d+)[,.]?\s*поражения\s*(\d+)/i);
-        if (match) {
-            stats.push({
-                team: match[1].trim(),
-                wins: parseInt(match[2]),
-                losses: parseInt(match[3])
-            });
-            continue;
-        }
-
-        match = line.match(/([А-Яа-яA-Za-z\s]+)[:.]?\s*(\d+)\s*[-–—]\s*(\d+)/);
-        if (match) {
-            stats.push({
-                team: match[1].trim(),
-                wins: parseInt(match[2]),
-                losses: parseInt(match[3])
-            });
-            continue;
-        }
-    }
-
-    return stats.length > 0 ? stats : null;
-}
-
-// ========== ПРОСТОЙ ПАРСИНГ СТАТИСТИКИ ==========
-function extractTeamStatsDetailed(text) {
-    if (!text) return null;
-
-    const lines = text.split('\n');
-    const teams = {};
-    let currentStat = null;
-
-    // Просто собираем все строки, которые выглядят как статистика
-    for (const line of lines) {
-        const trimmed = line.trim();
-
-        // Ищем статистику команд с двоеточием
-        let match = trimmed.match(/^([А-Яа-яA-Za-z\s]+)[:.]?\s*(\d+)\s*[-–—]\s*(\d+)/);
-        if (match) {
-            const teamName = match[1].trim();
-            if (!teams[teamName]) teams[teamName] = { record: `${match[2]}-${match[3]}` };
-            continue;
-        }
-
-        // Ищем: Атака: Ливерпуль 56
-        match = trimmed.match(/(Атака|Защита|Форма|Голы|Пропущено)[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)/i);
-        if (match) {
-            const statType = match[1];
-            const teamName = match[2].trim();
-            const value = match[3];
-
-            if (!teams[teamName]) teams[teamName] = {};
-            teams[teamName][statType] = value;
-            continue;
-        }
-
-        // Ищем: Голы: Ливерпуль 8 (1.6)
-        match = trimmed.match(/(Голы|Пропущено)[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)\s*\(([\d.]+)\)/i);
-        if (match) {
-            const statType = match[1];
-            const teamName = match[2].trim();
-            const value = `${match[3]} (${match[4]})`;
-
-            if (!teams[teamName]) teams[teamName] = {};
-            teams[teamName][statType] = value;
-            continue;
-        }
-    }
-
-    const result = [];
-    for (const [name, stats] of Object.entries(teams)) {
-        result.push({ name, stats });
-    }
-
-    return result.length > 0 ? result : null;
-}
-
-
-// ========== ПРОСТОЙ ПАРСИНГ ЛИГИ ==========
-function extractLeagueStats(text) {
-    if (!text) return null;
-
-    const lines = text.split('\n');
-    let stats = {};
+    const result = { teams: {}, league: {} };
+    let currentTeam = null;
 
     for (const line of lines) {
         const trimmed = line.trim();
 
-        let match = trimmed.match(/(Сыграно|В|Н|П)[:.]?\s*(\d+)/i);
+        // Ищем статистику команды: "Атака: Ливерпуль 63, Арсенал 1"
+        let match = trimmed.match(/(Атака|Защита|Форма|Attack|Defense|Form)[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)[,.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)/i);
         if (match) {
-            const key = match[1].toLowerCase();
-            const value = parseInt(match[2]);
-            stats[key] = value;
+            const statType = match[1];
+            const team1 = match[2].trim();
+            const val1 = parseInt(match[3]);
+            const team2 = match[4].trim();
+            const val2 = parseInt(match[5]);
+
+            if (!result.teams[team1]) result.teams[team1] = {};
+            if (!result.teams[team2]) result.teams[team2] = {};
+
+            result.teams[team1][statType] = val1;
+            result.teams[team2][statType] = val2;
+            continue;
+        }
+
+        // Ищем голы: "Голы: Ливерпуль 8 (1.6), Арсенал 15 (3.0)"
+        match = trimmed.match(/(Голы|Goals)[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)\s*\(([\d.]+)\)[,.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)\s*\(([\d.]+)\)/i);
+        if (match) {
+            const team1 = match[2].trim();
+            const val1 = parseInt(match[3]);
+            const avg1 = parseFloat(match[4]);
+            const team2 = match[5].trim();
+            const val2 = parseInt(match[6]);
+            const avg2 = parseFloat(match[7]);
+
+            if (!result.teams[team1]) result.teams[team1] = {};
+            if (!result.teams[team2]) result.teams[team2] = {};
+
+            result.teams[team1]['Голы'] = `${val1} (${avg1})`;
+            result.teams[team2]['Голы'] = `${val2} (${avg2})`;
+            continue;
+        }
+
+        // Ищем пропущенные: "Пропущено: Ливерпуль 6 (1.2), Арсенал 10 (2.0)"
+        match = trimmed.match(/(Пропущено|Conceded)[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)\s*\(([\d.]+)\)[,.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)\s*\(([\d.]+)\)/i);
+        if (match) {
+            const team1 = match[2].trim();
+            const val1 = parseInt(match[3]);
+            const avg1 = parseFloat(match[4]);
+            const team2 = match[5].trim();
+            const val2 = parseInt(match[6]);
+            const avg2 = parseFloat(match[7]);
+
+            if (!result.teams[team1]) result.teams[team1] = {};
+            if (!result.teams[team2]) result.teams[team2] = {};
+
+            result.teams[team1]['Пропущено'] = `${val1} (${avg1})`;
+            result.teams[team2]['Пропущено'] = `${val2} (${avg2})`;
+            continue;
+        }
+
+        // ===== ЛИГА — СЕЗОН =====
+        match = trimmed.match(/Сыграно[:.]?\s*(\d+)/i);
+        if (match) {
+            result.league.сыграно = parseInt(match[1]);
+            continue;
+        }
+        match = trimmed.match(/[ВВ][:.]?\s*(\d+)/i);
+        if (match) {
+            result.league.в = parseInt(match[1]);
+            continue;
+        }
+        match = trimmed.match(/[НН][:.]?\s*(\d+)/i);
+        if (match) {
+            result.league.н = parseInt(match[1]);
+            continue;
+        }
+        match = trimmed.match(/[ПП][:.]?\s*(\d+)/i);
+        if (match) {
+            result.league.п = parseInt(match[1]);
             continue;
         }
     }
 
-    return Object.keys(stats).length > 0 ? stats : null;
+    return result;
 }
-
 
 // ========== ВЕБХУК ==========
 app.post(`/webhook/${TOKEN}`, (req, res) => {
@@ -322,17 +255,20 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
         const status = extractStatus(text);
         const tournament = extractTournament(text);
         const source = extractSource(text);
-        const stats = extractStats(text);
         const matchTime = extractMatchTime(text);
-        const teamStats = extractTeamStats(text);
-        const teamStatsDetailed = extractTeamStatsDetailed(text);
-        const leagueStats = extractLeagueStats(text);
+        const parsedStats = parseStats(text);
 
         const title = text.split('\n')[0].substring(0, 80) || 'Новый прогноз';
 
         let forecasts = readForecasts();
         const exists = forecasts.some(f => f.id === `${channel.id}_${post.message_id}`);
         if (!exists) {
+            // Формируем teamStatsDetailed для отображения
+            const teamStatsDetailed = [];
+            for (const [name, stats] of Object.entries(parsedStats.teams)) {
+                teamStatsDetailed.push({ name, stats });
+            }
+
             const forecast = {
                 id: `${channel.id}_${post.message_id}`,
                 title: title,
@@ -344,17 +280,15 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
                 status: status || 'Скоро',
                 tournament: tournament || null,
                 source: source || channel.title || null,
-                stats: stats || null,
-                teamStats: teamStats || null,
-                teamStatsDetailed: teamStatsDetailed || null,
-                leagueStats: leagueStats || null,
                 matchTime: matchTime || 'Время не указано',
                 matchTimeRaw: matchTime,
                 date: new Date(post.date * 1000).toISOString(),
                 dateDisplay: new Date(post.date * 1000).toLocaleString('ru-RU'),
                 channel: channel.title || channel.username,
                 sport: 'football',
-                link: `https://t.me/${channel.username}/${post.message_id}`
+                link: `https://t.me/${channel.username}/${post.message_id}`,
+                teamStatsDetailed: teamStatsDetailed.length > 0 ? teamStatsDetailed : null,
+                leagueStats: Object.keys(parsedStats.league).length > 0 ? parsedStats.league : null
             };
 
             forecasts.push(forecast);
@@ -368,11 +302,8 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
             console.log(`   📊 Счет: ${forecast.homeScore ?? '?'}-${forecast.awayScore ?? '?'}`);
             console.log(`   🔴 Статус: ${forecast.status}`);
             console.log(`   ⏰ Время: ${forecast.matchTime}`);
-            if (forecast.teamStats) {
-                console.log(`   📊 Форма: ${forecast.teamStats.map(s => `${s.team} ${s.wins}-${s.losses}`).join(', ')}`);
-            }
             if (forecast.teamStatsDetailed) {
-                console.log(`   📊 Детальная статистика: ${forecast.teamStatsDetailed.length} команд`);
+                console.log(`   📊 Статистика: ${forecast.teamStatsDetailed.length} команд`);
             }
         } else {
             console.log(`⏩ Пост уже есть`);
@@ -395,7 +326,7 @@ app.get('/api/forecasts', (req, res) => {
 });
 
 app.get('/api/test', (req, res) => {
-    res.json({ success: true, message: 'Сервер работает на WEBHOOK! С автоудалением!' });
+    res.json({ success: true, message: 'Сервер работает! С новым парсингом!' });
 });
 
 // ========== ЗАПУСК ==========
@@ -407,3 +338,4 @@ app.listen(PORT, () => {
 
 console.log('✅ Парсер готов к работе!');
 console.log('🗑️ Автоудаление: прогнозы удаляются через 5 часов после завершения матча');
+console.log('📊 Новый парсинг статистики на русском!');
