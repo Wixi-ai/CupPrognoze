@@ -831,7 +831,7 @@ function renderForecastCards(forecasts) {
         ` : ''}
 
         <div class="match-footer">
-          <a href="${f.link || '#'}" target="_blank" class="match-link">📊 Смотреть прогноз →</a>
+          <a href="forecast.html?id=${f.id}" class="match-link">📊 Смотреть прогноз →</a>
         </div>
       </div>
     `;
