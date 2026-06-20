@@ -4,8 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>CupPrognoze - Прогнозы на спорт</title>
 
   <!-- Подключаем стили -->
@@ -53,13 +51,13 @@
       <section class="filters-section" id="filtersSection">
         <div class="filter-tabs" id="filterTabs">
           <button class="filter-btn active" data-filter="all">Все</button>
-          <button class="filter-btn" data-filter="football">⚽ Футбол</button>
-          <button class="filter-btn" data-filter="tennis">🎾 Теннис</button>
-          <button class="filter-btn" data-filter="cybersport">🖥️ Киберспорт</button>
-          <button class="filter-btn" data-filter="tabletennis">🏓 Наст. теннис</button>
-          <button class="filter-btn" data-filter="basketball">🏀 Баскетбол</button>
-          <button class="filter-btn" data-filter="hockey">🏒 Хоккей</button>
-          <button class="filter-btn" data-filter="volleyball">🏐 Волейбол</button>
+          <button class="filter-btn" data-filter="football">Футбол</button>
+          <button class="filter-btn" data-filter="tennis">Теннис</button>
+          <button class="filter-btn" data-filter="cybersport">Киберспорт</button>
+          <button class="filter-btn" data-filter="tabletennis">Наст. теннис</button>
+          <button class="filter-btn" data-filter="basketball">Баскетбол</button>
+          <button class="filter-btn" data-filter="hockey">Хоккей</button>
+          <button class="filter-btn" data-filter="volleyball">Волейбол</button>
         </div>
       </section>
 
@@ -71,10 +69,23 @@
         </section>
       </section>
 
-      <!-- ===== ВКЛАДКА: ПРОГНОЗЫ (API) ===== -->
+      <!-- ===== ВКЛАДКА: ПРОГНОЗЫ ===== -->
       <section class="tab-content" id="forecastsContent" style="display: none;">
         <section class="forecasts-section">
           <h2 class="section-title">📊 Актуальные прогнозы</h2>
+
+          <!-- Фильтры для прогнозов -->
+          <div class="filter-tabs forecast-filters" id="forecastFilters">
+            <button class="filter-btn active" data-forecast-filter="all">Все</button>
+            <button class="filter-btn" data-forecast-filter="football">Футбол</button>
+            <button class="filter-btn" data-forecast-filter="tennis">Теннис</button>
+            <button class="filter-btn" data-forecast-filter="cybersport">Киберспорт</button>
+            <button class="filter-btn" data-forecast-filter="tabletennis">Наст. теннис</button>
+            <button class="filter-btn" data-forecast-filter="basketball">Баскетбол</button>
+            <button class="filter-btn" data-forecast-filter="hockey">Хоккей</button>
+            <button class="filter-btn" data-forecast-filter="volleyball">Волейбол</button>
+          </div>
+
           <div id="forecastsContainer">
             <div class="loading-spinner">
               <div class="spinner"></div>

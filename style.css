@@ -2886,3 +2886,30 @@ html {
   border: 1px solid #d42a2a;
   box-shadow: 0 0 15px rgba(212, 42, 42, 0.1);
 }
+/* ============================================================
+   ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ ФИЛЬТРА ПРОГНОЗОВ
+   ============================================================ */
+
+/* ===== ФИЛЬТРЫ ДЛЯ ПРОГНОЗОВ ===== */
+.forecast-filters {
+  margin-bottom: 25px;
+}
+
+.forecast-filters .filter-btn {
+  font-size: 13px;
+  padding: 6px 16px;
+}
+
+/* ===== КАРТОЧКИ ПРОГНОЗОВ ===== */
+.forecasts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+/* ===== АДАПТИВ ДЛЯ ПРОГНОЗОВ ===== */
+@media (max-width: 600px) {
+  .forecasts-grid {
+    grid-template-columns: 1fr;
+  }
+}

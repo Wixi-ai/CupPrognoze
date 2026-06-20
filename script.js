@@ -6,9 +6,17 @@
  */
 
 // ============================================================
-//  НАСТРОЙКА API (ДЛЯ РАБОТЫ С RENDER)
+//  НАСТРОЙКА API
 // ============================================================
 const API_URL = 'https://cupprognoze.onrender.com/api';
+// Для локальной разработки:
+// const API_URL = 'http://localhost:3000/api';
+
+// ============================================================
+//  ПЕРЕМЕННЫЕ ДЛЯ ФИЛЬТРА ПРОГНОЗОВ
+// ============================================================
+let currentForecastFilter = 'all';
+let allForecastsData = [];
 
 // ============================================================
 //  1. ТЕЛЕГРАМ-КАНАЛЫ (ВСЕ ВЕДУТ В ОДИН КАНАЛ)
@@ -117,7 +125,7 @@ const channels = [
 ];
 
 // ============================================================
-//  2. БУКМЕКЕРЫ (РЕЙТИНГ) — ССЫЛКИ НЕ МЕНЯЕМ
+//  2. БУКМЕКЕРЫ (РЕЙТИНГ)
 // ============================================================
 const bookmakers = [
   {
@@ -267,7 +275,7 @@ const cappers = [
 ];
 
 // ============================================================
-//  4. СТАТЬИ (С ИЗОБРАЖЕНИЯМИ)
+//  4. СТАТЬИ
 // ============================================================
 const articles = [
   {
@@ -588,7 +596,6 @@ function renderArticles() {
 
   let html = '';
   articles.forEach(article => {
-    // Если есть изображение — показываем его, иначе — иконку
     const imageHtml = article.image
       ? `<img src="${article.image}" alt="${article.title}" class="article-img">`
       : `<div class="article-image">${article.icon || '📰'}</div>`;
@@ -716,7 +723,7 @@ function getSportIcon(sport) {
 }
 
 // ============================================================
-//  ПРОГНОЗЫ (РЕАЛЬНЫЙ API)
+//  ПРОГНОЗЫ (С ФИЛЬТРОМ)
 // ============================================================
 
 function loadForecasts() {
@@ -730,14 +737,15 @@ function loadForecasts() {
     </div>
   `;
 
-  fetch(`${API_URL}/forecasts?limit=50`)
+  fetch(`${API_URL}/forecasts?limit=100`)
     .then(response => {
       if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
       return response.json();
     })
     .then(data => {
       if (data.success && data.data && data.data.length > 0) {
-        container.innerHTML = renderForecastCards(data.data);
+        allForecastsData = data.data;
+        renderFilteredForecasts();
       } else {
         container.innerHTML = `
           <div style="text-align: center; padding: 40px 20px; color: #6a5a5a; background: #161010; border-radius: 16px; border: 1px solid #2a1818;">
@@ -761,8 +769,48 @@ function loadForecasts() {
     });
 }
 
+function renderFilteredForecasts() {
+  const container = document.getElementById('forecastsContainer');
+  if (!container) return;
+
+  let filtered = allForecastsData;
+
+  if (currentForecastFilter !== 'all') {
+    filtered = allForecastsData.filter(f => f.sport === currentForecastFilter);
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 40px 20px; color: #6a5a5a; background: #161010; border-radius: 16px; border: 1px solid #2a1818;">
+        <div style="font-size: 48px; margin-bottom: 20px;">🔍</div>
+        <h3 style="color: #f0e0e0; margin-bottom: 10px;">Нет прогнозов по этому виду спорта</h3>
+        <p style="font-size: 16px; color: #8a7a7a;">Попробуй выбрать другой фильтр</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = renderForecastCards(filtered);
+}
+
+function initForecastFilters() {
+  const filterContainer = document.getElementById('forecastFilters');
+  if (!filterContainer) return;
+
+  filterContainer.addEventListener('click', (e) => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+
+    document.querySelectorAll('#forecastFilters .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    currentForecastFilter = btn.dataset.forecastFilter;
+    renderFilteredForecasts();
+  });
+}
+
 // ============================================================
-//  ОТРИСОВКА КАРТОЧЕК ПРОГНОЗОВ (ФУТБОЛЬНЫЙ СТИЛЬ)
+//  ОТРИСОВКА КАРТОЧЕК ПРОГНОЗОВ
 // ============================================================
 
 function renderForecastCards(forecasts) {
@@ -842,6 +890,133 @@ function renderForecastCards(forecasts) {
 }
 
 // ============================================================
+//  ПОКАЗ СТРАНИЦ (СОГЛАШЕНИЕ, ПОЛИТИКА)
+// ============================================================
+
+function showPage(type) {
+  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.filters-section').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+
+  let content = document.getElementById('pageContent');
+  if (!content) {
+    content = document.createElement('div');
+    content.id = 'pageContent';
+    content.className = 'page-content';
+    document.querySelector('.main .container').appendChild(content);
+  }
+
+  content.className = 'page-content active';
+
+  if (type === 'terms') {
+    content.innerHTML = getTermsPage();
+    document.title = 'Пользовательское соглашение — CupPrognoze';
+  } else if (type === 'privacy') {
+    content.innerHTML = getPrivacyPage();
+    document.title = 'Политика конфиденциальности — CupPrognoze';
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closePage() {
+  const content = document.getElementById('pageContent');
+  if (content) {
+    content.className = 'page-content';
+    content.innerHTML = '';
+  }
+  const sourcesTab = document.querySelector('.nav-link[data-tab="sources"]');
+  if (sourcesTab) sourcesTab.click();
+  document.title = 'CupPrognoze — Прогнозы на спорт';
+}
+
+function getTermsPage() {
+  return `
+    <button class="back-btn" onclick="closePage()">← Назад</button>
+    <h1>📜 Пользовательское соглашение</h1>
+
+    <p><strong>1. Общие положения</strong></p>
+    <p>Настоящее Пользовательское соглашение регулирует отношения между администрацией сайта CupPrognoze и пользователем сайта.</p>
+    <p>Используя сайт CupPrognoze, Пользователь подтверждает, что ознакомился с условиями настоящего Соглашения и принимает их в полном объёме.</p>
+
+    <p><strong>2. Предмет Соглашения</strong></p>
+    <p>Сайт CupPrognoze предоставляет Пользователю доступ к информации о прогнозах на спортивные события, рейтингам букмекерских контор, капперам и другим материалам, связанным со ставками на спорт.</p>
+    <p>Вся информация на сайте носит исключительно информационный характер и не является гарантией получения дохода.</p>
+
+    <p><strong>3. Права и обязанности Пользователя</strong></p>
+    <ul>
+      <li>Пользователь обязуется использовать сайт только в законных целях.</li>
+      <li>Пользователь несёт полную ответственность за свои действия, связанные с использованием информации с сайта.</li>
+      <li>Пользователь не имеет права копировать, распространять или использовать контент сайта в коммерческих целях без согласия Администрации.</li>
+    </ul>
+
+    <p><strong>4. Ответственность</strong></p>
+    <p>Администрация сайта не несёт ответственности за любые убытки, включая финансовые, возникшие в результате использования информации, опубликованной на сайте.</p>
+    <p>Администрация не гарантирует точность, полноту и актуальность информации, размещённой на сайте.</p>
+
+    <p><strong>5. Изменение условий</strong></p>
+    <p>Администрация оставляет за собой право вносить изменения в настоящее Соглашение без предварительного уведомления Пользователя.</p>
+
+    <p><strong>6. Заключительные положения</strong></p>
+    <p>Настоящее Соглашение вступает в силу с момента начала использования сайта Пользователем.</p>
+    <p>Все споры и разногласия решаются в соответствии с законодательством Российской Федерации.</p>
+
+    <p style="color:#6a5a5a; font-size:13px; margin-top:30px;">Последнее обновление: 20 июня 2026 года</p>
+
+    <button class="back-btn" onclick="closePage()">← Назад</button>
+  `;
+}
+
+function getPrivacyPage() {
+  return `
+    <button class="back-btn" onclick="closePage()">← Назад</button>
+    <h1>🔒 Политика конфиденциальности</h1>
+
+    <p><strong>1. Общие положения</strong></p>
+    <p>Настоящая Политика конфиденциальности описывает, как сайт CupPrognoze собирает, использует и защищает информацию о Пользователях.</p>
+    <p>Используя Сайт, Пользователь даёт своё согласие на обработку своих данных в соответствии с настоящей Политикой.</p>
+
+    <p><strong>2. Какие данные мы собираем</strong></p>
+    <ul>
+      <li>Имя пользователя (при регистрации или обращении).</li>
+      <li>Контактные данные (email, Telegram) при обращении в поддержку.</li>
+      <li>Технические данные: IP-адрес, тип браузера, устройство, время посещения.</li>
+      <li>Cookies — для улучшения работы сайта.</li>
+    </ul>
+
+    <p><strong>3. Как мы используем данные</strong></p>
+    <ul>
+      <li>Для обеспечения работы сайта и улучшения пользовательского опыта.</li>
+      <li>Для анализа посещаемости сайта.</li>
+      <li>Для обратной связи с Пользователями.</li>
+    </ul>
+
+    <p><strong>4. Передача данных третьим лицам</strong></p>
+    <p>Сайт не передаёт личные данные Пользователей третьим лицам, за исключением случаев, предусмотренных законодательством.</p>
+
+    <p><strong>5. Cookies</strong></p>
+    <p>Сайт использует cookies для хранения настроек пользователя и улучшения работы. Пользователь может отключить cookies в настройках браузера.</p>
+
+    <p><strong>6. Защита данных</strong></p>
+    <p>Администрация принимает необходимые меры для защиты данных от несанкционированного доступа, изменения и уничтожения.</p>
+
+    <p><strong>7. Права Пользователя</strong></p>
+    <ul>
+      <li>Запросить информацию о своих данных, хранящихся на сайте.</li>
+      <li>Требовать удаления или исправления своих данных.</li>
+      <li>Отказаться от получения рекламных материалов в любой момент.</li>
+    </ul>
+
+    <p><strong>8. Контакты</strong></p>
+    <p>По всем вопросам, связанным с Политикой конфиденциальности, вы можете обратиться через Telegram: <a href="https://t.me/cup_prognoze_all" style="color:#d42a2a;">@cup_prognoze_all</a></p>
+
+    <p style="color:#6a5a5a; font-size:13px; margin-top:30px;">Последнее обновление: 20 июня 2026 года</p>
+
+    <button class="back-btn" onclick="closePage()">← Назад</button>
+  `;
+}
+
+// ============================================================
 //  НАВИГАЦИЯ И ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
 // ============================================================
 
@@ -883,6 +1058,9 @@ function initTabs() {
         break;
       case 'forecasts':
         loadForecasts();
+        setTimeout(() => {
+          initForecastFilters();
+        }, 200);
         break;
       case 'rating':
         renderBookmakers();
@@ -977,301 +1155,3 @@ document.addEventListener('DOMContentLoaded', () => {
   initLogo();
   initBurger();
 });
-// ============================================================
-//  ПОКАЗ СТРАНИЦ (СОГЛАШЕНИЕ, ПОЛИТИКА)
-// ============================================================
-
-function showPage(type) {
-  // Скрываем все основные секции
-  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-  document.querySelectorAll('.filters-section').forEach(el => el.style.display = 'none');
-
-  // Убираем активные классы с навигации
-  document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-
-  // Показываем страницу
-  let content = document.getElementById('pageContent');
-  if (!content) {
-    content = document.createElement('div');
-    content.id = 'pageContent';
-    content.className = 'page-content';
-    document.querySelector('.main .container').appendChild(content);
-  }
-
-  content.className = 'page-content active';
-
-  if (type === 'terms') {
-    content.innerHTML = getTermsPage();
-    document.title = 'Пользовательское соглашение — CupPrognoze';
-  } else if (type === 'privacy') {
-    content.innerHTML = getPrivacyPage();
-    document.title = 'Политика конфиденциальности — CupPrognoze';
-  }
-
-  // Прокрутка вверх
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function closePage() {
-  const content = document.getElementById('pageContent');
-  if (content) {
-    content.className = 'page-content';
-    content.innerHTML = '';
-  }
-  // Возвращаемся на главную
-  const sourcesTab = document.querySelector('.nav-link[data-tab="sources"]');
-  if (sourcesTab) sourcesTab.click();
-  document.title = 'CupPrognoze — Прогнозы на спорт';
-}
-
-function getTermsPage() {
-  return `
-    <button class="back-btn" onclick="closePage()">← Назад</button>
-    <h1>📜 Пользовательское соглашение</h1>
-
-    <p><strong>1. Общие положения</strong></p>
-    <p>Настоящее Пользовательское соглашение (далее — «Соглашение») регулирует отношения между администрацией сайта CupPrognoze (далее — «Администрация») и пользователем сайта (далее — «Пользователь»).</p>
-    <p>Используя сайт CupPrognoze, Пользователь подтверждает, что ознакомился с условиями настоящего Соглашения и принимает их в полном объёме.</p>
-
-    <p><strong>2. Предмет Соглашения</strong></p>
-    <p>Сайт CupPrognoze предоставляет Пользователю доступ к информации о прогнозах на спортивные события, рейтингам букмекерских контор, капперам и другим материалам, связанным со ставками на спорт.</p>
-    <p>Вся информация на сайте носит исключительно информационный характер и не является гарантией получения дохода.</p>
-
-    <p><strong>3. Права и обязанности Пользователя</strong></p>
-    <ul>
-      <li>Пользователь обязуется использовать сайт только в законных целях.</li>
-      <li>Пользователь несёт полную ответственность за свои действия, связанные с использованием информации с сайта.</li>
-      <li>Пользователь не имеет права копировать, распространять или использовать контент сайта в коммерческих целях без согласия Администрации.</li>
-    </ul>
-
-    <p><strong>4. Ответственность</strong></p>
-    <p>Администрация сайта не несёт ответственности за любые убытки, включая финансовые, возникшие в результате использования информации, опубликованной на сайте.</p>
-    <p>Администрация не гарантирует точность, полноту и актуальность информации, размещённой на сайте.</p>
-
-    <p><strong>5. Изменение условий</strong></p>
-    <p>Администрация оставляет за собой право вносить изменения в настоящее Соглашение без предварительного уведомления Пользователя. Актуальная версия Соглашения всегда доступна по этой ссылке.</p>
-
-    <p><strong>6. Заключительные положения</strong></p>
-    <p>Настоящее Соглашение вступает в силу с момента начала использования сайта Пользователем.</p>
-    <p>Все споры и разногласия решаются в соответствии с законодательством Российской Федерации.</p>
-
-    <p style="color:#6a5a5a; font-size:13px; margin-top:30px;">Последнее обновление: 18 июня 2026 года</p>
-
-    <button class="back-btn" onclick="closePage()">← Назад</button>
-  `;
-}
-
-function getPrivacyPage() {
-  return `
-    <button class="back-btn" onclick="closePage()">← Назад</button>
-    <h1>🔒 Политика конфиденциальности</h1>
-
-    <p><strong>1. Общие положения</strong></p>
-    <p>Настоящая Политика конфиденциальности (далее — «Политика») описывает, как сайт CupPrognoze (далее — «Сайт») собирает, использует и защищает информацию о Пользователях.</p>
-    <p>Используя Сайт, Пользователь даёт своё согласие на обработку своих данных в соответствии с настоящей Политикой.</p>
-
-    <p><strong>2. Какие данные мы собираем</strong></p>
-    <ul>
-      <li>Имя пользователя (при регистрации или обращении).</li>
-      <li>Контактные данные (email, Telegram) при обращении в поддержку.</li>
-      <li>Технические данные: IP-адрес, тип браузера, устройство, время посещения.</li>
-      <li>Cookies — для улучшения работы сайта.</li>
-    </ul>
-
-    <p><strong>3. Как мы используем данные</strong></p>
-    <ul>
-      <li>Для обеспечения работы сайта и улучшения пользовательского опыта.</li>
-      <li>Для анализа посещаемости сайта.</li>
-      <li>Для обратной связи с Пользователями.</li>
-      <li>Для информирования о новых материалах (только с согласия Пользователя).</li>
-    </ul>
-
-    <p><strong>4. Передача данных третьим лицам</strong></p>
-    <p>Сайт не передаёт личные данные Пользователей третьим лицам, за исключением случаев, предусмотренных законодательством Российской Федерации.</p>
-
-    <p><strong>5. Cookies</strong></p>
-    <p>Сайт использует cookies для хранения настроек пользователя и улучшения работы. Пользователь может отключить cookies в настройках браузера.</p>
-
-    <p><strong>6. Ссылки на другие сайты</strong></p>
-    <p>Сайт может содержать ссылки на сторонние ресурсы. Администрация не несёт ответственности за политику конфиденциальности этих ресурсов.</p>
-
-    <p><strong>7. Защита данных</strong></p>
-    <p>Администрация принимает необходимые меры для защиты данных от несанкционированного доступа, изменения и уничтожения.</p>
-
-    <p><strong>8. Права Пользователя</strong></p>
-    <ul>
-      <li>Запросить информацию о своих данных, хранящихся на сайте.</li>
-      <li>Требовать удаления или исправления своих данных.</li>
-      <li>Отказаться от получения рекламных материалов в любой момент.</li>
-    </ul>
-
-    <p><strong>9. Контакты</strong></p>
-    <p>По всем вопросам, связанным с Политикой конфиденциальности, вы можете обратиться через Telegram: <a href="https://t.me/cup_prognoze_all" style="color:#d42a2a;">@cup_prognoze_all</a></p>
-
-    <p style="color:#6a5a5a; font-size:13px; margin-top:30px;">Последнее обновление: 18 июня 2026 года</p>
-
-    <button class="back-btn" onclick="closePage()">← Назад</button>
-  `;
-}
-// ============================================================
-//  ДЕТАЛЬНАЯ СТРАНИЦА ПРОГНОЗА
-// ============================================================
-
-function openForecast(id) {
-  // Показываем страницу прогноза
-  const page = document.getElementById('forecastPage');
-  if (!page) {
-    // Если страницы нет — создаём
-    createForecastPage();
-  }
-
-  // Скрываем все основные секции
-  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-  document.querySelectorAll('.filters-section').forEach(el => el.style.display = 'none');
-  document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-
-  // Показываем страницу прогноза
-  const forecastPage = document.getElementById('forecastPage');
-  forecastPage.style.display = 'block';
-
-  // Загружаем данные прогноза
-  loadForecastDetails(id);
-
-  // Прокрутка наверх
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function createForecastPage() {
-  const container = document.querySelector('.main .container');
-
-  const page = document.createElement('div');
-  page.id = 'forecastPage';
-  page.className = 'forecast-detail-page';
-  page.style.display = 'none';
-
-  page.innerHTML = `
-        <div class="forecast-detail-content">
-            <!-- Хлебные крошки -->
-            <div class="breadcrumb">
-                <a href="#" onclick="closeForecast()">← Назад к прогнозам</a>
-                <span> / </span>
-                <span id="breadcrumbMatch">Матч</span>
-            </div>
-
-            <!-- Карточка прогноза -->
-            <div class="forecast-detail-card">
-                <div class="detail-header">
-                    <div class="detail-tournament" id="detailTournament">Чемпионат мира 2026</div>
-                    <div class="detail-time" id="detailTime">00:59</div>
-                </div>
-
-                <div class="detail-teams">
-                    <div class="detail-team home">
-                        <span class="detail-team-name" id="detailHomeTeam">Шотландия</span>
-                        <span class="detail-team-date" id="detailHomeDate">20 Июль, 2026г</span>
-                    </div>
-                    <div class="detail-score-wrapper">
-                        <div class="detail-score" id="detailScore">0-1</div>
-                        <div class="detail-status" id="detailStatus">Завершен</div>
-                    </div>
-                    <div class="detail-team away">
-                        <span class="detail-team-name" id="detailAwayTeam">Марокко</span>
-                        <span class="detail-team-date" id="detailAwayDate">00:00</span>
-                    </div>
-                </div>
-
-                <div class="detail-title" id="detailTitle">
-                    ШОТЛАНДИЯ МАРОККО ПРОГНОЗ И СТАВКА НА МАТЧ 20 ИЮНЯ 2026 ГОДА В 00:59
-                </div>
-
-                <div class="detail-meta">
-                    <span>📅 Опубликовано: <span id="detailPublished">20 июня 2026, 01:12</span></span>
-                    <span>🔄 Обновлено: <span id="detailUpdated">20 июня 2026, 01:12</span></span>
-                </div>
-
-                <div class="detail-actions">
-                    <a href="#" class="detail-btn" id="detailStats">📊 Статистика</a>
-                    <a href="#" class="detail-btn" id="detailOverview">📋 Обзор</a>
-                </div>
-            </div>
-        </div>
-    `;
-
-  container.appendChild(page);
-}
-
-function loadForecastDetails(id) {
-  // Загружаем прогнозы с API
-  fetch(`${API_URL}/forecasts?limit=100`)
-    .then(response => response.json())
-    .then(data => {
-      if (data.success && data.data) {
-        const forecast = data.data.find(f => f.id === id);
-        if (forecast) {
-          renderForecastDetail(forecast);
-        } else {
-          document.getElementById('detailTitle').textContent = 'Прогноз не найден';
-        }
-      }
-    })
-    .catch(error => {
-      console.error('Ошибка загрузки прогноза:', error);
-    });
-}
-
-function renderForecastDetail(forecast) {
-  document.getElementById('breadcrumbMatch').textContent = `${forecast.homeTeam || 'Команда 1'} — ${forecast.awayTeam || 'Команда 2'}`;
-  document.getElementById('detailTournament').textContent = forecast.tournament || 'Футбол';
-  document.getElementById('detailTime').textContent = forecast.matchTime || '00:00';
-  document.getElementById('detailHomeTeam').textContent = forecast.homeTeam || 'Команда 1';
-  document.getElementById('detailAwayTeam').textContent = forecast.awayTeam || 'Команда 2';
-  document.getElementById('detailHomeDate').textContent = forecast.homeDate || '—';
-  document.getElementById('detailAwayDate').textContent = forecast.awayDate || '—';
-
-  // Счет
-  let scoreDisplay = '—';
-  if (forecast.homeScore !== null && forecast.homeScore !== undefined &&
-    forecast.awayScore !== null && forecast.awayScore !== undefined) {
-    scoreDisplay = `${forecast.homeScore}-${forecast.awayScore}`;
-  }
-  document.getElementById('detailScore').textContent = scoreDisplay;
-
-  // Статус с цветом
-  const statusEl = document.getElementById('detailStatus');
-  const statusColors = {
-    'Завершен': '#ff4444',
-    'Идет': '#00ff88',
-    'Скоро': '#ffd700',
-    'Перерыв': '#ff6b6b'
-  };
-  statusEl.textContent = forecast.status || 'Скоро';
-  statusEl.style.color = statusColors[forecast.status] || '#6a5a5a';
-
-  // Заголовок
-  const title = `${forecast.homeTeam || ''} ${forecast.awayTeam || ''} прогноз и ставка на матч ${forecast.matchTime || ''}`.trim();
-  document.getElementById('detailTitle').textContent = title || 'Прогноз на матч';
-
-  // Даты
-  const now = new Date().toLocaleString('ru-RU');
-  document.getElementById('detailPublished').textContent = forecast.dateDisplay || now;
-  document.getElementById('detailUpdated').textContent = now;
-
-  // Кнопки
-  document.getElementById('detailStats').href = forecast.link || '#';
-  document.getElementById('detailOverview').href = forecast.link || '#';
-}
-
-function closeForecast() {
-  const page = document.getElementById('forecastPage');
-  if (page) {
-    page.style.display = 'none';
-  }
-
-  // Возвращаемся на вкладку прогнозов
-  const forecastsTab = document.querySelector('.nav-link[data-tab="forecasts"]');
-  if (forecastsTab) {
-    forecastsTab.click();
-  }
-
-  document.title = 'CupPrognoze — Прогнозы на спорт';
-}
