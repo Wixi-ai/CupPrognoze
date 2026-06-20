@@ -1,12 +1,16 @@
+cd / c / Users / spoti / Sait - naeb / server
+cat > generate.js << 'EOF'
 /**
- * 🤖 Генератор прогнозов (БЕЗ НЕЙРОСЕТИ)
- * Работает автономно, создает реалистичные прогнозы
+ * 🤖 АВТОМАТИЧЕСКИЙ ГЕНЕРАТОР ПРОГНОЗОВ
+ * Создаёт посты в Telegram канале самостоятельно
+ * Запускается по расписанию
  */
 
 const BOT_TOKEN = '8923310105:AAHA-ixNw9vKBdfhHo2-SWHuRB18XNwpfjc';
-const CHANNEL_ID = '@cup_prognoze_test';
+const CHANNEL_ID = '@cup_prognoze_all';
 
-const TEAMS = [
+// ===== КОМАНДЫ И ТУРНИРЫ =====
+const MATCHES = [
     { home: 'Реал Мадрид', away: 'Барселона', league: 'Ла Лига' },
     { home: 'Ливерпуль', away: 'Манчестер Сити', league: 'АПЛ' },
     { home: 'Бавария', away: 'Боруссия Дортмунд', league: 'Бундеслига' },
@@ -16,64 +20,117 @@ const TEAMS = [
     { home: 'Атлетико', away: 'Реал Сосьедад', league: 'Ла Лига' },
     { home: 'Наполи', away: 'Ювентус', league: 'Серия А' },
     { home: 'Бенфика', away: 'Порту', league: 'Примейра' },
-    { home: 'Аякс', away: 'ПСВ', league: 'Эредивизи' }
+    { home: 'Аякс', away: 'ПСВ', league: 'Эредивизи' },
+    { home: 'Спартак', away: 'Зенит', league: 'РПЛ' },
+    { home: 'Динамо', away: 'ЦСКА', league: 'РПЛ' },
 ];
 
-const PREDICTIONS = [
-    'Победа хозяев',
-    'Ничья',
-    'Победа гостей',
-    'Тотал больше 2.5',
-    'Тотал меньше 2.5',
-    'Обе команды забьют',
-    'Фора хозяев (-1)',
-    'Фора гостей (+1)'
-];
-
+// ===== СЛУЧАЙНЫЕ ДАННЫЕ =====
 function random(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function randomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+function randomFloat(min, max) { return (Math.random() * (max - min) + min).toFixed(1); }
 
 function randomDate() {
     const d = new Date();
-    d.setDate(d.getDate() + Math.floor(Math.random() * 7) + 1);
-    return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()} ${String(Math.floor(Math.random() * 12) + 12).padStart(2, '0')}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`;
+    d.setDate(d.getDate() + randomInt(1, 7));
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    const hours = String(randomInt(12, 23)).padStart(2, '0');
+    const minutes = String(randomInt(0, 59)).padStart(2, '0');
+    return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
 
-function generate() {
-    const match = random(TEAMS);
-    const prediction = random(PREDICTIONS);
-    const odds = (1.5 + Math.random() * 1.5).toFixed(2);
+// ===== ГЕНЕРАЦИЯ ПОСТА =====
+function generatePost() {
+    const match = random(MATCHES);
+    const attackHome = randomInt(40, 90);
+    const attackAway = randomInt(40, 90);
+    const defenseHome = randomInt(40, 90);
+    const defenseAway = randomInt(40, 90);
+    const formHome = randomInt(40, 90);
+    const formAway = randomInt(40, 90);
+
+    const goalsHome = randomInt(1, 5);
+    const goalsAway = randomInt(0, 4);
+    const goalsHomeAvg = randomFloat(1.0, 2.5);
+    const goalsAwayAvg = randomFloat(1.0, 2.5);
+
+    const concededHome = randomInt(0, 4);
+    const concededAway = randomInt(0, 4);
+    const concededHomeAvg = randomFloat(0.5, 2.0);
+    const concededAwayAvg = randomFloat(0.5, 2.0);
+
+    const played = randomInt(2, 5);
+    const wins = randomInt(0, played);
+    const draws = randomInt(0, played - wins);
+    const losses = played - wins - draws;
+
+    const statuses = ['Завершен', 'Завершен', 'Завершен', 'Идет', 'Скоро'];
+    const status = random(statuses);
+
     const date = randomDate();
-    const score = Math.random() > 0.6 ? `\n📊 Счет: ${Math.floor(Math.random() * 3)}-${Math.floor(Math.random() * 3)}` : '';
 
-    return `⚽ ${match.home} — ${match.away}
+    let post = `${match.home} - ${match.away}\n\n`;
+    post += `🏆 Турнир: ${match.league}\n\n`;
+    post += `Атака: ${match.home} ${attackHome}, ${match.away} ${attackAway}\n`;
+    post += `Защита: ${match.home} ${defenseHome}, ${match.away} ${defenseAway}\n`;
+    post += `Форма: ${match.home} ${formHome}, ${match.away} ${formAway}\n`;
+    post += `Голы: ${match.home} ${goalsHome} (${goalsHomeAvg}), ${match.away} ${goalsAway} (${goalsAwayAvg})\n`;
+    post += `Пропущено: ${match.home} ${concededHome} (${concededHomeAvg}), ${match.away} ${concededAway} (${concededAwayAvg})\n\n`;
+    post += `Сыграно: ${played}\n`;
+    post += `В: ${wins}\n`;
+    post += `Н: ${draws}\n`;
+    post += `П: ${losses}\n\n`;
+    post += `Источник: AI Predictor\n\n`;
+    post += `СЧЕТ: ${goalsHome}-${goalsAway}\n\n`;
+    post += `СТАТУС: ${status}\n\n`;
+    post += `⏰ ${date}`;
 
-🏆 Турнир: ${match.league}
-
-📊 Анализ: ${match.home} в отличной форме, ${match.away} показывает нестабильные результаты.
-
-🎯 Прогноз: ${prediction}
-📈 Коэффициент: ${odds}
-
-📅 ${date}
-🏁 СТАТУС: Скоро${score}
-
-🔗 Источник: CupPrognoze AI
-
-🤖 Прогноз сгенерирован автоматически
-📱 Подписывайся: ${CHANNEL_ID}`;
+    return post;
 }
 
-async function post() {
-    const post = generate();
-    console.log('📝 Прогноз:\n' + '─'.repeat(50) + '\n' + post + '\n' + '─'.repeat(50));
+// ===== ПУБЛИКАЦИЯ В TELEGRAM =====
+async function postToTelegram(text) {
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
-    const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: CHANNEL_ID, text: post, parse_mode: 'HTML' })
+        body: JSON.stringify({
+            chat_id: CHANNEL_ID,
+            text: text,
+            parse_mode: 'HTML'
+        })
     });
-    const d = await r.json();
-    console.log(d.ok ? '✅ Опубликовано!' : '❌ Ошибка');
+
+    const data = await response.json();
+
+    if (data.ok) {
+        console.log('✅ Пост опубликован!');
+        console.log('📝', text.split('\n')[0]);
+        return true;
+    } else {
+        console.error('❌ Ошибка:', data);
+        return false;
+    }
 }
 
-post();
+// ===== ЗАПУСК =====
+async function main() {
+    console.log(`\n🚀 Генерация прогноза...`);
+    console.log(`⏰ ${new Date().toLocaleString()}`);
+
+    const post = generatePost();
+    console.log('\n📝 Сгенерированный пост:');
+    console.log('─'.repeat(40));
+    console.log(post);
+    console.log('─'.repeat(40));
+
+    await postToTelegram(post);
+}
+
+main().catch(console.error);
+EOF
