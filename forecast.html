@@ -1,0 +1,195 @@
+cd /c/Users/spoti/Sait-naeb
+cat > forecast.html << 'EOF' <!DOCTYPE html>
+  <html lang="ru">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прогноз — CupPrognoze</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="container">
+        <a href="index.html" class="logo">
+          <span class="logo-icon">⚽</span>
+          <span class="logo-text">Cup<span class="logo-highlight">Prognoze</span></span>
+        </a>
+        <nav class="nav">
+          <ul class="nav-list">
+            <li><a href="index.html#sources" class="nav-link">Наши источники</a></li>
+            <li><a href="index.html#forecasts" class="nav-link active">Прогнозы</a></li>
+            <li><a href="index.html#rating" class="nav-link">Рейтинг</a></li>
+            <li><a href="index.html#cappers" class="nav-link">Капперы</a></li>
+            <li><a href="index.html#articles" class="nav-link">Статьи</a></li>
+            <li><a href="index.html#shares" class="nav-link">Складчины</a></li>
+            <li><a href="index.html#reviews" class="nav-link">Отзывы</a></li>
+          </ul>
+        </nav>
+        <div class="burger" id="burgerBtn">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="container">
+        <div class="forecast-detail-page" id="forecastDetail">
+          <div class="breadcrumb">
+            <a href="index.html#forecasts">← Назад к прогнозам</a>
+            <span> / </span>
+            <span id="breadcrumbMatch">Загрузка...</span>
+          </div>
+
+          <div class="forecast-detail-card" id="forecastCard">
+            <div class="detail-header">
+              <div class="detail-tournament" id="detailTournament">—</div>
+              <div class="detail-time" id="detailTime">—</div>
+            </div>
+
+            <div class="detail-teams">
+              <div class="detail-team home">
+                <span class="detail-team-name" id="detailHomeTeam">—</span>
+                <span class="detail-team-date" id="detailHomeDate">—</span>
+              </div>
+              <div class="detail-score-wrapper">
+                <div class="detail-score" id="detailScore">—</div>
+                <div class="detail-status" id="detailStatus">—</div>
+              </div>
+              <div class="detail-team away">
+                <span class="detail-team-name" id="detailAwayTeam">—</span>
+                <span class="detail-team-date" id="detailAwayDate">—</span>
+              </div>
+            </div>
+
+            <div class="detail-title" id="detailTitle">Загрузка прогноза...</div>
+
+            <div class="detail-meta">
+              <span>📅 Опубликовано: <span id="detailPublished">—</span></span>
+              <span>🔄 Обновлено: <span id="detailUpdated">—</span></span>
+            </div>
+
+            <div class="detail-actions">
+              <a href="#" class="detail-btn" id="detailStats">📊 Статистика</a>
+              <a href="#" class="detail-btn" id="detailOverview">📋 Обзор</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <p>&copy; 2026 CupPrognoze. Все права защищены. 18+</p>
+          <p class="footer-disclaimer">Сайт носит информационный характер и не является букмекерской конторой.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // ============================================================
+      //  ЗАГРУЗКА ПРОГНОЗА ПО ID ИЗ URL
+      // ============================================================
+
+      const API_URL = 'https://cupprognoze.onrender.com/api';
+      // Для локальной разработки:
+      // const API_URL = 'http://localhost:3000/api';
+
+      function getForecastId() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('id');
+      }
+
+      function renderForecast(forecast) {
+        document.title = `${forecast.homeTeam || 'Матч'} — ${forecast.awayTeam || 'Матч'} | CupPrognoze`;
+
+        document.getElementById('breadcrumbMatch').textContent =
+          `${forecast.homeTeam || 'Команда 1'} — ${forecast.awayTeam || 'Команда 2'}`;
+
+        document.getElementById('detailTournament').textContent = forecast.tournament || 'Футбол';
+        document.getElementById('detailTime').textContent = forecast.matchTime || '—';
+
+        document.getElementById('detailHomeTeam').textContent = forecast.homeTeam || 'Команда 1';
+        document.getElementById('detailAwayTeam').textContent = forecast.awayTeam || 'Команда 2';
+        document.getElementById('detailHomeDate').textContent = forecast.homeDate || '—';
+        document.getElementById('detailAwayDate').textContent = forecast.awayDate || '—';
+
+        // Счет
+        let scoreDisplay = '—';
+        if (forecast.homeScore !== null && forecast.homeScore !== undefined &&
+          forecast.awayScore !== null && forecast.awayScore !== undefined) {
+          scoreDisplay = `${forecast.homeScore}-${forecast.awayScore}`;
+        }
+        document.getElementById('detailScore').textContent = scoreDisplay;
+
+        // Статус
+        const statusEl = document.getElementById('detailStatus');
+        const statusColors = {
+          'Завершен': '#ff4444',
+          'Идет': '#00ff88',
+          'Скоро': '#ffd700',
+          'Перерыв': '#ff6b6b'
+        };
+        statusEl.textContent = forecast.status || 'Скоро';
+        statusEl.style.color = statusColors[forecast.status] || '#6a5a5a';
+
+        // Заголовок
+        const title = `${forecast.homeTeam || ''} ${forecast.awayTeam || ''} прогноз и ставка на матч ${forecast.matchTime || ''}`.trim();
+        document.getElementById('detailTitle').textContent = title || 'Прогноз на матч';
+
+        // Даты
+        const now = new Date().toLocaleString('ru-RU');
+        document.getElementById('detailPublished').textContent = forecast.dateDisplay || now;
+        document.getElementById('detailUpdated').textContent = now;
+
+        // Кнопки
+        document.getElementById('detailStats').href = forecast.link || '#';
+        document.getElementById('detailOverview').href = forecast.link || '#';
+      }
+
+      function loadForecast() {
+        const id = getForecastId();
+        if (!id) {
+          document.getElementById('detailTitle').textContent = '❌ Прогноз не найден';
+          return;
+        }
+
+        fetch(`${API_URL}/forecasts?limit=100`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.success && data.data) {
+              const forecast = data.data.find(f => f.id === id);
+              if (forecast) {
+                renderForecast(forecast);
+              } else {
+                document.getElementById('detailTitle').textContent = '❌ Прогноз не найден';
+              }
+            } else {
+              document.getElementById('detailTitle').textContent = '❌ Ошибка загрузки';
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            document.getElementById('detailTitle').textContent = '❌ Ошибка загрузки';
+          });
+      }
+
+      // ===== Мобильное меню =====
+      document.addEventListener('DOMContentLoaded', () => {
+        const burger = document.getElementById('burgerBtn');
+        const nav = document.querySelector('.nav');
+        if (burger && nav) {
+          burger.addEventListener('click', () => {
+            nav.classList.toggle('open');
+          });
+        }
+
+        loadForecast();
+      });
+    </script>
+  </body>
+
+  </html>
+  EOF
