@@ -252,76 +252,71 @@
       }
     }
 
-    function renderForecast(forecast) {
-      document.title = `${forecast.homeTeam || 'Матч'} — ${forecast.awayTeam || 'Матч'} | CupPrognoze`;
+    function renderStats(forecast) {
+      document.getElementById('statsHomeName').textContent = forecast.homeTeam || 'Команда 1';
+      document.getElementById('statsAwayName').textContent = forecast.awayTeam || 'Команда 2';
 
-      document.getElementById('breadcrumbMatch').textContent =
-        `${forecast.homeTeam || 'Команда 1'} — ${forecast.awayTeam || 'Команда 2'}`;
-
-      document.getElementById('detailTournament').textContent = forecast.tournament || 'Футбол';
-      document.getElementById('detailTime').textContent = forecast.matchTime || '—';
-
-      document.getElementById('detailHomeTeam').textContent = forecast.homeTeam || 'Команда 1';
-      document.getElementById('detailAwayTeam').textContent = forecast.awayTeam || 'Команда 2';
-      document.getElementById('detailHomeDate').textContent = forecast.homeDate || '—';
-      document.getElementById('detailAwayDate').textContent = forecast.awayDate || '—';
-
-      let scoreDisplay = '—';
-      if (forecast.homeScore !== null && forecast.homeScore !== undefined &&
-        forecast.awayScore !== null && forecast.awayScore !== undefined) {
-        scoreDisplay = `${forecast.homeScore}-${forecast.awayScore}`;
-      }
-      document.getElementById('detailScore').textContent = scoreDisplay;
-
-      const statusEl = document.getElementById('detailStatus');
-      const statusColors = {
-        'Завершен': '#ff4444',
-        'Идет': '#00ff88',
-        'Скоро': '#ffd700',
-        'Перерыв': '#ff6b6b'
-      };
-      statusEl.textContent = forecast.status || 'Скоро';
-      statusEl.style.color = statusColors[forecast.status] || '#6a5a5a';
-
-      let statsHtml = '';
-      if (forecast.teamStats && forecast.teamStats.length > 0) {
-        statsHtml = '<div class="detail-form">';
-        forecast.teamStats.forEach(stat => {
-          const total = 4;
-          const wins = Math.min(stat.wins || 0, total);
-          const losses = Math.min(stat.losses || 0, total);
-          const draws = Math.max(0, total - wins - losses);
-
-          let circles = '';
-          for (let i = 0; i < wins; i++) circles += '🟢';
-          for (let i = 0; i < draws; i++) circles += '⚪';
-          for (let i = 0; i < losses; i++) circles += '🔴';
-
-          const record = draws > 0 ? `${wins}-${losses}-${draws}` : `${wins}-${losses}`;
-
-          statsHtml += `
-                        <div class="detail-form-line">
-                            <span class="detail-form-emoji">${circles}</span>
-                            <span class="detail-form-team">${stat.team}</span>
-                            <span class="detail-form-stats">${record}</span>
-                        </div>
-                    `;
+      // Если нет данных — пустые полоски
+      if (!forecast.teamStatsDetailed || forecast.teamStatsDetailed.length === 0) {
+        ['HomeAttack', 'HomeDefense', 'HomeForm', 'AwayAttack', 'AwayDefense', 'AwayForm'].forEach(id => {
+          const el = document.getElementById('stats' + id);
+          if (el) el.innerHTML = createProgressBar(0);
         });
-        statsHtml += '</div>';
+        ['HomeGoals', 'HomeConceded', 'AwayGoals', 'AwayConceded'].forEach(id => {
+          document.getElementById('stats' + id).textContent = '—';
+        });
+        ['Played', 'Wins', 'Draws', 'Losses'].forEach(id => {
+          document.getElementById('stats' + id).textContent = '—';
+        });
+        return;
       }
-      document.getElementById('detailForm').innerHTML = statsHtml;
 
-      const title = `${forecast.homeTeam || ''} ${forecast.awayTeam || ''} прогноз и ставка на матч ${forecast.matchTime || ''}`.trim();
-      document.getElementById('detailTitle').textContent = title || 'Прогноз на матч';
+      const home = forecast.teamStatsDetailed[0] || {};
+      const away = forecast.teamStatsDetailed[1] || {};
+      const homeStats = home.stats || {};
+      const awayStats = away.stats || {};
 
-      const now = new Date().toLocaleString('ru-RU');
-      document.getElementById('detailPublished').textContent = forecast.dateDisplay || now;
-      document.getElementById('detailUpdated').textContent = now;
+      function createProgressBar(value) {
+        const num = parseInt(value) || 0;
+        const percent = Math.min(Math.max(num, 0), 100);
 
-      document.getElementById('detailStats').href = forecast.link || '#';
-      document.getElementById('detailOverview').href = forecast.link || '#';
+        // Цвет в зависимости от значения
+        let color = '#ff4444';
+        if (percent >= 70) color = '#00ff88';
+        else if (percent >= 40) color = '#ffd700';
 
-      renderStats(forecast);
+        return `
+            <div class="stat-bar">
+                <div class="stat-bar-fill" style="width: ${percent}%; background: ${color};"></div>
+                <span class="stat-bar-value">${num}</span>
+            </div>
+        `;
+      }
+
+      document.getElementById('statsHomeAttack').innerHTML = createProgressBar(homeStats.Атака || homeStats.attack || 0);
+      document.getElementById('statsHomeDefense').innerHTML = createProgressBar(homeStats.Защита || homeStats.defense || 0);
+      document.getElementById('statsHomeForm').innerHTML = createProgressBar(homeStats.Форма || homeStats.form || 0);
+
+      document.getElementById('statsAwayAttack').innerHTML = createProgressBar(awayStats.Атака || awayStats.attack || 0);
+      document.getElementById('statsAwayDefense').innerHTML = createProgressBar(awayStats.Защита || awayStats.defense || 0);
+      document.getElementById('statsAwayForm').innerHTML = createProgressBar(awayStats.Форма || awayStats.form || 0);
+
+      document.getElementById('statsHomeGoals').textContent = homeStats.Голы || homeStats.goalsScored || '—';
+      document.getElementById('statsHomeConceded').textContent = homeStats.Пропущено || homeStats.goalsConceded || '—';
+      document.getElementById('statsAwayGoals').textContent = awayStats.Голы || awayStats.goalsScored || '—';
+      document.getElementById('statsAwayConceded').textContent = awayStats.Пропущено || awayStats.goalsConceded || '—';
+
+      if (forecast.leagueStats) {
+        document.getElementById('statsPlayed').textContent = forecast.leagueStats.сыграно || forecast.leagueStats.played || '—';
+        document.getElementById('statsWins').textContent = forecast.leagueStats.в || forecast.leagueStats.wins || '—';
+        document.getElementById('statsDraws').textContent = forecast.leagueStats.н || forecast.leagueStats.draws || '—';
+        document.getElementById('statsLosses').textContent = forecast.leagueStats.п || forecast.leagueStats.losses || '—';
+      } else {
+        document.getElementById('statsPlayed').textContent = '—';
+        document.getElementById('statsWins').textContent = '—';
+        document.getElementById('statsDraws').textContent = '—';
+        document.getElementById('statsLosses').textContent = '—';
+      }
     }
 
     function loadForecast() {

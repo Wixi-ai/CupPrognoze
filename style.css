@@ -1816,30 +1816,29 @@ html {
     }
 }
 /* ============================================================
-   ПОЛОСКИ СТАТИСТИКИ
+   ПОЛОСКИ СТАТИСТИКИ (как на скрине)
    ============================================================ */
-.progress-bar-container {
+.stat-bar {
     position: relative;
     width: 100%;
-    height: 24px;
+    height: 20px;
     background: rgba(26, 17, 17, 0.6);
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
     border: 1px solid rgba(42, 24, 24, 0.3);
 }
 
-.progress-bar-fill {
+.stat-bar-fill {
     height: 100%;
-    border-radius: 12px;
-    transition: width 1s ease;
-    min-width: 4px;
+    border-radius: 10px;
+    transition: width 0.8s ease;
 }
 
-.progress-bar-value {
+.stat-bar-value {
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    right: 8px;
+    transform: translateY(-50%);
     font-size: 12px;
     font-weight: 700;
     color: #fff;
@@ -1870,13 +1869,11 @@ html {
 
 /* ===== АДАПТИВ ===== */
 @media (max-width: 480px) {
-    .progress-bar-container {
-        height: 20px;
+    .stat-bar {
+        height: 18px;
     }
-    .progress-bar-value {
+    .stat-bar-value {
         font-size: 10px;
-    }
-    .stats-param-label {
-        font-size: 10px;
+        right: 4px;
     }
 }
