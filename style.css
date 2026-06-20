@@ -1461,3 +1461,197 @@ html {
     .breadcrumb { font-size: 12px; padding: 8px 0 14px; }
     .detail-meta { font-size: 12px; }
 }
+/* ============================================================
+   ТОЛЬКО ОБВОДКА + УВЕЛИЧЕНИЕ ПРИ НАВЕДЕНИИ
+   ============================================================ */
+
+/* Все карточки */
+.card,
+.bookmaker-card,
+.capper-card,
+.article-card,
+.share-card,
+.review-card,
+.forecast-card {
+  transition: all 0.3s ease !important;
+}
+
+/* При наведении — обводка + увеличение */
+.card:hover,
+.bookmaker-card:hover,
+.capper-card:hover,
+.article-card:hover,
+.share-card:hover,
+.review-card:hover,
+.forecast-card:hover {
+  transform: scale(1.02) !important;
+  border-color: #d42a2a !important;
+  box-shadow: 0 0 25px rgba(212, 42, 42, 0.15) !important;
+  background: rgba(22, 16, 16, 0.85) !important;
+}
+
+/* Отключаем свечение границы (чтобы не мешало) */
+.card::before,
+.bookmaker-card::before,
+.capper-card::before,
+.article-card::before,
+.share-card::before,
+.review-card::before,
+.forecast-card::before {
+  display: none !important;
+}
+
+/* Отключаем всё лишнее */
+.card:hover .card-rating .stars {
+  transform: none !important;
+}
+.card:hover .card-title .sport-icon,
+.forecast-card:hover .forecast-sport {
+  transform: none !important;
+}
+.capper-card:hover .capper-avatar {
+  transform: none !important;
+  box-shadow: none !important;
+}
+.article-card:hover .article-img {
+  transform: none !important;
+}
+.review-card:hover .review-text {
+  color: #b0a0a0 !important;
+}
+.btn:hover,
+.filter-btn:hover,
+.card-link:hover,
+.bookmaker-link:hover,
+.capper-link:hover,
+.share-join-btn:hover,
+.match-link:hover,
+.article-read-link:hover {
+  transform: none !important;
+  scale: 1 !important;
+}
+.btn::after,
+.filter-btn::after,
+.card-link::after,
+.bookmaker-link::after {
+  display: none !important;
+}
+.section-title:hover::after {
+  width: 80px !important;
+}
+.back-btn:hover {
+  transform: none !important;
+}
+/* ============================================================
+   ПЛАВНАЯ ОБВОДКА + УВЕЛИЧЕНИЕ
+   ============================================================ */
+
+/* Все карточки */
+.card,
+.bookmaker-card,
+.capper-card,
+.article-card,
+.share-card,
+.review-card,
+.forecast-card {
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: 1px solid rgba(42, 24, 24, 0.3);
+  position: relative;
+  background: rgba(22, 16, 16, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* При наведении */
+.card:hover,
+.bookmaker-card:hover,
+.capper-card:hover,
+.article-card:hover,
+.share-card:hover,
+.review-card:hover,
+.forecast-card:hover {
+  transform: scale(1.015) !important;
+  border-color: #d42a2a !important;
+  box-shadow: 0 0 30px rgba(212, 42, 42, 0.12), 8px 8px 16px rgba(0, 0, 0, 0.6) !important;
+  background: rgba(22, 16, 16, 0.95) !important;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Плавная обводка + увеличение при наведении */
+.card:hover,
+.bookmaker-card:hover,
+.capper-card:hover,
+.article-card:hover,
+.share-card:hover,
+.review-card:hover,
+.forecast-card:hover {
+  transform: scale(1.015) !important;
+  border-color: #d42a2a !important;
+  box-shadow: 0 0 30px rgba(212, 42, 42, 0.12), 8px 8px 16px rgba(0, 0, 0, 0.6) !important;
+  background: rgba(22, 16, 16, 0.95) !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Отключаем всё лишнее */
+.card::before,
+.bookmaker-card::before,
+.capper-card::before,
+.article-card::before,
+.share-card::before,
+.review-card::before,
+.forecast-card::before {
+  display: none !important;
+}
+
+.card:hover .card-rating .stars {
+  transform: none !important;
+}
+.card:hover .card-title .sport-icon,
+.forecast-card:hover .forecast-sport {
+  transform: none !important;
+}
+.capper-card:hover .capper-avatar {
+  transform: none !important;
+  box-shadow: none !important;
+}
+.article-card:hover .article-img {
+  transform: none !important;
+}
+.review-card:hover .review-text {
+  color: #b0a0a0 !important;
+}
+.btn:hover,
+.filter-btn:hover,
+.card-link:hover,
+.bookmaker-link:hover,
+.capper-link:hover,
+.share-join-btn:hover,
+.match-link:hover,
+.article-read-link:hover {
+  transform: none !important;
+  scale: 1 !important;
+}
+.btn::after,
+.filter-btn::after,
+.card-link::after,
+.bookmaker-link::after {
+  display: none !important;
+}
+.section-title:hover::after {
+  width: 80px !important;
+}
+.back-btn:hover {
+  transform: none !important;
+}
+
+/* ===== СПЕЦИАЛЬНО ДЛЯ СТАТЕЙ ===== */
+.article-card {
+  background: #161010 !important;
+  border: 1px solid rgba(42, 24, 24, 0.3);
+}
+
+.article-card:hover {
+  background: #161010 !important;
+  border-color: #d42a2a !important;
+  transform: scale(1.015) !important;
+}
