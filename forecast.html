@@ -36,14 +36,12 @@
   <main class="main">
     <div class="container">
       <div class="forecast-detail-page" id="forecastDetail">
-        <!-- Хлебные крошки -->
         <div class="breadcrumb">
           <a href="index.html#forecasts">← Назад к прогнозам</a>
           <span> / </span>
           <span id="breadcrumbMatch">Загрузка...</span>
         </div>
 
-        <!-- ===== КАРТОЧКА ПРОГНОЗА ===== -->
         <div class="forecast-detail-card" id="forecastCard">
           <div class="detail-header">
             <div class="detail-tournament" id="detailTournament">—</div>
@@ -65,7 +63,6 @@
             </div>
           </div>
 
-          <!-- КРУЖКИ ФОРМЫ КОМАНД -->
           <div id="detailForm"></div>
 
           <div class="detail-title" id="detailTitle">Загрузка прогноза...</div>
@@ -85,7 +82,6 @@
         <div class="stats-block" id="statsBlock">
           <div class="stats-section-title">📊 ДЕТАЛЬНАЯ СТАТИСТИКА</div>
 
-          <!-- Команды - последние 5 -->
           <div class="stats-teams">
             <div class="stats-team" id="statsHomeTeam">
               <div class="stats-team-name" id="statsHomeName">—</div>
@@ -135,7 +131,6 @@
             </div>
           </div>
 
-          <!-- Лига - Сезон -->
           <div class="stats-league">
             <div class="stats-league-title">🏆 ЛИГА — СЕЗОН</div>
             <div class="stats-league-table">
@@ -158,7 +153,6 @@
             </div>
           </div>
 
-          <!-- Очные встречи -->
           <div class="stats-head-to-head">
             <div class="stats-h2h-title">🔄 ОЧНЫЕ ВСТРЕЧИ (ПОСЛЕДНИЕ)</div>
             <div class="stats-h2h-list" id="statsH2H">
@@ -180,26 +174,17 @@
   </footer>
 
   <script>
-    // ============================================================
-    //  ЗАГРУЗКА ПРОГНОЗА ПО ID ИЗ URL
-    // ============================================================
-
     const API_URL = 'https://cupprognoze.onrender.com/api';
-    // Для локальной разработки:
-    // const API_URL = 'http://localhost:3000/api';
 
     function getForecastId() {
       const params = new URLSearchParams(window.location.search);
       return params.get('id');
     }
 
-    // ===== ОТРИСОВКА СТАТИСТИКИ =====
     function renderStats(forecast) {
-      // Команды
       document.getElementById('statsHomeName').textContent = forecast.homeTeam || 'Команда 1';
       document.getElementById('statsAwayName').textContent = forecast.awayTeam || 'Команда 2';
 
-      // Статистика команд (если есть)
       if (forecast.teamStatsDetailed && forecast.teamStatsDetailed.length >= 2) {
         const home = forecast.teamStatsDetailed[0];
         const away = forecast.teamStatsDetailed[1];
@@ -207,43 +192,24 @@
         document.getElementById('statsHomeAttack').textContent = home.stats?.attack || '—';
         document.getElementById('statsHomeDefense').textContent = home.stats?.defense || '—';
         document.getElementById('statsHomeForm').textContent = home.stats?.form || '—';
-        document.getElementById('statsHomeGoals').textContent = home.stats?.goalsScored ? `${home.stats.goalsScored} (${home.stats.goalsAvg})` : '—';
-        document.getElementById('statsHomeConceded').textContent = home.stats?.goalsConceded || '—';
+        document.getElementById('statsHomeGoals').textContent = home.stats?.goalsScored ? `${home.stats.goalsScored} (${home.stats.goalsAvg || '—'})` : '—';
+        document.getElementById('statsHomeConceded').textContent = home.stats?.goalsConceded ? `${home.stats.goalsConceded} (${home.stats.concededAvg || '—'})` : '—';
 
         document.getElementById('statsAwayAttack').textContent = away.stats?.attack || '—';
         document.getElementById('statsAwayDefense').textContent = away.stats?.defense || '—';
         document.getElementById('statsAwayForm').textContent = away.stats?.form || '—';
-        document.getElementById('statsAwayGoals').textContent = away.stats?.goalsScored ? `${away.stats.goalsScored} (${away.stats.goalsAvg})` : '—';
-        document.getElementById('statsAwayConceded').textContent = away.stats?.goalsConceded || '—';
+        document.getElementById('statsAwayGoals').textContent = away.stats?.goalsScored ? `${away.stats.goalsScored} (${away.stats.goalsAvg || '—'})` : '—';
+        document.getElementById('statsAwayConceded').textContent = away.stats?.goalsConceded ? `${away.stats.goalsConceded} (${away.stats.concededAvg || '—'})` : '—';
       }
 
-      // Лига — сезон (если есть)
       if (forecast.leagueStats) {
         document.getElementById('statsPlayed').textContent = forecast.leagueStats.played || '—';
         document.getElementById('statsWins').textContent = forecast.leagueStats.wins || '—';
         document.getElementById('statsDraws').textContent = forecast.leagueStats.draws || '—';
         document.getElementById('statsLosses').textContent = forecast.leagueStats.losses || '—';
       }
-
-      // Очные встречи (если есть)
-      if (forecast.headToHead && forecast.headToHead.length > 0) {
-        const h2hContainer = document.getElementById('statsH2H');
-        h2hContainer.innerHTML = '';
-        forecast.headToHead.forEach(match => {
-          const item = document.createElement('div');
-          item.className = 'stats-h2h-item';
-          item.innerHTML = `
-                        <span class="stats-h2h-teams">${match.home} — ${match.away}</span>
-                        <span class="stats-h2h-score">${match.score || '—'}</span>
-                        <span class="stats-h2h-date">${match.date || '—'}</span>
-                        <span class="stats-h2h-tournament">${match.tournament || ''}</span>
-                    `;
-          h2hContainer.appendChild(item);
-        });
-      }
     }
 
-    // ===== ОТРИСОВКА ПРОГНОЗА =====
     function renderForecast(forecast) {
       document.title = `${forecast.homeTeam || 'Матч'} — ${forecast.awayTeam || 'Матч'} | CupPrognoze`;
 
@@ -258,7 +224,6 @@
       document.getElementById('detailHomeDate').textContent = forecast.homeDate || '—';
       document.getElementById('detailAwayDate').textContent = forecast.awayDate || '—';
 
-      // Счет
       let scoreDisplay = '—';
       if (forecast.homeScore !== null && forecast.homeScore !== undefined &&
         forecast.awayScore !== null && forecast.awayScore !== undefined) {
@@ -266,7 +231,6 @@
       }
       document.getElementById('detailScore').textContent = scoreDisplay;
 
-      // Статус
       const statusEl = document.getElementById('detailStatus');
       const statusColors = {
         'Завершен': '#ff4444',
@@ -277,7 +241,6 @@
       statusEl.textContent = forecast.status || 'Скоро';
       statusEl.style.color = statusColors[forecast.status] || '#6a5a5a';
 
-      // Кружки формы команд
       let statsHtml = '';
       if (forecast.teamStats && forecast.teamStats.length > 0) {
         statsHtml = '<div class="detail-form">';
@@ -306,24 +269,19 @@
       }
       document.getElementById('detailForm').innerHTML = statsHtml;
 
-      // Заголовок
       const title = `${forecast.homeTeam || ''} ${forecast.awayTeam || ''} прогноз и ставка на матч ${forecast.matchTime || ''}`.trim();
       document.getElementById('detailTitle').textContent = title || 'Прогноз на матч';
 
-      // Даты
       const now = new Date().toLocaleString('ru-RU');
       document.getElementById('detailPublished').textContent = forecast.dateDisplay || now;
       document.getElementById('detailUpdated').textContent = now;
 
-      // Кнопки
       document.getElementById('detailStats').href = forecast.link || '#';
       document.getElementById('detailOverview').href = forecast.link || '#';
 
-      // Отрисовка статистики
       renderStats(forecast);
     }
 
-    // ===== ЗАГРУЗКА =====
     function loadForecast() {
       const id = getForecastId();
       if (!id) {
@@ -351,7 +309,6 @@
         });
     }
 
-    // ===== Мобильное меню =====
     document.addEventListener('DOMContentLoaded', () => {
       const burger = document.getElementById('burgerBtn');
       const nav = document.querySelector('.nav');
