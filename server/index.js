@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -205,7 +204,6 @@ function extractTeamStats(text) {
     const stats = [];
 
     for (const line of lines) {
-        // Формат: "Название: победы X, поражения Y"
         let match = line.match(/([А-Яа-яA-Za-z\s]+)[:.]?\s*победы\s*(\d+)[,.]?\s*поражения\s*(\d+)/i);
         if (match) {
             stats.push({
@@ -216,7 +214,6 @@ function extractTeamStats(text) {
             continue;
         }
 
-        // Формат: "Название: X-Y"
         match = line.match(/([А-Яа-яA-Za-z\s]+)[:.]?\s*(\d+)\s*[-–—]\s*(\d+)/);
         if (match) {
             stats.push({
