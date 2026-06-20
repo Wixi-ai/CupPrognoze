@@ -1,4 +1,4 @@
-cat > index.js << 'EOF'
+
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -326,4 +326,3 @@ app.listen(PORT, () => {
 
 console.log('✅ Парсер готов к работе!');
 console.log('🗑️ Автоудаление: прогнозы удаляются через 5 часов после завершения матча');
-EOF
