@@ -42,7 +42,6 @@
           <span id="breadcrumbMatch">Загрузка...</span>
         </div>
 
-        <!-- ===== КАРТОЧКА ПРОГНОЗА ===== -->
         <div class="forecast-detail-card" id="forecastCard">
           <div class="detail-header">
             <div class="detail-tournament" id="detailTournament">—</div>
@@ -72,16 +71,12 @@
             <span>📅 Опубликовано: <span id="detailPublished">—</span></span>
             <span>🔄 Обновлено: <span id="detailUpdated">—</span></span>
           </div>
-
-
         </div>
 
-        <!-- ===== БЛОК СТАТИСТИКИ ===== -->
         <div class="stats-block" id="statsBlock">
           <div class="stats-section-title">📊 ДЕТАЛЬНАЯ СТАТИСТИКА</div>
 
           <div class="stats-teams">
-            <!-- Команда 1 -->
             <div class="stats-team" id="statsHomeTeam">
               <div class="stats-team-name" id="statsHomeName">—</div>
               <div class="stats-team-params">
@@ -106,7 +101,6 @@
               </div>
             </div>
 
-            <!-- Команда 2 -->
             <div class="stats-team" id="statsAwayTeam">
               <div class="stats-team-name" id="statsAwayName">—</div>
               <div class="stats-team-params">
@@ -132,7 +126,6 @@
             </div>
           </div>
 
-          <!-- Лига — Сезон -->
           <div class="stats-league">
             <div class="stats-league-title">🏆 ЛИГА — СЕЗОН</div>
             <div class="stats-league-table">
@@ -176,15 +169,12 @@
       return params.get('id');
     }
 
-    // ===== ПОЛОСКА С ЦИФРОЙ СВЕРХУ =====
     function createProgressBar(value) {
       const num = parseInt(value) || 0;
       const percent = Math.min(Math.max(num, 0), 100);
-
       let color = '#ff4444';
       if (percent >= 70) color = '#00ff88';
       else if (percent >= 40) color = '#ffd700';
-
       return `
                 <div class="stat-bar-wrapper">
                     <span class="stat-bar-number">${num}</span>
@@ -195,13 +185,10 @@
             `;
     }
 
-    // ===== ОСНОВНАЯ ФУНКЦИЯ СТАТИСТИКИ =====
     function renderStats(forecast) {
-      // Названия команд
       document.getElementById('statsHomeName').textContent = forecast.homeTeam || 'Команда 1';
       document.getElementById('statsAwayName').textContent = forecast.awayTeam || 'Команда 2';
 
-      // Если нет данных — пустые полоски
       if (!forecast.teamStatsDetailed || forecast.teamStatsDetailed.length === 0) {
         ['HomeAttack', 'HomeDefense', 'HomeForm', 'AwayAttack', 'AwayDefense', 'AwayForm'].forEach(id => {
           document.getElementById('stats' + id).innerHTML = createProgressBar(0);
@@ -215,7 +202,6 @@
         return;
       }
 
-      // Собираем данные по названиям команд
       const teams = {};
       forecast.teamStatsDetailed.forEach(item => {
         const name = item.name.trim();
@@ -225,27 +211,22 @@
 
       const homeName = forecast.homeTeam || 'Команда 1';
       const awayName = forecast.awayTeam || 'Команда 2';
-
       const homeStats = teams[homeName] || {};
       const awayStats = teams[awayName] || {};
 
-      // Полоски для хозяев
       document.getElementById('statsHomeAttack').innerHTML = createProgressBar(homeStats.Атака || homeStats.attack || 0);
       document.getElementById('statsHomeDefense').innerHTML = createProgressBar(homeStats.Защита || homeStats.defense || 0);
       document.getElementById('statsHomeForm').innerHTML = createProgressBar(homeStats.Форма || homeStats.form || 0);
 
-      // Полоски для гостей
       document.getElementById('statsAwayAttack').innerHTML = createProgressBar(awayStats.Атака || awayStats.attack || 0);
       document.getElementById('statsAwayDefense').innerHTML = createProgressBar(awayStats.Защита || awayStats.defense || 0);
       document.getElementById('statsAwayForm').innerHTML = createProgressBar(awayStats.Форма || awayStats.form || 0);
 
-      // Голы и пропущенные
       document.getElementById('statsHomeGoals').textContent = homeStats.Голы || homeStats.goalsScored || '—';
       document.getElementById('statsHomeConceded').textContent = homeStats.Пропущено || homeStats.goalsConceded || '—';
       document.getElementById('statsAwayGoals').textContent = awayStats.Голы || awayStats.goalsScored || '—';
       document.getElementById('statsAwayConceded').textContent = awayStats.Пропущено || awayStats.goalsConceded || '—';
 
-      // Лига — сезон
       if (forecast.leagueStats) {
         document.getElementById('statsPlayed').textContent = forecast.leagueStats.сыграно || forecast.leagueStats.played || '—';
         document.getElementById('statsWins').textContent = forecast.leagueStats.в || forecast.leagueStats.wins || '—';
@@ -259,7 +240,6 @@
       }
     }
 
-    // ===== ОТРИСОВКА ПРОГНОЗА =====
     function renderForecast(forecast) {
       document.title = `${forecast.homeTeam || 'Матч'} — ${forecast.awayTeam || 'Матч'} | CupPrognoze`;
 
@@ -291,7 +271,6 @@
       statusEl.textContent = forecast.status || 'Скоро';
       statusEl.style.color = statusColors[forecast.status] || '#6a5a5a';
 
-      // Кружки формы команд
       let statsHtml = '';
       if (forecast.teamStats && forecast.teamStats.length > 0) {
         statsHtml = '<div class="detail-form">';
@@ -326,9 +305,6 @@
       const now = new Date().toLocaleString('ru-RU');
       document.getElementById('detailPublished').textContent = forecast.dateDisplay || now;
       document.getElementById('detailUpdated').textContent = now;
-
-      document.getElementById('detailStats').href = forecast.link || '#';
-      document.getElementById('detailOverview').href = forecast.link || '#';
 
       renderStats(forecast);
     }
