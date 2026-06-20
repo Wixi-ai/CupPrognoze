@@ -2913,3 +2913,43 @@ html {
     grid-template-columns: 1fr;
   }
 }
+/* ============================================================
+   СТАТИСТИКА КОМАНД (КРУЖКИ)
+   ============================================================ */
+.match-form {
+    background: rgba(26, 17, 17, 0.5);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin: 8px 0 12px;
+    border: 1px solid rgba(42, 24, 24, 0.3);
+}
+
+.form-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 3px 0;
+    font-size: 14px;
+    color: #b0a0a0;
+}
+
+.form-emoji {
+    font-size: 18px;
+    letter-spacing: 2px;
+    min-width: 110px;
+}
+
+.form-team {
+    font-weight: 600;
+    color: #e0d6d6;
+    flex: 1;
+}
+
+.form-stats {
+    font-size: 12px;
+    color: #6a5a5a;
+    font-weight: 600;
+    background: rgba(26, 17, 17, 0.5);
+    padding: 2px 10px;
+    border-radius: 12px;
+}

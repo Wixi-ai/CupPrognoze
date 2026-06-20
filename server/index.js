@@ -1,3 +1,4 @@
+cat > index.js << 'EOF'
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -43,21 +44,17 @@ function saveForecasts(data) {
     }
 }
 
-// ========== АВТОУДАЛЕНИЕ ЗАВЕРШЕННЫХ ПРОГНОЗОВ ==========
+// ========== АВТОУДАЛЕНИЕ ==========
 function autoDeleteOldForecasts() {
     const forecasts = readForecasts();
     const now = new Date();
     let deletedCount = 0;
 
     const filtered = forecasts.filter(f => {
-        // Если статус не "Завершен" — оставляем
         if (f.status !== 'Завершен') return true;
-
-        // Если нет времени матча — оставляем (не можем определить)
         if (!f.matchTimeRaw) return true;
 
         try {
-            // Парсим время матча
             const parts = f.matchTimeRaw.match(/(\d{2})\.(\d{2})\.(\d{4})\s+(\d{2}):(\d{2})/);
             if (!parts) return true;
 
@@ -69,10 +66,8 @@ function autoDeleteOldForecasts() {
                 parseInt(parts[5])
             );
 
-            // Добавляем 5 часов к времени матча
             const deleteAfter = new Date(matchDate.getTime() + 5 * 60 * 60 * 1000);
 
-            // Если текущее время больше deleteAfter — удаляем
             if (now > deleteAfter) {
                 console.log(`🗑️ Удален прогноз: ${f.title} (завершен ${f.matchTime})`);
                 deletedCount++;
@@ -93,7 +88,7 @@ function autoDeleteOldForecasts() {
     return deletedCount;
 }
 
-// ========== ИЗВЛЕЧЕНИЕ ДАННЫХ ==========
+// ========== ИЗВЛЕЧЕНИЕ КОМАНД ==========
 function extractTeams(text) {
     if (!text) return null;
     const patterns = [
@@ -103,21 +98,29 @@ function extractTeams(text) {
     for (const pattern of patterns) {
         const match = text.match(pattern);
         if (match && match[1] && match[2]) {
-            return { home: match[1].trim(), away: match[2].trim() };
+            return {
+                home: match[1].trim(),
+                away: match[2].trim()
+            };
         }
     }
     return null;
 }
 
+// ========== ИЗВЛЕЧЕНИЕ СЧЕТА ==========
 function extractScore(text) {
     if (!text) return null;
     const match = text.match(/(\d+)\s*[-–—:]\s*(\d+)/);
     if (match) {
-        return { home: parseInt(match[1]), away: parseInt(match[2]) };
+        return {
+            home: parseInt(match[1]),
+            away: parseInt(match[2])
+        };
     }
     return null;
 }
 
+// ========== ИЗВЛЕЧЕНИЕ СТАТУСА ==========
 function extractStatus(text) {
     if (!text) return null;
     const statuses = ['завершен', 'идет', 'скоро', 'live', 'finished', 'в перерыве'];
@@ -138,6 +141,7 @@ function extractStatus(text) {
     return null;
 }
 
+// ========== ИЗВЛЕЧЕНИЕ ТУРНИРА ==========
 function extractTournament(text) {
     if (!text) return null;
     const match = text.match(/🏆\s*([^\n]+)/);
@@ -145,6 +149,7 @@ function extractTournament(text) {
     return null;
 }
 
+// ========== ИЗВЛЕЧЕНИЕ ИСТОЧНИКА ==========
 function extractSource(text) {
     if (!text) return null;
     const match = text.match(/источник[:.]?\s*([^\n]+)/i);
@@ -152,6 +157,7 @@ function extractSource(text) {
     return null;
 }
 
+// ========== ИЗВЛЕЧЕНИЕ СТАТИСТИКИ ==========
 function extractStats(text) {
     if (!text) return null;
     const match = text.match(/[+-]?\d+\s*[-–—]\s*[+-]?\d+/);
@@ -159,6 +165,7 @@ function extractStats(text) {
     return null;
 }
 
+// ========== ИЗВЛЕЧЕНИЕ ВРЕМЕНИ ==========
 function extractMatchTime(text) {
     if (!text) return null;
     const patterns = [
@@ -190,6 +197,40 @@ function extractMatchTime(text) {
     return null;
 }
 
+// ========== ИЗВЛЕЧЕНИЕ СТАТИСТИКИ КОМАНД ==========
+function extractTeamStats(text) {
+    if (!text) return null;
+
+    const lines = text.split('\n');
+    const stats = [];
+
+    for (const line of lines) {
+        // Формат: "Название: победы X, поражения Y"
+        let match = line.match(/([А-Яа-яA-Za-z\s]+)[:.]?\s*победы\s*(\d+)[,.]?\s*поражения\s*(\d+)/i);
+        if (match) {
+            stats.push({
+                team: match[1].trim(),
+                wins: parseInt(match[2]),
+                losses: parseInt(match[3])
+            });
+            continue;
+        }
+
+        // Формат: "Название: X-Y"
+        match = line.match(/([А-Яа-яA-Za-z\s]+)[:.]?\s*(\d+)\s*[-–—]\s*(\d+)/);
+        if (match) {
+            stats.push({
+                team: match[1].trim(),
+                wins: parseInt(match[2]),
+                losses: parseInt(match[3])
+            });
+            continue;
+        }
+    }
+
+    return stats.length > 0 ? stats : null;
+}
+
 // ========== ВЕБХУК ==========
 app.post(`/webhook/${TOKEN}`, (req, res) => {
     console.log('📩 Получен вебхук!');
@@ -199,9 +240,9 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
         const post = update.channel_post;
         const channel = post.chat;
         const text = post.text || '';
-        
+
         console.log(`📝 Новый пост из канала: ${channel.title} (@${channel.username})`);
-        
+
         const teams = extractTeams(text);
         const score = extractScore(text);
         const status = extractStatus(text);
@@ -209,8 +250,10 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
         const source = extractSource(text);
         const stats = extractStats(text);
         const matchTime = extractMatchTime(text);
+        const teamStats = extractTeamStats(text);
+
         const title = text.split('\n')[0].substring(0, 80) || 'Новый прогноз';
-        
+
         let forecasts = readForecasts();
         const exists = forecasts.some(f => f.id === `${channel.id}_${post.message_id}`);
         if (!exists) {
@@ -226,6 +269,7 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
                 tournament: tournament || null,
                 source: source || channel.title || null,
                 stats: stats || null,
+                teamStats: teamStats || null,
                 matchTime: matchTime || 'Время не указано',
                 matchTimeRaw: matchTime,
                 date: new Date(post.date * 1000).toISOString(),
@@ -234,13 +278,21 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
                 sport: 'football',
                 link: `https://t.me/${channel.username}/${post.message_id}`
             };
-            
+
             forecasts.push(forecast);
             forecasts.sort((a, b) => new Date(b.date) - new Date(a.date));
             if (forecasts.length > 500) forecasts = forecasts.slice(0, 500);
             saveForecasts(forecasts);
-            
+
             console.log(`✅ СОХРАНЕНО: ${forecast.title}`);
+            console.log(`   ⚽ ${forecast.homeTeam || '?'} - ${forecast.awayTeam || '?'}`);
+            console.log(`   🏆 ${forecast.tournament || '—'}`);
+            console.log(`   📊 Счет: ${forecast.homeScore ?? '?'}-${forecast.awayScore ?? '?'}`);
+            console.log(`   🔴 Статус: ${forecast.status}`);
+            console.log(`   ⏰ Время: ${forecast.matchTime}`);
+            if (forecast.teamStats) {
+                console.log(`   📊 Форма: ${forecast.teamStats.map(s => `${s.team} ${s.wins}-${s.losses}`).join(', ')}`);
+            }
         } else {
             console.log(`⏩ Пост уже есть`);
         }
@@ -253,9 +305,8 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
 
 // ========== API ==========
 app.get('/api/forecasts', (req, res) => {
-    // Перед отправкой — автоудаление старых
     autoDeleteOldForecasts();
-    
+
     const forecasts = readForecasts();
     const limit = parseInt(req.query.limit) || 50;
     const result = forecasts.slice(0, limit);
@@ -275,3 +326,4 @@ app.listen(PORT, () => {
 
 console.log('✅ Парсер готов к работе!');
 console.log('🗑️ Автоудаление: прогнозы удаляются через 5 часов после завершения матча');
+EOF

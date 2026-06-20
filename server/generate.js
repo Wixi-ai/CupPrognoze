@@ -35,7 +35,7 @@ function random(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 function randomDate() {
     const d = new Date();
     d.setDate(d.getDate() + Math.floor(Math.random() * 7) + 1);
-    return `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${d.getFullYear()} ${String(Math.floor(Math.random()*12)+12).padStart(2,'0')}:${String(Math.floor(Math.random()*60)).padStart(2,'0')}`;
+    return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()} ${String(Math.floor(Math.random() * 12) + 12).padStart(2, '0')}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`;
 }
 
 function generate() {
@@ -43,7 +43,7 @@ function generate() {
     const prediction = random(PREDICTIONS);
     const odds = (1.5 + Math.random() * 1.5).toFixed(2);
     const date = randomDate();
-    const score = Math.random() > 0.6 ? `\n📊 Счет: ${Math.floor(Math.random()*3)}-${Math.floor(Math.random()*3)}` : '';
+    const score = Math.random() > 0.6 ? `\n📊 Счет: ${Math.floor(Math.random() * 3)}-${Math.floor(Math.random() * 3)}` : '';
 
     return `⚽ ${match.home} — ${match.away}
 

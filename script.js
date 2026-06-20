@@ -810,7 +810,7 @@ function initForecastFilters() {
 }
 
 // ============================================================
-//  ОТРИСОВКА КАРТОЧЕК ПРОГНОЗОВ
+//  ОТРИСОВКА КАРТОЧЕК ПРОГНОЗОВ (С КРУЖКАМИ)
 // ============================================================
 
 function renderForecastCards(forecasts) {
@@ -843,6 +843,34 @@ function renderForecastCards(forecasts) {
 
     const statsDisplay = f.stats || '';
 
+    // ===== ГЕНЕРАЦИЯ КРУЖКОВ ДЛЯ КОМАНД =====
+    let statsHtml = '';
+    if (f.teamStats && f.teamStats.length > 0) {
+      statsHtml = '<div class="match-form">';
+      f.teamStats.forEach(stat => {
+        const total = 10; // Всего матчей для отображения
+        const wins = Math.min(stat.wins || 0, total);
+        const losses = Math.min(stat.losses || 0, total);
+        const draws = Math.max(0, total - wins - losses);
+
+        let circles = '';
+        for (let i = 0; i < wins; i++) circles += '🟢';
+        for (let i = 0; i < draws; i++) circles += '⚪';
+        for (let i = 0; i < losses; i++) circles += '🔴';
+
+        const record = draws > 0 ? `${wins}-${losses}-${draws}` : `${wins}-${losses}`;
+
+        statsHtml += `
+          <div class="form-line">
+            <span class="form-emoji">${circles}</span>
+            <span class="form-team">${stat.team}</span>
+            <span class="form-stats">${record}</span>
+          </div>
+        `;
+      });
+      statsHtml += '</div>';
+    }
+
     html += `
       <div class="forecast-card match-card">
         <div class="match-header">
@@ -870,6 +898,8 @@ function renderForecastCards(forecasts) {
             </div>
           </div>
         </div>
+
+        ${statsHtml}
 
         ${statsDisplay ? `
         <div class="match-stats">
