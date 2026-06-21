@@ -130,69 +130,36 @@ const channels = [
 const bookmakers = [
   {
     id: 1,
-    name: 'BetWinner',
-    description: 'Один из лучших букмекеров с широкой росписью на спортивные события. Быстрые выплаты и отличный бонус за регистрацию.',
-    rating: 4.9,
-    bonus: 'Бонус до 25 000 ₽',
-    features: ['📱 Мобильное приложение', '💳 Моментальный вывод', '🎯 Широкая роспись'],
-    link: 'https://ref.betwinner.com/your_ref_link_here',
-    logo: '',
-    logoColor: 'color-1'
-  },
-  {
-    id: 2,
-    name: '1xBet',
-    description: 'Международный бренд с огромным выбором видов спорта и тысячью событий ежедневно. Лучшие коэффициенты на топ-матчи.',
-    rating: 4.7,
-    bonus: 'Бонус до 100 000 ₽',
-    features: ['🌍 Мировые лиги', '📺 Лайв-трансляции', '🎰 Казино в подарок'],
-    link: 'https://ref.1xbet.com/your_ref_link_here',
-    logo: '',
-    logoColor: 'color-2'
-  },
-  {
-    id: 3,
-    name: 'Parimatch',
-    description: 'Надежный букмекер с отличной репутацией. Высокие коэффициенты на футбол и киберспорт. Удобный интерфейс.',
+    name: 'PARI',
+    description: 'Один из лидеров беттинговой индустрии в России. Инвестирует в спорт, партнерства с клубами и лигами.',
     rating: 4.8,
     bonus: 'Бонус до 10 000 ₽',
-    features: ['⚡ Быстрая регистрация', '🔒 Надежность', '📊 Аналитика матчей'],
+    features: ['⚡ Быстрая регистрация', '📊 Аналитика', '🔒 Надёжность'],
     link: 'https://ref.parimatch.com/your_ref_link_here',
-    logo: '',
+    logo: 'images/bookmakers/pari-logo.png',
     logoColor: 'color-3'
   },
   {
-    id: 4,
-    name: 'WinLine',
-    description: 'Отечественный букмекер с приятными бонусами и кэшбэком. Отличная поддержка русскоязычных игроков.',
+    id: 2,
+    name: 'Винлайн',
+    description: 'Отечественный букмекер с приятными бонусами, кэшбэком и отличной поддержкой.',
     rating: 4.5,
     bonus: 'Кэшбэк до 10%',
-    features: ['🇷🇺 Русский язык', '💳 Быстрый вывод', '🎁 Еженедельные акции'],
+    features: ['🇷🇺 Русский язык', '💳 Быстрый вывод', '🎁 Акции'],
     link: 'https://ref.winline.com/your_ref_link_here',
-    logo: '',
+    logo: 'images/bookmakers/winline-logo.png',
     logoColor: 'color-4'
   },
   {
-    id: 5,
-    name: 'Mostbet',
-    description: 'Популярный букмекер с низкой маржой и отличным выбором ставок. Особенно хорош для ставок на теннис и киберспорт.',
+    id: 3,
+    name: 'BetBoom',
+    description: 'Популярный букмекер с низкой маржой и щедрыми акциями. Фрибеты до 150 000 ₽.',
     rating: 4.6,
-    bonus: 'Бонус до 35 000 ₽',
-    features: ['🎾 Большой выбор спорта', '📱 App', '💰 Низкая маржа'],
-    link: 'https://ref.mostbet.com/your_ref_link_here',
-    logo: '',
+    bonus: 'Фрибеты до 150 000 ₽',
+    features: ['⚽ Большой выбор спорта', '🎁 Щедрые акции', '💰 Низкая маржа'],
+    link: 'https://ref.betboom.com/your_ref_link_here',
+    logo: 'images/bookmakers/betboom-logo.png',
     logoColor: 'color-5'
-  },
-  {
-    id: 6,
-    name: 'Leon',
-    description: 'Букмекер с приятным дизайном и отличной поддержкой. Часто дает фрибеты активным игрокам.',
-    rating: 4.4,
-    bonus: 'Фрибет до 5 000 ₽',
-    features: ['🎨 Стильный дизайн', '📞 Круглосуточная поддержка', '🎁 Фрибеты'],
-    link: 'https://ref.leon.com/your_ref_link_here',
-    logo: '',
-    logoColor: 'color-6'
   }
 ];
 

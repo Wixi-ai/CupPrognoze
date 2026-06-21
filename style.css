@@ -468,16 +468,30 @@ html {
    БУКМЕКЕРЫ
    ============================================================ */
 .bookmaker-logo {
-  width: 100%;
-  height: 120px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px dashed rgba(74, 58, 42, 0.3);
-  transition: all 0.4s ease;
-  overflow: hidden;
+    width: 100%;
+    height: 100px; /* ← УМЕНЬШИЛ ВЫСОТУ */
+    border-radius: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(74, 58, 42, 0.3);
+    transition: all 0.4s ease;
+    overflow: hidden;
+    background: rgba(13, 10, 10, 0.6); /* ← ТЁМНЫЙ ФОН */
+}
+
+.bookmaker-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* ← ВПИСЫВАЕТ КАРТИНКУ */
+    padding: 10px;
+}
+
+.bookmaker-card:hover .bookmaker-logo {
+    transform: scale(1.03);
+    border-color: #ffd700;
+    box-shadow: 0 0 30px rgba(212, 160, 32, 0.15);
 }
 .bookmaker-card:hover .bookmaker-logo {
   transform: scale(1.03);
