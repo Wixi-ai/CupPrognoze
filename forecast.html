@@ -73,24 +73,24 @@
           </div>
         </div>
 
+        <!-- Блок статистики -->
         <div class="stats-block" id="statsBlock">
           <div class="stats-section-title">📊 ДЕТАЛЬНАЯ СТАТИСТИКА</div>
-
           <div class="stats-teams">
             <div class="stats-team" id="statsHomeTeam">
               <div class="stats-team-name" id="statsHomeName">—</div>
               <div class="stats-team-params">
                 <div class="stats-param">
                   <span class="stats-param-label">Атака</span>
-                  <span class="stats-param-value" id="statsHomeAttack"></span>
+                  <span class="stats-param-value" id="statsHomeAttack">—</span>
                 </div>
                 <div class="stats-param">
                   <span class="stats-param-label">Защита</span>
-                  <span class="stats-param-value" id="statsHomeDefense"></span>
+                  <span class="stats-param-value" id="statsHomeDefense">—</span>
                 </div>
                 <div class="stats-param">
                   <span class="stats-param-label">Форма</span>
-                  <span class="stats-param-value" id="statsHomeForm"></span>
+                  <span class="stats-param-value" id="statsHomeForm">—</span>
                 </div>
               </div>
               <div class="stats-goals">
@@ -100,27 +100,20 @@
                 <span class="stats-goals-value" id="statsHomeConceded">—</span>
               </div>
             </div>
-            <!-- ===== ИСТОРИЯ ВСТРЕЧ ===== -->
-            <div class="h2h-section" id="h2hSection">
-              <div class="h2h-title">🔄 ИСТОРИЯ ВСТРЕЧ</div>
-              <div class="h2h-list" id="h2hList">
-                <div class="h2h-empty">Загрузка истории встреч...</div>
-              </div>
-            </div>
             <div class="stats-team" id="statsAwayTeam">
               <div class="stats-team-name" id="statsAwayName">—</div>
               <div class="stats-team-params">
                 <div class="stats-param">
                   <span class="stats-param-label">Атака</span>
-                  <span class="stats-param-value" id="statsAwayAttack"></span>
+                  <span class="stats-param-value" id="statsAwayAttack">—</span>
                 </div>
                 <div class="stats-param">
                   <span class="stats-param-label">Защита</span>
-                  <span class="stats-param-value" id="statsAwayDefense"></span>
+                  <span class="stats-param-value" id="statsAwayDefense">—</span>
                 </div>
                 <div class="stats-param">
                   <span class="stats-param-label">Форма</span>
-                  <span class="stats-param-value" id="statsAwayForm"></span>
+                  <span class="stats-param-value" id="statsAwayForm">—</span>
                 </div>
               </div>
               <div class="stats-goals">
@@ -131,7 +124,6 @@
               </div>
             </div>
           </div>
-
           <div class="stats-league">
             <div class="stats-league-title">🏆 ЛИГА — СЕЗОН</div>
             <div class="stats-league-table">
@@ -154,6 +146,9 @@
             </div>
           </div>
         </div>
+
+        <!-- История встреч -->
+        <div id="h2hContainer"></div>
       </div>
     </div>
   </main>
@@ -223,7 +218,6 @@
       document.getElementById('statsHomeAttack').innerHTML = createProgressBar(homeStats.Атака || homeStats.attack || 0);
       document.getElementById('statsHomeDefense').innerHTML = createProgressBar(homeStats.Защита || homeStats.defense || 0);
       document.getElementById('statsHomeForm').innerHTML = createProgressBar(homeStats.Форма || homeStats.form || 0);
-
       document.getElementById('statsAwayAttack').innerHTML = createProgressBar(awayStats.Атака || awayStats.attack || 0);
       document.getElementById('statsAwayDefense').innerHTML = createProgressBar(awayStats.Защита || awayStats.defense || 0);
       document.getElementById('statsAwayForm').innerHTML = createProgressBar(awayStats.Форма || awayStats.form || 0);
@@ -238,39 +232,44 @@
         document.getElementById('statsWins').textContent = forecast.leagueStats.в || forecast.leagueStats.wins || '—';
         document.getElementById('statsDraws').textContent = forecast.leagueStats.н || forecast.leagueStats.draws || '—';
         document.getElementById('statsLosses').textContent = forecast.leagueStats.п || forecast.leagueStats.losses || '—';
-      } else {
-        document.getElementById('statsPlayed').textContent = '—';
-        document.getElementById('statsWins').textContent = '—';
-        document.getElementById('statsDraws').textContent = '—';
-        document.getElementById('statsLosses').textContent = '—';
       }
     }
-    // ===== ИСТОРИЯ ВСТРЕЧ =====
-    function renderH2H(forecast) {
-      const list = document.getElementById('h2hList');
-      if (!list) return;
 
-      // Если есть история — показываем её
+    function renderH2H(forecast) {
+      const container = document.getElementById('h2hContainer');
+      if (!container) return;
+
       if (forecast.headToHead && forecast.headToHead.length > 0) {
-        let html = '';
+        let html = `
+                    <div class="h2h-section">
+                        <div class="h2h-title">🔄 ИСТОРИЯ ВСТРЕЧ</div>
+                        <div class="h2h-list">
+                `;
         forecast.headToHead.forEach(match => {
           html += `
-                <div class="h2h-item">
-                    <span class="h2h-teams">${match.home} — ${match.away}</span>
-                    <span class="h2h-score">${match.score || '—'}</span>
-                    <span class="h2h-date">${match.date || '—'}</span>
-                    <span class="h2h-tournament">${match.tournament || ''}</span>
-                </div>
-            `;
+                        <div class="h2h-item">
+                            <span class="h2h-teams">${match.home} — ${match.away}</span>
+                            <span class="h2h-score">${match.score || '—'}</span>
+                            <span class="h2h-date">${match.date || '—'}</span>
+                            <span class="h2h-tournament">${match.tournament || ''}</span>
+                        </div>
+                    `;
         });
-        list.innerHTML = html;
+        html += `
+                        </div>
+                    </div>
+                `;
+        container.innerHTML = html;
       } else {
-        // Если истории нет — показываем заглушку
-        list.innerHTML = `
-            <div class="h2h-empty">Нет данных об очных встречах</div>
-        `;
+        container.innerHTML = `
+                    <div class="h2h-section">
+                        <div class="h2h-title">🔄 ИСТОРИЯ ВСТРЕЧ</div>
+                        <div class="h2h-empty">Нет данных об очных встречах</div>
+                    </div>
+                `;
       }
     }
+
     function renderForecast(forecast) {
       document.title = `${forecast.homeTeam || 'Матч'} — ${forecast.awayTeam || 'Матч'} | CupPrognoze`;
 
@@ -294,13 +293,13 @@
 
       const statusEl = document.getElementById('detailStatus');
       const statusColors = {
-        'Завершен': '#ff4444',
-        'Идет': '#00ff88',
-        'Скоро': '#ffd700',
-        'Перерыв': '#ff6b6b'
+        'Завершен': '#9ca3af',
+        'Идет': '#6ee7b7',
+        'Скоро': '#a78bfa',
+        'Перерыв': '#fbbf24'
       };
       statusEl.textContent = forecast.status || 'Скоро';
-      statusEl.style.color = statusColors[forecast.status] || '#6a5a5a';
+      statusEl.style.color = statusColors[forecast.status] || '#9ca3af';
 
       let statsHtml = '';
       if (forecast.teamStats && forecast.teamStats.length > 0) {
@@ -310,14 +309,11 @@
           const wins = Math.min(stat.wins || 0, total);
           const losses = Math.min(stat.losses || 0, total);
           const draws = Math.max(0, total - wins - losses);
-
           let circles = '';
           for (let i = 0; i < wins; i++) circles += '🟢';
           for (let i = 0; i < draws; i++) circles += '⚪';
           for (let i = 0; i < losses; i++) circles += '🔴';
-
           const record = draws > 0 ? `${wins}-${losses}-${draws}` : `${wins}-${losses}`;
-
           statsHtml += `
                         <div class="detail-form-line">
                             <span class="detail-form-emoji">${circles}</span>
@@ -336,39 +332,7 @@
       const now = new Date().toLocaleString('ru-RU');
       document.getElementById('detailPublished').textContent = forecast.dateDisplay || now;
       document.getElementById('detailUpdated').textContent = now;
-      // ===== ИСТОРИЯ ВСТРЕЧ =====
-      function renderH2H(forecast) {
-        const container = document.getElementById('h2hContainer');
-        if (!container) return;
 
-        // Если есть история — показываем её
-        if (forecast.headToHead && forecast.headToHead.length > 0) {
-          let html = '';
-          forecast.headToHead.forEach(match => {
-            html += `
-                <div class="h2h-item">
-                    <span class="h2h-teams">${match.home} — ${match.away}</span>
-                    <span class="h2h-score">${match.score || '—'}</span>
-                    <span class="h2h-date">${match.date || '—'}</span>
-                    <span class="h2h-tournament">${match.tournament || ''}</span>
-                </div>
-            `;
-          });
-          container.innerHTML = `
-            <div class="h2h-section">
-                <div class="h2h-title">🔄 ИСТОРИЯ ВСТРЕЧ</div>
-                <div class="h2h-list">${html}</div>
-            </div>
-        `;
-        } else {
-          container.innerHTML = `
-            <div class="h2h-section">
-                <div class="h2h-title">🔄 ИСТОРИЯ ВСТРЕЧ</div>
-                <div class="h2h-empty">Нет данных об очных встречах</div>
-            </div>
-        `;
-        }
-      }
       renderStats(forecast);
       renderH2H(forecast);
     }
