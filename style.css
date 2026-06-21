@@ -1669,3 +1669,22 @@ html {
   border-color: #d42a2a !important;
   transform: scale(1.015) !important;
 }
+/* ===== ИНДИВИДУАЛЬНЫЙ ФОН ДЛЯ ЛОГОТИПОВ БУКМЕКЕРОВ ===== */
+
+/* PARI — ЧЁРНЫЙ ФОН */
+.bookmaker-logo.pari-bg {
+    background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+    border-color: #4a3a3a;
+}
+
+/* ВИНЛАЙН — ЧЁРНЫЙ ФОН */
+.bookmaker-logo.winline-bg {
+    background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+    border-color: #4a3a3a;
+}
+
+/* BETBOOM — ЧЁРНО-СИНИЙ ФОН */
+.bookmaker-logo.betboom-bg {
+    background: linear-gradient(135deg, #0a0a1a, #0d1a2d);
+    border-color: #1a3a5a;
+}

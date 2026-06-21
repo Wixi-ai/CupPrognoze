@@ -137,7 +137,7 @@ const bookmakers = [
     features: ['⚡ Быстрая регистрация', '📊 Аналитика', '🔒 Надёжность'],
     link: 'https://ref.parimatch.com/your_ref_link_here',
     logo: 'images/bookmakers/pari-logo.png',
-    logoColor: 'color-3'
+    logoBg: 'pari-bg'
   },
   {
     id: 2,
@@ -148,7 +148,7 @@ const bookmakers = [
     features: ['🇷🇺 Русский язык', '💳 Быстрый вывод', '🎁 Акции'],
     link: 'https://ref.winline.com/your_ref_link_here',
     logo: 'images/bookmakers/winline-logo.png',
-    logoColor: 'color-4'
+    logoBg: 'winline-bg'
   },
   {
     id: 3,
@@ -159,7 +159,7 @@ const bookmakers = [
     features: ['⚽ Большой выбор спорта', '🎁 Щедрые акции', '💰 Низкая маржа'],
     link: 'https://ref.betboom.com/your_ref_link_here',
     logo: 'images/bookmakers/betboom-logo.png',
-    logoColor: 'color-5'
+    logoBg: 'betboom-bg'
   }
 ];
 
@@ -487,7 +487,7 @@ function renderBookmakers() {
 
     html += `
       <div class="bookmaker-card" data-id="${bm.id}">
-        <div class="bookmaker-logo ${bm.logoColor || 'color-1'}">
+        <div class="bookmaker-logo ${bm.logoBg || bm.logoColor || 'color-1'}">
           ${logoHtml}
         </div>
         <div class="card-header">
