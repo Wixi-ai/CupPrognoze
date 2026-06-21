@@ -22,13 +22,34 @@ app.use(express.json());
 
 const FORECASTS_FILE = path.join(__dirname, 'forecasts.json');
 
+// ========== ИНИЦИАЛИЗАЦИЯ ФАЙЛА ==========
+function initForecastsFile() {
+    try {
+        if (!fs.existsSync(FORECASTS_FILE)) {
+            console.log('📄 Создаю новый forecasts.json');
+            fs.writeFileSync(FORECASTS_FILE, JSON.stringify([]));
+        } else {
+            // Проверяем, что файл читается
+            const data = fs.readFileSync(FORECASTS_FILE, 'utf8');
+            JSON.parse(data);
+            console.log('✅ forecasts.json существует и валиден');
+        }
+    } catch (error) {
+        console.error('❌ Ошибка при инициализации forecasts.json:', error);
+        fs.writeFileSync(FORECASTS_FILE, JSON.stringify([]));
+        console.log('📄 Создан новый forecasts.json');
+    }
+}
+
 function readForecasts() {
     try {
         if (fs.existsSync(FORECASTS_FILE)) {
-            return JSON.parse(fs.readFileSync(FORECASTS_FILE, 'utf8'));
+            const data = fs.readFileSync(FORECASTS_FILE, 'utf8');
+            return JSON.parse(data);
         }
         return [];
     } catch (error) {
+        console.error('❌ Ошибка чтения прогнозов:', error);
         return [];
     }
 }
@@ -107,7 +128,6 @@ function randomDate(daysOffset) {
 }
 
 const MATCHES = [
-    // Футбол
     { home: 'Ливерпуль', away: 'Манчестер Сити', league: 'АПЛ', sport: 'football' },
     { home: 'Арсенал', away: 'Челси', league: 'АПЛ', sport: 'football' },
     { home: 'Реал Мадрид', away: 'Барселона', league: 'Ла Лига', sport: 'football' },
@@ -118,33 +138,24 @@ const MATCHES = [
     { home: 'ПСЖ', away: 'Марсель', league: 'Лига 1', sport: 'football' },
     { home: 'Зенит', away: 'Спартак', league: 'РПЛ', sport: 'football' },
     { home: 'Динамо', away: 'ЦСКА', league: 'РПЛ', sport: 'football' },
-    // Теннис
     { home: 'Карлос Алькарас', away: 'Новак Джокович', league: 'Уимблдон', sport: 'tennis' },
     { home: 'Даниил Медведев', away: 'Янник Синнер', league: 'US Open', sport: 'tennis' },
-    { home: 'Александр Зверев', away: 'Карлос Алькарас', league: 'Ролан Гаррос', sport: 'tennis' },
-    // Киберспорт
     { home: 'FaZe Clan', away: 'Team Vitality', league: 'IEM Rio', sport: 'cybersport' },
     { home: 'NAVI', away: 'G2 Esports', league: 'BLAST Premier', sport: 'cybersport' },
-    { home: 'Team Spirit', away: 'Team Liquid', league: 'The International', sport: 'cybersport' },
-    // Баскетбол
     { home: 'Бостон Селтикс', away: 'Даллас Маверикс', league: 'НБА', sport: 'basketball' },
-    { home: 'Лос-Анджелес Лейкерс', away: 'Голден Стэйт', league: 'НБА', sport: 'basketball' },
-    // Хоккей
     { home: 'Эдмонтон Ойлерз', away: 'Флорида Пантерз', league: 'НХЛ', sport: 'hockey' },
-    { home: 'Вашингтон Кэпиталз', away: 'Питтсбург Пингвинз', league: 'НХЛ', sport: 'hockey' },
 ];
 
 function generatePost() {
     const match = random(MATCHES);
-
-    // Реалистичная статистика
+    
     const attackHome = randomInt(45, 95);
     const attackAway = randomInt(40, 90);
     const defenseHome = randomInt(40, 90);
     const defenseAway = randomInt(40, 90);
     const formHome = randomInt(40, 95);
     const formAway = randomInt(40, 90);
-
+    
     const goalsHome = randomInt(1, 5);
     const goalsAway = randomInt(0, 4);
     const goalsHomeAvg = randomFloat(1.2, 2.8);
@@ -153,7 +164,7 @@ function generatePost() {
     const concededAway = randomInt(0, 4);
     const concededHomeAvg = randomFloat(0.5, 2.0);
     const concededAwayAvg = randomFloat(0.5, 2.0);
-
+    
     const played = randomInt(3, 6);
     let wins, draws, losses;
     if (Math.random() > 0.5) {
@@ -165,13 +176,10 @@ function generatePost() {
         draws = randomInt(0, played - wins - 1);
         losses = played - wins - draws;
     }
-
-    // Дата матча: от завтра до 10 дней вперёд
+    
     const daysOffset = randomInt(1, 10);
-
-    // Статус: только "Скоро" для будущих матчей
     const statuses = ['Скоро', 'Скоро', 'Скоро', 'Скоро'];
-
+    
     let post = `${match.home} - ${match.away}\n\n`;
     post += `🏆 Турнир: ${match.league}\n\n`;
     post += `Атака: ${match.home} ${attackHome}, ${match.away} ${attackAway}\n`;
@@ -271,13 +279,11 @@ function extractMatchTime(text) {
 
 function parseStats(text) {
     if (!text) return { teams: {}, league: {} };
-
     const lines = text.split('\n');
     const result = { teams: {}, league: {} };
 
     for (const line of lines) {
         const trimmed = line.trim();
-
         let match = trimmed.match(/(Атака|Защита|Форма)[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)[,.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)/i);
         if (match) {
             const statType = match[1];
@@ -285,14 +291,12 @@ function parseStats(text) {
             const val1 = parseInt(match[3]);
             const team2 = match[4].trim();
             const val2 = parseInt(match[5]);
-
             if (!result.teams[team1]) result.teams[team1] = {};
             if (!result.teams[team2]) result.teams[team2] = {};
             result.teams[team1][statType] = val1;
             result.teams[team2][statType] = val2;
             continue;
         }
-
         match = trimmed.match(/(Голы)[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)\s*\(([\d.]+)\)[,.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)\s*\(([\d.]+)\)/i);
         if (match) {
             const team1 = match[2].trim();
@@ -301,14 +305,12 @@ function parseStats(text) {
             const team2 = match[5].trim();
             const val2 = parseInt(match[6]);
             const avg2 = parseFloat(match[7]);
-
             if (!result.teams[team1]) result.teams[team1] = {};
             if (!result.teams[team2]) result.teams[team2] = {};
             result.teams[team1]['Голы'] = `${val1} (${avg1})`;
             result.teams[team2]['Голы'] = `${val2} (${avg2})`;
             continue;
         }
-
         match = trimmed.match(/(Пропущено)[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)\s*\(([\d.]+)\)[,.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)\s*\(([\d.]+)\)/i);
         if (match) {
             const team1 = match[2].trim();
@@ -317,14 +319,12 @@ function parseStats(text) {
             const team2 = match[5].trim();
             const val2 = parseInt(match[6]);
             const avg2 = parseFloat(match[7]);
-
             if (!result.teams[team1]) result.teams[team1] = {};
             if (!result.teams[team2]) result.teams[team2] = {};
             result.teams[team1]['Пропущено'] = `${val1} (${avg1})`;
             result.teams[team2]['Пропущено'] = `${val2} (${avg2})`;
             continue;
         }
-
         match = trimmed.match(/Сыграно[:.]?\s*(\d+)/i);
         if (match) {
             result.league.сыграно = parseInt(match[1]);
@@ -346,7 +346,6 @@ function parseStats(text) {
             continue;
         }
     }
-
     return result;
 }
 
@@ -380,7 +379,6 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
                 teamStatsDetailed.push({ name, stats });
             }
 
-            // Определяем спорт по турниру
             let sport = 'football';
             if (tournament) {
                 if (tournament.includes('Уимблдон') || tournament.includes('US Open') || tournament.includes('Ролан Гаррос')) {
@@ -417,18 +415,14 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
             };
 
             forecasts.push(forecast);
-            // Сортируем по дате матча (новые сверху)
             forecasts.sort((a, b) => {
                 if (!a.matchTimeRaw) return 1;
                 if (!b.matchTimeRaw) return -1;
                 return a.matchTimeRaw.localeCompare(b.matchTimeRaw);
             });
-
-            // Оставляем только 15 последних прогнозов
             if (forecasts.length > 15) {
                 forecasts = forecasts.slice(0, 15);
             }
-
             saveForecasts(forecasts);
 
             console.log(`✅ СОХРАНЕНО: ${forecast.title}`);
@@ -458,20 +452,19 @@ app.get('/api/forecasts', (req, res) => {
 });
 
 app.get('/api/test', (req, res) => {
-    res.json({ success: true, message: 'Сервер работает! С авто-генерацией!' });
+    res.json({ success: true, message: 'Сервер работает!' });
 });
 
 // ========== ПРОВЕРКА КОЛИЧЕСТВА ПРОГНОЗОВ ==========
 async function ensureMinimumForecasts() {
     const forecasts = readForecasts();
     console.log(`📊 Текущее количество прогнозов: ${forecasts.length}`);
-
+    
     if (forecasts.length < 15) {
         console.log(`⚠️ Мало прогнозов (${forecasts.length}), создаю новые...`);
         const needed = 15 - forecasts.length;
         for (let i = 0; i < needed; i++) {
             await generateAndPost();
-            // Небольшая задержка между постами
             await new Promise(resolve => setTimeout(resolve, 2000));
         }
         console.log(`✅ Создано ${needed} новых прогнозов`);
@@ -481,6 +474,8 @@ async function ensureMinimumForecasts() {
 }
 
 // ========== ЗАПУСК ==========
+initForecastsFile();
+
 app.listen(PORT, () => {
     console.log(`✅ Сервер запущен на порту ${PORT}`);
     console.log(`🌐 Открой: http://localhost:${PORT}/api/test`);
@@ -489,16 +484,13 @@ app.listen(PORT, () => {
     console.log('📊 Минимальное количество прогнозов: 15');
 });
 
-// ===== ПЕРВЫЙ ЗАПУСК — ПРОВЕРКА КОЛИЧЕСТВА =====
 setTimeout(async () => {
     console.log('🔄 Проверяю количество прогнозов...');
     await ensureMinimumForecasts();
 }, 5000);
 
-// ===== АВТО-ГЕНЕРАЦИЯ КАЖДЫЕ 30 МИНУТ =====
 setInterval(async () => {
     await generateAndPost();
-    // После создания поста проверяем количество
     setTimeout(async () => {
         await ensureMinimumForecasts();
     }, 3000);
@@ -506,4 +498,3 @@ setInterval(async () => {
 
 console.log('✅ Парсер готов к работе!');
 console.log('🗑️ Автоудаление: прогнозы удаляются через 5 часов после завершения матча');
-console.log('📊 Новый парсинг статистики на русском!');
