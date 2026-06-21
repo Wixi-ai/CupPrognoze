@@ -1241,3 +1241,503 @@ body::before {
     font-size: 14px;
   }
 }
+/* ============================================================
+   АДАПТАЦИЯ ПОД ТЕЛЕФОНЫ
+   ============================================================ */
+
+/* ===== ОБЩИЕ ПРАВКИ ДЛЯ МОБИЛОК ===== */
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+
+  .container {
+    padding: 0 12px;
+  }
+
+  /* Шапка */
+  .header {
+    padding: 10px 0;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+  .logo-icon {
+    font-size: 22px;
+  }
+
+  .nav-list {
+    gap: 4px 10px;
+  }
+  .nav-link {
+    font-size: 12px;
+  }
+
+  /* Заголовки */
+  .section-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+    padding-bottom: 6px;
+  }
+
+  /* Фильтры */
+  .filter-tabs {
+    padding: 8px 10px;
+    gap: 4px 6px;
+    border-radius: 30px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-tabs::-webkit-scrollbar {
+    height: 2px;
+  }
+  .filter-tabs::-webkit-scrollbar-thumb {
+    background: #a78bfa;
+    border-radius: 4px;
+  }
+
+  .filter-btn {
+    font-size: 11px;
+    padding: 4px 12px;
+    white-space: nowrap;
+  }
+
+  /* Карточки */
+  .card,
+  .bookmaker-card,
+  .capper-card,
+  .article-card,
+  .share-card,
+  .review-card,
+  .forecast-card {
+    padding: 14px 16px;
+    border-radius: 12px;
+  }
+
+  .card-title {
+    font-size: 16px;
+  }
+  .card-description {
+    font-size: 13px;
+  }
+  .card-stats {
+    font-size: 11px;
+    gap: 8px;
+  }
+  .card-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .card-link {
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* Сетки — одна колонка */
+  .cards-grid,
+  .bookmakers-grid,
+  .cappers-grid,
+  .articles-grid,
+  .shares-grid,
+  .reviews-grid,
+  .forecasts-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+  }
+
+  /* Букмекеры */
+  .bookmaker-logo {
+    height: 60px;
+  }
+  .bookmaker-card .card-title {
+    font-size: 17px;
+  }
+  .bookmaker-rating-badge {
+    font-size: 12px;
+    padding: 2px 10px;
+  }
+  .bookmaker-features {
+    gap: 4px;
+  }
+  .bookmaker-feature {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+  .bookmaker-link {
+    font-size: 12px;
+    padding: 6px 16px;
+    justify-content: center;
+  }
+
+  /* Капперы */
+  .capper-avatar {
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+  }
+  .capper-name {
+    font-size: 17px;
+  }
+  .capper-stats {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .capper-stat .number {
+    font-size: 17px;
+  }
+
+  /* Статьи */
+  .article-image-wrapper {
+    height: 140px;
+  }
+  .article-title {
+    font-size: 16px;
+  }
+  .article-excerpt {
+    font-size: 12px;
+  }
+  .article-meta {
+    font-size: 11px;
+    flex-wrap: wrap;
+  }
+
+  /* Прогнозы (матчи) */
+  .forecast-card.match-card {
+    padding: 12px 14px;
+  }
+
+  .match-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .match-tournament {
+    font-size: 12px;
+  }
+  .match-time {
+    font-size: 12px;
+  }
+
+  .match-teams {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .team.home {
+    text-align: center;
+  }
+  .team.away {
+    text-align: center;
+  }
+  .team-name {
+    font-size: 16px;
+  }
+
+  .match-score-wrapper {
+    min-width: 60px;
+    padding: 4px 12px;
+  }
+  .match-score {
+    font-size: 26px;
+  }
+  .match-status {
+    font-size: 11px;
+  }
+
+  .match-stats {
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+    padding: 6px 10px;
+  }
+  .match-stats span {
+    font-size: 12px;
+  }
+
+  .match-footer {
+    padding-top: 8px;
+    margin-top: 8px;
+  }
+  .match-link {
+    font-size: 13px;
+    padding: 6px 16px;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Складчины */
+  .share-title {
+    font-size: 16px;
+  }
+  .share-details {
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+  }
+  .share-detail {
+    font-size: 12px;
+  }
+  .share-join-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+  .share-status {
+    font-size: 10px;
+  }
+
+  /* Отзывы */
+  .review-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .review-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+  .review-name {
+    font-size: 14px;
+  }
+  .review-text {
+    font-size: 13px;
+  }
+  .review-rating {
+    font-size: 13px;
+  }
+
+  /* Подвал */
+  .footer {
+    padding: 16px 0;
+  }
+  .footer p {
+    font-size: 12px;
+  }
+  .footer-links {
+    gap: 10px;
+  }
+  .footer-links a {
+    font-size: 11px;
+  }
+}
+
+/* ===== ОЧЕНЬ МАЛЕНЬКИЕ ТЕЛЕФОНЫ ===== */
+@media (max-width: 480px) {
+  .logo {
+    font-size: 17px;
+    gap: 6px;
+  }
+  .logo-icon {
+    font-size: 18px;
+  }
+
+  .nav-link {
+    font-size: 11px;
+    padding: 4px 0;
+  }
+
+  .section-title {
+    font-size: 17px;
+  }
+
+  .card,
+  .bookmaker-card,
+  .capper-card,
+  .article-card,
+  .share-card,
+  .review-card,
+  .forecast-card {
+    padding: 10px 12px;
+  }
+
+  .card-title {
+    font-size: 14px;
+  }
+  .card-description {
+    font-size: 12px;
+  }
+  .card-stats {
+    font-size: 10px;
+  }
+  .card-rating .stars {
+    font-size: 12px;
+  }
+  .card-rating .value {
+    font-size: 11px;
+  }
+
+  .team-name {
+    font-size: 14px;
+  }
+  .match-score {
+    font-size: 22px;
+  }
+
+  .bookmaker-logo {
+    height: 50px;
+  }
+  .bookmaker-card .card-title {
+    font-size: 15px;
+  }
+  .bookmaker-rating-badge {
+    font-size: 11px;
+  }
+  .bookmaker-feature {
+    font-size: 9px;
+    padding: 1px 6px;
+  }
+  .bookmaker-link {
+    font-size: 11px;
+    padding: 4px 12px;
+  }
+
+  .capper-avatar {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+  .capper-name {
+    font-size: 15px;
+  }
+  .capper-stat .number {
+    font-size: 15px;
+  }
+  .capper-stat .label {
+    font-size: 9px;
+  }
+
+  .article-image-wrapper {
+    height: 110px;
+  }
+  .article-title {
+    font-size: 14px;
+  }
+  .article-excerpt {
+    font-size: 11px;
+  }
+
+  .match-tournament {
+    font-size: 10px;
+  }
+  .match-time {
+    font-size: 10px;
+  }
+  .match-source {
+    font-size: 10px;
+  }
+  .team-name {
+    font-size: 13px;
+  }
+  .match-score {
+    font-size: 20px;
+  }
+  .match-status {
+    font-size: 10px;
+  }
+  .match-stats span {
+    font-size: 10px;
+  }
+  .match-link {
+    font-size: 12px;
+  }
+
+  .share-title {
+    font-size: 14px;
+  }
+  .share-description {
+    font-size: 12px;
+  }
+  .share-detail {
+    font-size: 11px;
+  }
+  .share-join-btn {
+    font-size: 11px;
+  }
+  .share-status {
+    font-size: 9px;
+  }
+
+  .review-text {
+    font-size: 12px;
+  }
+  .review-source {
+    font-size: 10px;
+  }
+
+  .detail-form-line {
+    font-size: 12px;
+    gap: 6px;
+  }
+  .detail-form-emoji {
+    font-size: 14px;
+    min-width: 50px;
+  }
+  .detail-form-stats {
+    font-size: 10px;
+    padding: 1px 8px;
+  }
+
+  .stats-team-name {
+    font-size: 14px;
+  }
+  .stats-param-label {
+    font-size: 9px;
+  }
+  .stats-param-value {
+    font-size: 12px;
+  }
+  .stats-goals-label {
+    font-size: 10px;
+  }
+  .stats-goals-value {
+    font-size: 12px;
+  }
+  .stat-bar-number {
+    font-size: 10px;
+  }
+  .stat-bar {
+    height: 4px;
+  }
+  .stats-league-label {
+    font-size: 10px;
+  }
+  .stats-league-value {
+    font-size: 14px;
+  }
+}
+
+/* ===== БУРГЕР-МЕНЮ (МОБИЛЬНОЕ) ===== */
+@media (max-width: 600px) {
+  .burger {
+    display: flex !important;
+  }
+
+  .nav {
+    display: none;
+    width: 100%;
+    margin: 10px 0 0;
+  }
+  .nav.open {
+    display: block;
+  }
+  .nav-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 0;
+  }
+
+  .nav-link {
+    font-size: 15px;
+    padding: 8px 0;
+    width: 100%;
+    text-align: center;
+  }
+  .nav-link::after {
+    bottom: 4px;
+  }
+}
