@@ -100,7 +100,13 @@
                 <span class="stats-goals-value" id="statsHomeConceded">—</span>
               </div>
             </div>
-
+            <!-- ===== ИСТОРИЯ ВСТРЕЧ ===== -->
+            <div class="h2h-section" id="h2hSection">
+              <div class="h2h-title">🔄 ИСТОРИЯ ВСТРЕЧ</div>
+              <div class="h2h-list" id="h2hList">
+                <div class="h2h-empty">Загрузка истории встреч...</div>
+              </div>
+            </div>
             <div class="stats-team" id="statsAwayTeam">
               <div class="stats-team-name" id="statsAwayName">—</div>
               <div class="stats-team-params">
@@ -239,7 +245,32 @@
         document.getElementById('statsLosses').textContent = '—';
       }
     }
+    // ===== ИСТОРИЯ ВСТРЕЧ =====
+    function renderH2H(forecast) {
+      const list = document.getElementById('h2hList');
+      if (!list) return;
 
+      // Если есть история — показываем её
+      if (forecast.headToHead && forecast.headToHead.length > 0) {
+        let html = '';
+        forecast.headToHead.forEach(match => {
+          html += `
+                <div class="h2h-item">
+                    <span class="h2h-teams">${match.home} — ${match.away}</span>
+                    <span class="h2h-score">${match.score || '—'}</span>
+                    <span class="h2h-date">${match.date || '—'}</span>
+                    <span class="h2h-tournament">${match.tournament || ''}</span>
+                </div>
+            `;
+        });
+        list.innerHTML = html;
+      } else {
+        // Если истории нет — показываем заглушку
+        list.innerHTML = `
+            <div class="h2h-empty">Нет данных об очных встречах</div>
+        `;
+      }
+    }
     function renderForecast(forecast) {
       document.title = `${forecast.homeTeam || 'Матч'} — ${forecast.awayTeam || 'Матч'} | CupPrognoze`;
 
@@ -305,8 +336,41 @@
       const now = new Date().toLocaleString('ru-RU');
       document.getElementById('detailPublished').textContent = forecast.dateDisplay || now;
       document.getElementById('detailUpdated').textContent = now;
+      // ===== ИСТОРИЯ ВСТРЕЧ =====
+      function renderH2H(forecast) {
+        const container = document.getElementById('h2hContainer');
+        if (!container) return;
 
+        // Если есть история — показываем её
+        if (forecast.headToHead && forecast.headToHead.length > 0) {
+          let html = '';
+          forecast.headToHead.forEach(match => {
+            html += `
+                <div class="h2h-item">
+                    <span class="h2h-teams">${match.home} — ${match.away}</span>
+                    <span class="h2h-score">${match.score || '—'}</span>
+                    <span class="h2h-date">${match.date || '—'}</span>
+                    <span class="h2h-tournament">${match.tournament || ''}</span>
+                </div>
+            `;
+          });
+          container.innerHTML = `
+            <div class="h2h-section">
+                <div class="h2h-title">🔄 ИСТОРИЯ ВСТРЕЧ</div>
+                <div class="h2h-list">${html}</div>
+            </div>
+        `;
+        } else {
+          container.innerHTML = `
+            <div class="h2h-section">
+                <div class="h2h-title">🔄 ИСТОРИЯ ВСТРЕЧ</div>
+                <div class="h2h-empty">Нет данных об очных встречах</div>
+            </div>
+        `;
+        }
+      }
       renderStats(forecast);
+      renderH2H(forecast);
     }
 
     function loadForecast() {

@@ -47,7 +47,7 @@ function addForecast(forecast) {
     // Проверяем, есть ли уже такой прогноз
     const exists = forecasts.some(f => f.id === forecast.id);
     if (exists) return false;
-    
+
     forecasts.push(forecast);
     // Сортируем по дате матча
     forecasts.sort((a, b) => {
@@ -159,7 +159,7 @@ function generatePost() {
     }
     const daysOffset = randomInt(1, 10);
     const statuses = ['Скоро', 'Скоро', 'Скоро', 'Скоро'];
-    
+
     let post = `${match.home} - ${match.away}\n\n`;
     post += `🏆 Турнир: ${match.league}\n\n`;
     post += `Атака: ${match.home} ${attackHome}, ${match.away} ${attackAway}\n`;
@@ -183,7 +183,7 @@ async function generateAndSaveForecast() {
     const post = generatePost();
     const lines = post.split('\n');
     const title = lines[0] || 'Новый прогноз';
-    
+
     // Извлекаем данные из поста
     const teams = extractTeams(post);
     const score = extractScore(post);
@@ -192,12 +192,12 @@ async function generateAndSaveForecast() {
     const source = extractSource(post);
     const matchTime = extractMatchTime(post);
     const parsedStats = parseStats(post);
-    
+
     const teamStatsDetailed = [];
     for (const [name, stats] of Object.entries(parsedStats.teams)) {
         teamStatsDetailed.push({ name, stats });
     }
-    
+
     let sport = 'football';
     if (tournament) {
         if (tournament.includes('Уимблдон') || tournament.includes('US Open') || tournament.includes('Ролан Гаррос')) sport = 'tennis';
@@ -205,10 +205,10 @@ async function generateAndSaveForecast() {
         else if (tournament.includes('НБА')) sport = 'basketball';
         else if (tournament.includes('НХЛ')) sport = 'hockey';
     }
-    
+
     // Создаём ID (временный, для уникальности)
     const id = `generated_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
-    
+
     const forecast = {
         id: id,
         title: title,
@@ -230,13 +230,13 @@ async function generateAndSaveForecast() {
         teamStatsDetailed: teamStatsDetailed.length > 0 ? teamStatsDetailed : null,
         leagueStats: Object.keys(parsedStats.league).length > 0 ? parsedStats.league : null
     };
-    
+
     // Сохраняем в память
     const added = addForecast(forecast);
     if (added) {
         console.log(`💾 СОХРАНЕНО В ПАМЯТЬ: ${forecast.title}`);
     }
-    
+
     // Отправляем в Telegram
     const url = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
     try {
@@ -406,7 +406,7 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
 
         let currentForecasts = readForecasts();
         const exists = currentForecasts.some(f => f.id === `${channel.id}_${post.message_id}`);
-        
+
         if (!exists) {
             const teamStatsDetailed = [];
             for (const [name, stats] of Object.entries(parsedStats.teams)) {
@@ -485,7 +485,7 @@ app.get('/api/test', (req, res) => {
 async function ensureMinimumForecasts() {
     const data = readForecasts();
     console.log(`📊 Текущее количество прогнозов: ${data.length}`);
-    
+
     if (data.length < 15) {
         console.log(`⚠️ Мало прогнозов (${data.length}), создаю новые...`);
         const needed = 15 - data.length;
