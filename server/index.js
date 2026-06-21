@@ -10,6 +10,7 @@ const CHANNEL_ID = '@cup_prognoze_test';
 
 console.log('🚀 Запуск парсера CupPrognoze (WEBHOOK)');
 console.log('📡 Токен:', TOKEN ? 'НАЙДЕН' : 'НЕ НАЙДЕН!');
+console.log('📡 Канал:', CHANNEL_ID);
 
 if (!TOKEN) {
     console.error('❌ Токен не найден!');
@@ -20,65 +21,45 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ========== ПАМЯТЬ (ВМЕСТО ФАЙЛА) ==========
+let forecasts = [];
 const FORECASTS_FILE = path.join(__dirname, 'forecasts.json');
 
-// ========== ИНИЦИАЛИЗАЦИЯ ФАЙЛА ==========
-function initForecastsFile() {
-    try {
-        if (!fs.existsSync(FORECASTS_FILE)) {
-            console.log('📄 Создаю новый forecasts.json');
-            fs.writeFileSync(FORECASTS_FILE, JSON.stringify([]));
-        } else {
-            // Проверяем, что файл читается
-            const data = fs.readFileSync(FORECASTS_FILE, 'utf8');
-            JSON.parse(data);
-            console.log('✅ forecasts.json существует и валиден');
-        }
-    } catch (error) {
-        console.error('❌ Ошибка при инициализации forecasts.json:', error);
-        fs.writeFileSync(FORECASTS_FILE, JSON.stringify([]));
-        console.log('📄 Создан новый forecasts.json');
-    }
-}
-
+// ========== ФУНКЦИИ ==========
 function readForecasts() {
-    try {
-        if (fs.existsSync(FORECASTS_FILE)) {
-            const data = fs.readFileSync(FORECASTS_FILE, 'utf8');
-            return JSON.parse(data);
-        }
-        return [];
-    } catch (error) {
-        console.error('❌ Ошибка чтения прогнозов:', error);
-        return [];
-    }
+    return forecasts;
 }
 
 function saveForecasts(data) {
+    forecasts = data;
+    console.log('💾 Сохранено в память прогнозов:', data.length);
+    // Пробуем сохранить в файл
     try {
-        fs.writeFileSync(FORECASTS_FILE, JSON.stringify(data, null, 2));
-        console.log('💾 Сохранено прогнозов:', data.length);
-        return true;
+        fs.writeFileSync(FORECASTS_FILE, JSON.stringify(data, null, 2), 'utf8');
+        console.log('💾 Дублировано в файл');
     } catch (error) {
-        console.error('❌ Ошибка сохранения:', error);
-        return false;
+        // Игнорируем
     }
+    return true;
 }
 
-// ========== АВТОУДАЛЕНИЕ ==========
+// ========== АВТОУДАЛЕНИЕ (ФИКС) ==========
 function autoDeleteOldForecasts() {
-    const forecasts = readForecasts();
     const now = new Date();
     let deletedCount = 0;
-
+    
+    // Фильтруем прогнозы — удаляем только те, которые завершены более 5 часов назад
     const filtered = forecasts.filter(f => {
+        // Если статус не "Завершен" — оставляем
         if (f.status !== 'Завершен') return true;
+        
+        // Если нет времени матча — оставляем
         if (!f.matchTimeRaw) return true;
-
+        
         try {
             const parts = f.matchTimeRaw.match(/(\d{2})\.(\d{2})\.(\d{4})\s+(\d{2}):(\d{2})/);
             if (!parts) return true;
-
+            
             const matchDate = new Date(
                 parseInt(parts[3]),
                 parseInt(parts[2]) - 1,
@@ -86,36 +67,35 @@ function autoDeleteOldForecasts() {
                 parseInt(parts[4]),
                 parseInt(parts[5])
             );
-
+            
+            // Удаляем через 5 часов после завершения
             const deleteAfter = new Date(matchDate.getTime() + 5 * 60 * 60 * 1000);
-
+            
             if (now > deleteAfter) {
-                console.log(`🗑️ Удален прогноз: ${f.title} (завершен ${f.matchTime})`);
+                console.log(`🗑️ Удален старый прогноз: ${f.title}`);
                 deletedCount++;
                 return false;
             }
         } catch (e) {
-            console.error('Ошибка парсинга даты:', e);
+            // Если ошибка парсинга — оставляем
+            return true;
         }
-
         return true;
     });
-
+    
+    // Если есть что удалять — сохраняем
     if (deletedCount > 0) {
         saveForecasts(filtered);
         console.log(`🗑️ Автоудаление: удалено ${deletedCount} прогнозов`);
+        return deletedCount;
     }
-
-    return deletedCount;
+    return 0;
 }
 
-// ========== ГЕНЕРАТОР ПОСТОВ ==========
+// ========== ГЕНЕРАТОР ==========
 function random(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
 function randomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-
 function randomFloat(min, max) { return parseFloat((Math.random() * (max - min) + min).toFixed(1)); }
-
 function randomDate(daysOffset) {
     const d = new Date();
     d.setDate(d.getDate() + daysOffset);
@@ -148,14 +128,12 @@ const MATCHES = [
 
 function generatePost() {
     const match = random(MATCHES);
-    
     const attackHome = randomInt(45, 95);
     const attackAway = randomInt(40, 90);
     const defenseHome = randomInt(40, 90);
     const defenseAway = randomInt(40, 90);
     const formHome = randomInt(40, 95);
     const formAway = randomInt(40, 90);
-    
     const goalsHome = randomInt(1, 5);
     const goalsAway = randomInt(0, 4);
     const goalsHomeAvg = randomFloat(1.2, 2.8);
@@ -164,7 +142,6 @@ function generatePost() {
     const concededAway = randomInt(0, 4);
     const concededHomeAvg = randomFloat(0.5, 2.0);
     const concededAwayAvg = randomFloat(0.5, 2.0);
-    
     const played = randomInt(3, 6);
     let wins, draws, losses;
     if (Math.random() > 0.5) {
@@ -176,7 +153,6 @@ function generatePost() {
         draws = randomInt(0, played - wins - 1);
         losses = played - wins - draws;
     }
-    
     const daysOffset = randomInt(1, 10);
     const statuses = ['Скоро', 'Скоро', 'Скоро', 'Скоро'];
     
@@ -195,14 +171,12 @@ function generatePost() {
     post += `СЧЕТ: ${goalsHome}-${goalsAway}\n\n`;
     post += `СТАТУС: ${random(statuses)}\n\n`;
     post += `⏰ ${randomDate(daysOffset)}`;
-
     return post;
 }
 
 async function generateAndPost() {
     const url = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
     const post = generatePost();
-
     try {
         const response = await fetch(url, {
             method: 'POST',
@@ -281,7 +255,6 @@ function parseStats(text) {
     if (!text) return { teams: {}, league: {} };
     const lines = text.split('\n');
     const result = { teams: {}, league: {} };
-
     for (const line of lines) {
         const trimmed = line.trim();
         let match = trimmed.match(/(Атака|Защита|Форма)[:.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)[,.]?\s*([А-Яа-яA-Za-z\s]+)\s*(\d+)/i);
@@ -358,7 +331,6 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
         const post = update.channel_post;
         const channel = post.chat;
         const text = post.text || '';
-
         console.log(`📝 Новый пост из канала: ${channel.title} (@${channel.username})`);
 
         const teams = extractTeams(text);
@@ -368,11 +340,11 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
         const source = extractSource(text);
         const matchTime = extractMatchTime(text);
         const parsedStats = parseStats(text);
-
         const title = text.split('\n')[0].substring(0, 80) || 'Новый прогноз';
 
-        let forecasts = readForecasts();
-        const exists = forecasts.some(f => f.id === `${channel.id}_${post.message_id}`);
+        let currentForecasts = readForecasts();
+        const exists = currentForecasts.some(f => f.id === `${channel.id}_${post.message_id}`);
+        
         if (!exists) {
             const teamStatsDetailed = [];
             for (const [name, stats] of Object.entries(parsedStats.teams)) {
@@ -381,15 +353,10 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
 
             let sport = 'football';
             if (tournament) {
-                if (tournament.includes('Уимблдон') || tournament.includes('US Open') || tournament.includes('Ролан Гаррос')) {
-                    sport = 'tennis';
-                } else if (tournament.includes('IEM') || tournament.includes('BLAST') || tournament.includes('The International')) {
-                    sport = 'cybersport';
-                } else if (tournament.includes('НБА')) {
-                    sport = 'basketball';
-                } else if (tournament.includes('НХЛ')) {
-                    sport = 'hockey';
-                }
+                if (tournament.includes('Уимблдон') || tournament.includes('US Open') || tournament.includes('Ролан Гаррос')) sport = 'tennis';
+                else if (tournament.includes('IEM') || tournament.includes('BLAST') || tournament.includes('The International')) sport = 'cybersport';
+                else if (tournament.includes('НБА')) sport = 'basketball';
+                else if (tournament.includes('НХЛ')) sport = 'hockey';
             }
 
             const forecast = {
@@ -414,24 +381,23 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
                 leagueStats: Object.keys(parsedStats.league).length > 0 ? parsedStats.league : null
             };
 
-            forecasts.push(forecast);
-            forecasts.sort((a, b) => {
+            currentForecasts.push(forecast);
+            // Сортируем по дате матча
+            currentForecasts.sort((a, b) => {
                 if (!a.matchTimeRaw) return 1;
                 if (!b.matchTimeRaw) return -1;
                 return a.matchTimeRaw.localeCompare(b.matchTimeRaw);
             });
-            if (forecasts.length > 15) {
-                forecasts = forecasts.slice(0, 15);
+            // Оставляем только 20 последних
+            if (currentForecasts.length > 20) {
+                currentForecasts = currentForecasts.slice(0, 20);
             }
-            saveForecasts(forecasts);
+            saveForecasts(currentForecasts);
 
             console.log(`✅ СОХРАНЕНО: ${forecast.title}`);
             console.log(`   ⚽ ${forecast.homeTeam || '?'} - ${forecast.awayTeam || '?'}`);
-            console.log(`   🏆 ${forecast.tournament || '—'}`);
-            console.log(`   📊 Счет: ${forecast.homeScore ?? '?'}-${forecast.awayScore ?? '?'}`);
-            console.log(`   🔴 Статус: ${forecast.status}`);
             console.log(`   ⏰ Время: ${forecast.matchTime}`);
-            console.log(`   📊 Всего прогнозов: ${forecasts.length}`);
+            console.log(`   📊 Всего прогнозов: ${currentForecasts.length}`);
         } else {
             console.log(`⏩ Пост уже есть`);
         }
@@ -444,11 +410,12 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
 
 // ========== API ==========
 app.get('/api/forecasts', (req, res) => {
+    // Сначала удаляем старые прогнозы
     autoDeleteOldForecasts();
-    const forecasts = readForecasts();
+    const data = readForecasts();
     const limit = parseInt(req.query.limit) || 50;
-    const result = forecasts.slice(0, limit);
-    res.json({ success: true, count: result.length, total: forecasts.length, data: result });
+    const result = data.slice(0, limit);
+    res.json({ success: true, count: result.length, total: data.length, data: result });
 });
 
 app.get('/api/test', (req, res) => {
@@ -457,25 +424,25 @@ app.get('/api/test', (req, res) => {
 
 // ========== ПРОВЕРКА КОЛИЧЕСТВА ПРОГНОЗОВ ==========
 async function ensureMinimumForecasts() {
-    const forecasts = readForecasts();
-    console.log(`📊 Текущее количество прогнозов: ${forecasts.length}`);
+    const data = readForecasts();
+    console.log(`📊 Текущее количество прогнозов: ${data.length}`);
     
-    if (forecasts.length < 15) {
-        console.log(`⚠️ Мало прогнозов (${forecasts.length}), создаю новые...`);
-        const needed = 15 - forecasts.length;
+    if (data.length < 15) {
+        console.log(`⚠️ Мало прогнозов (${data.length}), создаю новые...`);
+        const needed = 15 - data.length;
+        let created = 0;
         for (let i = 0; i < needed; i++) {
-            await generateAndPost();
+            const success = await generateAndPost();
+            if (success) created++;
             await new Promise(resolve => setTimeout(resolve, 2000));
         }
-        console.log(`✅ Создано ${needed} новых прогнозов`);
+        console.log(`✅ Создано ${created} новых прогнозов`);
     } else {
-        console.log(`✅ Прогнозов достаточно (${forecasts.length}/15)`);
+        console.log(`✅ Прогнозов достаточно (${data.length}/15)`);
     }
 }
 
 // ========== ЗАПУСК ==========
-initForecastsFile();
-
 app.listen(PORT, () => {
     console.log(`✅ Сервер запущен на порту ${PORT}`);
     console.log(`🌐 Открой: http://localhost:${PORT}/api/test`);
