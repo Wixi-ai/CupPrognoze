@@ -21,8 +21,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ========== ПАМЯТЬ (ВМЕСТО ФАЙЛА) ==========
+// ========== ПАМЯТЬ ==========
 let forecasts = [];
+let forecastIdCounter = 0;
 const FORECASTS_FILE = path.join(__dirname, 'forecasts.json');
 
 // ========== ФУНКЦИИ ==========
@@ -33,7 +34,6 @@ function readForecasts() {
 function saveForecasts(data) {
     forecasts = data;
     console.log('💾 Сохранено в память прогнозов:', data.length);
-    // Пробуем сохранить в файл
     try {
         fs.writeFileSync(FORECASTS_FILE, JSON.stringify(data, null, 2), 'utf8');
         console.log('💾 Дублировано в файл');
@@ -43,23 +43,36 @@ function saveForecasts(data) {
     return true;
 }
 
-// ========== АВТОУДАЛЕНИЕ (ФИКС) ==========
+function addForecast(forecast) {
+    // Проверяем, есть ли уже такой прогноз
+    const exists = forecasts.some(f => f.id === forecast.id);
+    if (exists) return false;
+    
+    forecasts.push(forecast);
+    // Сортируем по дате матча
+    forecasts.sort((a, b) => {
+        if (!a.matchTimeRaw) return 1;
+        if (!b.matchTimeRaw) return -1;
+        return a.matchTimeRaw.localeCompare(b.matchTimeRaw);
+    });
+    // Оставляем только 20 последних
+    if (forecasts.length > 20) {
+        forecasts = forecasts.slice(0, 20);
+    }
+    saveForecasts(forecasts);
+    return true;
+}
+
+// ========== АВТОУДАЛЕНИЕ ==========
 function autoDeleteOldForecasts() {
     const now = new Date();
     let deletedCount = 0;
-    
-    // Фильтруем прогнозы — удаляем только те, которые завершены более 5 часов назад
     const filtered = forecasts.filter(f => {
-        // Если статус не "Завершен" — оставляем
         if (f.status !== 'Завершен') return true;
-        
-        // Если нет времени матча — оставляем
         if (!f.matchTimeRaw) return true;
-        
         try {
             const parts = f.matchTimeRaw.match(/(\d{2})\.(\d{2})\.(\d{4})\s+(\d{2}):(\d{2})/);
             if (!parts) return true;
-            
             const matchDate = new Date(
                 parseInt(parts[3]),
                 parseInt(parts[2]) - 1,
@@ -67,29 +80,20 @@ function autoDeleteOldForecasts() {
                 parseInt(parts[4]),
                 parseInt(parts[5])
             );
-            
-            // Удаляем через 5 часов после завершения
             const deleteAfter = new Date(matchDate.getTime() + 5 * 60 * 60 * 1000);
-            
             if (now > deleteAfter) {
                 console.log(`🗑️ Удален старый прогноз: ${f.title}`);
                 deletedCount++;
                 return false;
             }
-        } catch (e) {
-            // Если ошибка парсинга — оставляем
-            return true;
-        }
+        } catch (e) { return true; }
         return true;
     });
-    
-    // Если есть что удалять — сохраняем
     if (deletedCount > 0) {
         saveForecasts(filtered);
         console.log(`🗑️ Автоудаление: удалено ${deletedCount} прогнозов`);
-        return deletedCount;
     }
-    return 0;
+    return deletedCount;
 }
 
 // ========== ГЕНЕРАТОР ==========
@@ -174,9 +178,67 @@ function generatePost() {
     return post;
 }
 
-async function generateAndPost() {
-    const url = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+// ========== ГЕНЕРАЦИЯ ПРОГНОЗА С СОХРАНЕНИЕМ ==========
+async function generateAndSaveForecast() {
     const post = generatePost();
+    const lines = post.split('\n');
+    const title = lines[0] || 'Новый прогноз';
+    
+    // Извлекаем данные из поста
+    const teams = extractTeams(post);
+    const score = extractScore(post);
+    const status = extractStatus(post);
+    const tournament = extractTournament(post);
+    const source = extractSource(post);
+    const matchTime = extractMatchTime(post);
+    const parsedStats = parseStats(post);
+    
+    const teamStatsDetailed = [];
+    for (const [name, stats] of Object.entries(parsedStats.teams)) {
+        teamStatsDetailed.push({ name, stats });
+    }
+    
+    let sport = 'football';
+    if (tournament) {
+        if (tournament.includes('Уимблдон') || tournament.includes('US Open') || tournament.includes('Ролан Гаррос')) sport = 'tennis';
+        else if (tournament.includes('IEM') || tournament.includes('BLAST') || tournament.includes('The International')) sport = 'cybersport';
+        else if (tournament.includes('НБА')) sport = 'basketball';
+        else if (tournament.includes('НХЛ')) sport = 'hockey';
+    }
+    
+    // Создаём ID (временный, для уникальности)
+    const id = `generated_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    
+    const forecast = {
+        id: id,
+        title: title,
+        text: post,
+        homeTeam: teams ? teams.home : null,
+        awayTeam: teams ? teams.away : null,
+        homeScore: score ? score.home : null,
+        awayScore: score ? score.away : null,
+        status: status || 'Скоро',
+        tournament: tournament || null,
+        source: source || 'AI Predictor',
+        matchTime: matchTime || 'Время не указано',
+        matchTimeRaw: matchTime,
+        date: new Date().toISOString(),
+        dateDisplay: new Date().toLocaleString('ru-RU'),
+        channel: 'AI Predictor',
+        sport: sport,
+        link: '#',
+        teamStatsDetailed: teamStatsDetailed.length > 0 ? teamStatsDetailed : null,
+        leagueStats: Object.keys(parsedStats.league).length > 0 ? parsedStats.league : null
+    };
+    
+    // Сохраняем в память
+    const added = addForecast(forecast);
+    if (added) {
+        console.log(`💾 СОХРАНЕНО В ПАМЯТЬ: ${forecast.title}`);
+    }
+    
+    // Отправляем в Telegram
+    const url = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
     try {
         const response = await fetch(url, {
             method: 'POST',
@@ -190,7 +252,7 @@ async function generateAndPost() {
         const data = await response.json();
         if (data.ok) {
             console.log('✅ Авто-пост создан!');
-            console.log(`📝 ${post.split('\n')[0]}`);
+            console.log(`📝 ${title}`);
             return true;
         } else {
             console.error('❌ Ошибка авто-поста:', data);
@@ -382,13 +444,11 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
             };
 
             currentForecasts.push(forecast);
-            // Сортируем по дате матча
             currentForecasts.sort((a, b) => {
                 if (!a.matchTimeRaw) return 1;
                 if (!b.matchTimeRaw) return -1;
                 return a.matchTimeRaw.localeCompare(b.matchTimeRaw);
             });
-            // Оставляем только 20 последних
             if (currentForecasts.length > 20) {
                 currentForecasts = currentForecasts.slice(0, 20);
             }
@@ -410,7 +470,6 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
 
 // ========== API ==========
 app.get('/api/forecasts', (req, res) => {
-    // Сначала удаляем старые прогнозы
     autoDeleteOldForecasts();
     const data = readForecasts();
     const limit = parseInt(req.query.limit) || 50;
@@ -432,7 +491,7 @@ async function ensureMinimumForecasts() {
         const needed = 15 - data.length;
         let created = 0;
         for (let i = 0; i < needed; i++) {
-            const success = await generateAndPost();
+            const success = await generateAndSaveForecast();
             if (success) created++;
             await new Promise(resolve => setTimeout(resolve, 2000));
         }
@@ -457,7 +516,7 @@ setTimeout(async () => {
 }, 5000);
 
 setInterval(async () => {
-    await generateAndPost();
+    await generateAndSaveForecast();
     setTimeout(async () => {
         await ensureMinimumForecasts();
     }, 3000);
