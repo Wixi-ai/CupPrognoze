@@ -30,7 +30,7 @@ const channels = [
     sport: 'football',
     rating: 4.8,
     subscribers: '12.5K',
-    price: 'Бесплатно'
+
   },
   {
     id: 2,
@@ -40,7 +40,7 @@ const channels = [
     sport: 'tennis',
     rating: 4.6,
     subscribers: '8.2K',
-    price: 'Premium'
+
   },
   {
     id: 3,
@@ -50,7 +50,7 @@ const channels = [
     sport: 'cybersport',
     rating: 4.9,
     subscribers: '23.7K',
-    price: 'Бесплатно'
+
   },
   {
     id: 4,
@@ -60,7 +60,7 @@ const channels = [
     sport: 'tabletennis',
     rating: 4.3,
     subscribers: '5.1K',
-    price: 'Бесплатно'
+
   },
   {
     id: 5,
@@ -70,7 +70,7 @@ const channels = [
     sport: 'basketball',
     rating: 4.7,
     subscribers: '9.8K',
-    price: 'Premium'
+
   },
   {
     id: 6,
@@ -80,7 +80,7 @@ const channels = [
     sport: 'hockey',
     rating: 4.4,
     subscribers: '6.3K',
-    price: 'Бесплатно'
+
   },
   {
     id: 7,
@@ -90,7 +90,7 @@ const channels = [
     sport: 'volleyball',
     rating: 4.2,
     subscribers: '3.9K',
-    price: 'Бесплатно'
+
   },
   {
     id: 8,
@@ -100,7 +100,7 @@ const channels = [
     sport: 'football',
     rating: 4.9,
     subscribers: '18.3K',
-    price: 'Premium'
+
   },
   {
     id: 9,
@@ -110,7 +110,7 @@ const channels = [
     sport: 'tennis',
     rating: 4.5,
     subscribers: '7.4K',
-    price: 'Бесплатно'
+
   },
   {
     id: 10,
@@ -120,7 +120,7 @@ const channels = [
     sport: 'cybersport',
     rating: 4.1,
     subscribers: '4.2K',
-    price: 'Бесплатно'
+
   }
 ];
 
@@ -141,10 +141,10 @@ const bookmakers = [
   },
   {
     id: 2,
-    name: 'Винлайн',
+    name: 'Winline',
     description: 'Отечественный букмекер с приятными бонусами, кэшбэком и отличной поддержкой.',
     rating: 4.5,
-    bonus: 'Кэшбэк до 10%',
+    bonus: 'Фрибет до 10 000 ₽',
     features: ['🇷🇺 Русский язык', '💳 Быстрый вывод', '🎁 Акции'],
     link: 'https://ref.winline.com/your_ref_link_here',
     logo: 'images/bookmakers/winline-logo.png',
@@ -450,7 +450,7 @@ function renderChannels(filter = 'all') {
           <div class="card-title">
             <a href="${ch.link}" target="_blank">${sportIcon} ${ch.name}</a>
           </div>
-          <span class="card-badge">${ch.price}</span>
+
         </div>
         <div class="card-description">${ch.description}</div>
         <div class="card-stats">
@@ -715,24 +715,24 @@ function loadForecasts() {
         renderFilteredForecasts();
       } else {
         container.innerHTML = `
-          <div style="text-align: center; padding: 40px 20px; color: #6a5a5a; background: #161010; border-radius: 16px; border: 1px solid #2a1818;">
-            <div style="font-size: 48px; margin-bottom: 20px;">📭</div>
-            <h3 style="color: #f0e0e0; margin-bottom: 10px;">Пока нет прогнозов</h3>
-            <p style="font-size: 16px; color: #8a7a7a;">Подпишись на каналы, чтобы видеть прогнозы здесь!</p>
-          </div>
-        `;
+  <div style="text-align: center; padding: 50px 30px; background: rgba(31, 35, 44, 0.5); border-radius: 16px; border: 1px solid rgba(139, 92, 246, 0.08);">
+    <div style="font-size: 48px; margin-bottom: 20px; opacity: 0.5;">📭</div>
+    <h3 style="color: #f1f5f9; margin-bottom: 10px; font-weight: 600;">Пока нет прогнозов</h3>
+    <p style="font-size: 16px; color: #9ca3af;">Подпишись на каналы, чтобы видеть прогнозы здесь!</p>
+  </div>
+`;
       }
     })
     .catch(error => {
       console.error('Ошибка загрузки прогнозов:', error);
       container.innerHTML = `
-        <div style="text-align: center; padding: 40px 20px; color: #ff4444; background: #161010; border-radius: 16px; border: 1px solid #2a1818;">
-          <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
-          <h3 style="color: #f0e0e0; margin-bottom: 10px;">Ошибка загрузки</h3>
-          <p style="font-size: 14px; color: #8a7a7a;">Не удалось загрузить прогнозы. Проверь, что сервер запущен.</p>
-          <p style="font-size: 12px; color: #6a5a5a; margin-top: 10px;">${error.message}</p>
-        </div>
-      `;
+  <div style="text-align: center; padding: 50px 30px; background: rgba(31, 35, 44, 0.5); border-radius: 16px; border: 1px solid rgba(239, 68, 68, 0.15);">
+    <div style="font-size: 48px; margin-bottom: 20px; opacity: 0.6;">⚠️</div>
+    <h3 style="color: #fca5a5; margin-bottom: 10px; font-weight: 600;">Ошибка загрузки</h3>
+    <p style="font-size: 14px; color: #9ca3af;">Не удалось загрузить прогнозы. Проверь, что сервер запущен.</p>
+    <p style="font-size: 12px; color: #6b7280; margin-top: 10px;">${error.message}</p>
+  </div>
+`;
     });
 }
 
@@ -787,10 +787,10 @@ function renderForecastCards(forecasts) {
 
   forecasts.forEach(f => {
     const statusColors = {
-      'Завершен': '#ff4444',
-      'Идет': '#00ff88',
-      'Скоро': '#ffd700',
-      'Перерыв': '#ff6b6b'
+      'Завершен': '#9ca3af',
+      'Идет': '#6ee7b7',
+      'Скоро': '#a78bfa',
+      'Перерыв': '#fbbf24'
     };
     const statusEmoji = {
       'Завершен': '⏹️',
@@ -799,7 +799,7 @@ function renderForecastCards(forecasts) {
       'Перерыв': '⏸️'
     };
 
-    const statusColor = statusColors[f.status] || '#6a5a5a';
+    const statusColor = statusColors[f.status] || '#9ca3af';
     const statusEmojiIcon = statusEmoji[f.status] || '⚪';
 
     let scoreDisplay = '—';
@@ -811,45 +811,45 @@ function renderForecastCards(forecasts) {
     const statsDisplay = f.stats || '';
 
     html += `
-      <div class="forecast-card match-card">
-        <div class="match-header">
-          <div class="match-tournament">${f.tournament || 'Футбол'}</div>
-          <div class="match-time">${f.matchTime || 'Время не указано'}</div>
-        </div>
+            <div class="forecast-card match-card">
+                <div class="match-header">
+                    <div class="match-tournament">${f.tournament || 'Футбол'}</div>
+                    <div class="match-time">${f.matchTime || 'Время не указано'}</div>
+                </div>
 
-        <div class="match-source">Источник: ${f.source || f.channel || '—'}</div>
+                <div class="match-source">Источник: ${f.source || f.channel || '—'}</div>
 
-        <div class="match-main">
-          <div class="match-teams">
-            <div class="team home">
-              <span class="team-name">${f.homeTeam || 'Команда 1'}</span>
+                <div class="match-main">
+                    <div class="match-teams">
+                        <div class="team home">
+                            <span class="team-name">${f.homeTeam || 'Команда 1'}</span>
+                        </div>
+                        <div class="match-score-wrapper">
+                            <div class="match-score" style="color: ${statusColor}">
+                                ${scoreDisplay}
+                            </div>
+                            <div class="match-status" style="color: ${statusColor}">
+                                ${statusEmojiIcon} ${f.status || 'Скоро'}
+                            </div>
+                        </div>
+                        <div class="team away">
+                            <span class="team-name">${f.awayTeam || 'Команда 2'}</span>
+                        </div>
+                    </div>
+                </div>
+
+                ${statsDisplay ? `
+                <div class="match-stats">
+                    <span>Детальная статистика</span>
+                    <span class="stats-numbers">${statsDisplay}</span>
+                </div>
+                ` : ''}
+
+                <div class="match-footer">
+                    <a href="forecast.html?id=${f.id}" class="match-link">📊 Смотреть прогноз →</a>
+                </div>
             </div>
-            <div class="match-score-wrapper">
-              <div class="match-score" style="color: ${statusColor}">
-                ${scoreDisplay}
-              </div>
-              <div class="match-status" style="color: ${statusColor}">
-                ${statusEmojiIcon} ${f.status || 'Скоро'}
-              </div>
-            </div>
-            <div class="team away">
-              <span class="team-name">${f.awayTeam || 'Команда 2'}</span>
-            </div>
-          </div>
-        </div>
-
-        ${statsDisplay ? `
-        <div class="match-stats">
-          <span>Детальная статистика</span>
-          <span class="stats-numbers">${statsDisplay}</span>
-        </div>
-        ` : ''}
-
-        <div class="match-footer">
-          <a href="forecast.html?id=${f.id}" class="match-link">📊 Смотреть прогноз →</a>
-        </div>
-      </div>
-    `;
+        `;
   });
 
   html += '</div>';

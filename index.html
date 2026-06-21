@@ -4,25 +4,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CupPrognoze - Прогнозы на спорт</title>
-
-  <!-- Подключаем стили -->
+  <title>CupPrognoze — премиум прогнозы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 
 <body>
+  <div class="glow-orb glow-orb-1"></div>
+  <div class="glow-orb glow-orb-2"></div>
+  <div class="glow-orb glow-orb-3"></div>
 
-  <!-- ===== ШАПКА САЙТА ===== -->
   <header class="header">
     <div class="container">
-      <!-- Логотип (кликабельный) -->
       <a href="#" class="logo" id="logoLink">
         <span class="logo-icon">⚽</span>
         <span class="logo-text">Cup<span class="logo-highlight">Prognoze</span></span>
       </a>
-
-      <!-- Навигация -->
       <nav class="nav" id="mainNav">
         <ul class="nav-list">
           <li><a href="#" class="nav-link active" data-tab="sources">Наши источники</a></li>
@@ -34,35 +35,27 @@
           <li><a href="#" class="nav-link" data-tab="reviews">Отзывы</a></li>
         </ul>
       </nav>
-
-      <!-- Мобильное меню -->
       <div class="burger" id="burgerBtn">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </div>
     </div>
   </header>
 
-  <!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
   <main class="main">
     <div class="container">
-
-      <!-- Фильтры по видам спорта (только для вкладки "Наши источники") -->
       <section class="filters-section" id="filtersSection">
         <div class="filter-tabs" id="filterTabs">
           <button class="filter-btn active" data-filter="all">Все</button>
-          <button class="filter-btn" data-filter="football">Футбол</button>
-          <button class="filter-btn" data-filter="tennis">Теннис</button>
-          <button class="filter-btn" data-filter="cybersport">Киберспорт</button>
-          <button class="filter-btn" data-filter="tabletennis">Наст. теннис</button>
-          <button class="filter-btn" data-filter="basketball">Баскетбол</button>
-          <button class="filter-btn" data-filter="hockey">Хоккей</button>
-          <button class="filter-btn" data-filter="volleyball">Волейбол</button>
+          <button class="filter-btn" data-filter="football">⚽ Футбол</button>
+          <button class="filter-btn" data-filter="tennis">🎾 Теннис</button>
+          <button class="filter-btn" data-filter="cybersport">🖥️ Киберспорт</button>
+          <button class="filter-btn" data-filter="tabletennis">🏓 Наст. теннис</button>
+          <button class="filter-btn" data-filter="basketball">🏀 Баскетбол</button>
+          <button class="filter-btn" data-filter="hockey">🏒 Хоккей</button>
+          <button class="filter-btn" data-filter="volleyball">🏐 Волейбол</button>
         </div>
       </section>
 
-      <!-- ===== ВКЛАДКА: НАШИ ИСТОЧНИКИ ===== -->
       <section class="tab-content" id="sourcesContent">
         <section class="cards-section">
           <h2 class="section-title">📡 Наши источники прогнозов</h2>
@@ -70,23 +63,19 @@
         </section>
       </section>
 
-      <!-- ===== ВКЛАДКА: ПРОГНОЗЫ ===== -->
       <section class="tab-content" id="forecastsContent" style="display: none;">
         <section class="forecasts-section">
           <h2 class="section-title">📊 Актуальные прогнозы</h2>
-
-          <!-- Фильтры для прогнозов -->
           <div class="filter-tabs forecast-filters" id="forecastFilters">
             <button class="filter-btn active" data-forecast-filter="all">Все</button>
-            <button class="filter-btn" data-forecast-filter="football">Футбол</button>
-            <button class="filter-btn" data-forecast-filter="tennis">Теннис</button>
-            <button class="filter-btn" data-forecast-filter="cybersport">Киберспорт</button>
-            <button class="filter-btn" data-forecast-filter="tabletennis">Наст. теннис</button>
-            <button class="filter-btn" data-forecast-filter="basketball">Баскетбол</button>
-            <button class="filter-btn" data-forecast-filter="hockey">Хоккей</button>
-            <button class="filter-btn" data-forecast-filter="volleyball">Волейбол</button>
+            <button class="filter-btn" data-forecast-filter="football">⚽ Футбол</button>
+            <button class="filter-btn" data-forecast-filter="tennis">🎾 Теннис</button>
+            <button class="filter-btn" data-forecast-filter="cybersport">🖥️ Киберспорт</button>
+            <button class="filter-btn" data-forecast-filter="tabletennis">🏓 Наст. теннис</button>
+            <button class="filter-btn" data-forecast-filter="basketball">🏀 Баскетбол</button>
+            <button class="filter-btn" data-forecast-filter="hockey">🏒 Хоккей</button>
+            <button class="filter-btn" data-forecast-filter="volleyball">🏐 Волейбол</button>
           </div>
-
           <div id="forecastsContainer">
             <div class="loading-spinner">
               <div class="spinner"></div>
@@ -96,7 +85,6 @@
         </section>
       </section>
 
-      <!-- ===== ВКЛАДКА: РЕЙТИНГ ===== -->
       <section class="tab-content" id="ratingContent" style="display: none;">
         <section class="bookmakers-section">
           <h2 class="section-title">🏆 Рейтинг букмекеров</h2>
@@ -104,7 +92,6 @@
         </section>
       </section>
 
-      <!-- ===== ВКЛАДКА: КАППЕРЫ ===== -->
       <section class="tab-content" id="cappersContent" style="display: none;">
         <section class="cappers-section">
           <h2 class="section-title">🎯 Топ капперы</h2>
@@ -112,7 +99,6 @@
         </section>
       </section>
 
-      <!-- ===== ВКЛАДКА: СТАТЬИ ===== -->
       <section class="tab-content" id="articlesContent" style="display: none;">
         <section class="articles-section">
           <h2 class="section-title">📰 Полезные статьи</h2>
@@ -120,7 +106,6 @@
         </section>
       </section>
 
-      <!-- ===== ВКЛАДКА: СКЛАДЧИНЫ ===== -->
       <section class="tab-content" id="sharesContent" style="display: none;">
         <section class="shares-section">
           <h2 class="section-title">🤝 Складчины</h2>
@@ -128,18 +113,15 @@
         </section>
       </section>
 
-      <!-- ===== ВКЛАДКА: ОТЗЫВЫ ===== -->
       <section class="tab-content" id="reviewsContent" style="display: none;">
         <section class="reviews-section">
           <h2 class="section-title">💬 Отзывы</h2>
           <div class="reviews-grid" id="reviewsGrid"></div>
         </section>
       </section>
-
     </div>
   </main>
 
-  <!-- ===== ПОДВАЛ ===== -->
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
@@ -153,7 +135,6 @@
     </div>
   </footer>
 
-  <!-- Подключаем скрипты -->
   <script src="script.js"></script>
 </body>
 
