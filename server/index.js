@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const TOKEN = process.env.BOT_TOKEN;
 const PORT = process.env.PORT || 3000;
-const CHANNEL_ID = '@cup_prognoze_all';
+const CHANNEL_ID = '@cup_prognoze_test';
 
 console.log('🚀 Запуск парсера CupPrognoze (WEBHOOK)');
 console.log('📡 Токен:', TOKEN ? 'НАЙДЕН' : 'НЕ НАЙДЕН!');
