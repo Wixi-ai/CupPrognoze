@@ -95,9 +95,9 @@ function randomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)
 
 function randomFloat(min, max) { return parseFloat((Math.random() * (max - min) + min).toFixed(1)); }
 
-function randomDate() {
+function randomDate(daysOffset) {
     const d = new Date();
-    d.setDate(d.getDate() + randomInt(1, 10));
+    d.setDate(d.getDate() + daysOffset);
     const day = String(d.getDate()).padStart(2, '0');
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const year = d.getFullYear();
@@ -106,26 +106,35 @@ function randomDate() {
     return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
 
-function generatePost() {
-    const MATCHES = [
-        { home: 'Ливерпуль', away: 'Манчестер Сити', league: 'АПЛ' },
-        { home: 'Арсенал', away: 'Челси', league: 'АПЛ' },
-        { home: 'Манчестер Юнайтед', away: 'Тоттенхэм', league: 'АПЛ' },
-        { home: 'Ньюкасл', away: 'Астон Вилла', league: 'АПЛ' },
-        { home: 'Вест Хэм', away: 'Брайтон', league: 'АПЛ' },
-        { home: 'Реал Мадрид', away: 'Барселона', league: 'Ла Лига' },
-        { home: 'Атлетико', away: 'Реал Сосьедад', league: 'Ла Лига' },
-        { home: 'Севилья', away: 'Вильярреал', league: 'Ла Лига' },
-        { home: 'Милан', away: 'Интер', league: 'Серия А' },
-        { home: 'Ювентус', away: 'Наполи', league: 'Серия А' },
-        { home: 'Рома', away: 'Лацио', league: 'Серия А' },
-        { home: 'Бавария', away: 'Боруссия Дортмунд', league: 'Бундеслига' },
-        { home: 'РБ Лейпциг', away: 'Байер Леверкузен', league: 'Бундеслига' },
-        { home: 'ПСЖ', away: 'Марсель', league: 'Лига 1' },
-        { home: 'Зенит', away: 'Спартак', league: 'РПЛ' },
-        { home: 'Динамо', away: 'ЦСКА', league: 'РПЛ' },
-    ];
+const MATCHES = [
+    // Футбол
+    { home: 'Ливерпуль', away: 'Манчестер Сити', league: 'АПЛ', sport: 'football' },
+    { home: 'Арсенал', away: 'Челси', league: 'АПЛ', sport: 'football' },
+    { home: 'Реал Мадрид', away: 'Барселона', league: 'Ла Лига', sport: 'football' },
+    { home: 'Атлетико', away: 'Реал Сосьедад', league: 'Ла Лига', sport: 'football' },
+    { home: 'Бавария', away: 'Боруссия Дортмунд', league: 'Бундеслига', sport: 'football' },
+    { home: 'Милан', away: 'Интер', league: 'Серия А', sport: 'football' },
+    { home: 'Ювентус', away: 'Наполи', league: 'Серия А', sport: 'football' },
+    { home: 'ПСЖ', away: 'Марсель', league: 'Лига 1', sport: 'football' },
+    { home: 'Зенит', away: 'Спартак', league: 'РПЛ', sport: 'football' },
+    { home: 'Динамо', away: 'ЦСКА', league: 'РПЛ', sport: 'football' },
+    // Теннис
+    { home: 'Карлос Алькарас', away: 'Новак Джокович', league: 'Уимблдон', sport: 'tennis' },
+    { home: 'Даниил Медведев', away: 'Янник Синнер', league: 'US Open', sport: 'tennis' },
+    { home: 'Александр Зверев', away: 'Карлос Алькарас', league: 'Ролан Гаррос', sport: 'tennis' },
+    // Киберспорт
+    { home: 'FaZe Clan', away: 'Team Vitality', league: 'IEM Rio', sport: 'cybersport' },
+    { home: 'NAVI', away: 'G2 Esports', league: 'BLAST Premier', sport: 'cybersport' },
+    { home: 'Team Spirit', away: 'Team Liquid', league: 'The International', sport: 'cybersport' },
+    // Баскетбол
+    { home: 'Бостон Селтикс', away: 'Даллас Маверикс', league: 'НБА', sport: 'basketball' },
+    { home: 'Лос-Анджелес Лейкерс', away: 'Голден Стэйт', league: 'НБА', sport: 'basketball' },
+    // Хоккей
+    { home: 'Эдмонтон Ойлерз', away: 'Флорида Пантерз', league: 'НХЛ', sport: 'hockey' },
+    { home: 'Вашингтон Кэпиталз', away: 'Питтсбург Пингвинз', league: 'НХЛ', sport: 'hockey' },
+];
 
+function generatePost() {
     const match = random(MATCHES);
 
     // Реалистичная статистика
@@ -157,8 +166,11 @@ function generatePost() {
         losses = played - wins - draws;
     }
 
-    const statuses = ['Завершен', 'Завершен', 'Завершен', 'Завершен', 'Скоро'];
-    const date = randomDate();
+    // Дата матча: от завтра до 10 дней вперёд
+    const daysOffset = randomInt(1, 10);
+
+    // Статус: только "Скоро" для будущих матчей
+    const statuses = ['Скоро', 'Скоро', 'Скоро', 'Скоро'];
 
     let post = `${match.home} - ${match.away}\n\n`;
     post += `🏆 Турнир: ${match.league}\n\n`;
@@ -174,7 +186,7 @@ function generatePost() {
     post += `Источник: AI Predictor\n\n`;
     post += `СЧЕТ: ${goalsHome}-${goalsAway}\n\n`;
     post += `СТАТУС: ${random(statuses)}\n\n`;
-    post += `⏰ ${date}`;
+    post += `⏰ ${randomDate(daysOffset)}`;
 
     return post;
 }
@@ -197,11 +209,14 @@ async function generateAndPost() {
         if (data.ok) {
             console.log('✅ Авто-пост создан!');
             console.log(`📝 ${post.split('\n')[0]}`);
+            return true;
         } else {
             console.error('❌ Ошибка авто-поста:', data);
+            return false;
         }
     } catch (error) {
         console.error('❌ Ошибка:', error.message);
+        return false;
     }
 }
 
@@ -365,6 +380,20 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
                 teamStatsDetailed.push({ name, stats });
             }
 
+            // Определяем спорт по турниру
+            let sport = 'football';
+            if (tournament) {
+                if (tournament.includes('Уимблдон') || tournament.includes('US Open') || tournament.includes('Ролан Гаррос')) {
+                    sport = 'tennis';
+                } else if (tournament.includes('IEM') || tournament.includes('BLAST') || tournament.includes('The International')) {
+                    sport = 'cybersport';
+                } else if (tournament.includes('НБА')) {
+                    sport = 'basketball';
+                } else if (tournament.includes('НХЛ')) {
+                    sport = 'hockey';
+                }
+            }
+
             const forecast = {
                 id: `${channel.id}_${post.message_id}`,
                 title: title,
@@ -381,18 +410,34 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
                 date: new Date(post.date * 1000).toISOString(),
                 dateDisplay: new Date(post.date * 1000).toLocaleString('ru-RU'),
                 channel: channel.title || channel.username,
-                sport: 'football',
+                sport: sport,
                 link: `https://t.me/${channel.username}/${post.message_id}`,
                 teamStatsDetailed: teamStatsDetailed.length > 0 ? teamStatsDetailed : null,
                 leagueStats: Object.keys(parsedStats.league).length > 0 ? parsedStats.league : null
             };
 
             forecasts.push(forecast);
-            forecasts.sort((a, b) => new Date(b.date) - new Date(a.date));
-            if (forecasts.length > 500) forecasts = forecasts.slice(0, 500);
+            // Сортируем по дате матча (новые сверху)
+            forecasts.sort((a, b) => {
+                if (!a.matchTimeRaw) return 1;
+                if (!b.matchTimeRaw) return -1;
+                return a.matchTimeRaw.localeCompare(b.matchTimeRaw);
+            });
+
+            // Оставляем только 15 последних прогнозов
+            if (forecasts.length > 15) {
+                forecasts = forecasts.slice(0, 15);
+            }
+
             saveForecasts(forecasts);
 
             console.log(`✅ СОХРАНЕНО: ${forecast.title}`);
+            console.log(`   ⚽ ${forecast.homeTeam || '?'} - ${forecast.awayTeam || '?'}`);
+            console.log(`   🏆 ${forecast.tournament || '—'}`);
+            console.log(`   📊 Счет: ${forecast.homeScore ?? '?'}-${forecast.awayScore ?? '?'}`);
+            console.log(`   🔴 Статус: ${forecast.status}`);
+            console.log(`   ⏰ Время: ${forecast.matchTime}`);
+            console.log(`   📊 Всего прогнозов: ${forecasts.length}`);
         } else {
             console.log(`⏩ Пост уже есть`);
         }
@@ -416,23 +461,47 @@ app.get('/api/test', (req, res) => {
     res.json({ success: true, message: 'Сервер работает! С авто-генерацией!' });
 });
 
+// ========== ПРОВЕРКА КОЛИЧЕСТВА ПРОГНОЗОВ ==========
+async function ensureMinimumForecasts() {
+    const forecasts = readForecasts();
+    console.log(`📊 Текущее количество прогнозов: ${forecasts.length}`);
+
+    if (forecasts.length < 15) {
+        console.log(`⚠️ Мало прогнозов (${forecasts.length}), создаю новые...`);
+        const needed = 15 - forecasts.length;
+        for (let i = 0; i < needed; i++) {
+            await generateAndPost();
+            // Небольшая задержка между постами
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+        console.log(`✅ Создано ${needed} новых прогнозов`);
+    } else {
+        console.log(`✅ Прогнозов достаточно (${forecasts.length}/15)`);
+    }
+}
+
 // ========== ЗАПУСК ==========
 app.listen(PORT, () => {
     console.log(`✅ Сервер запущен на порту ${PORT}`);
     console.log(`🌐 Открой: http://localhost:${PORT}/api/test`);
     console.log(`📡 Вебхук путь: /webhook/${TOKEN}`);
     console.log('🤖 Авто-генератор: будет создавать посты каждые 30 минут');
+    console.log('📊 Минимальное количество прогнозов: 15');
 });
 
-// ===== АВТО-ГЕНЕРАЦИЯ КАЖДЫЕ 30 МИНУТ =====
-console.log('🤖 Первый пост будет через 5 секунд...');
-
+// ===== ПЕРВЫЙ ЗАПУСК — ПРОВЕРКА КОЛИЧЕСТВА =====
 setTimeout(async () => {
-    await generateAndPost();
+    console.log('🔄 Проверяю количество прогнозов...');
+    await ensureMinimumForecasts();
 }, 5000);
 
+// ===== АВТО-ГЕНЕРАЦИЯ КАЖДЫЕ 30 МИНУТ =====
 setInterval(async () => {
     await generateAndPost();
+    // После создания поста проверяем количество
+    setTimeout(async () => {
+        await ensureMinimumForecasts();
+    }, 3000);
 }, 30 * 60 * 1000);
 
 console.log('✅ Парсер готов к работе!');
