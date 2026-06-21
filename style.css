@@ -2567,3 +2567,116 @@ body::before {
         font-size: 12px;
     }
 }
+/* ============================================================
+   ИСТОРИЯ ВСТРЕЧ — ДВЕ КОЛОНКИ
+   ============================================================ */
+.h2h-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.h2h-column {
+    background: rgba(139, 92, 246, 0.03);
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1px solid rgba(139, 92, 246, 0.04);
+}
+
+.h2h-column-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f1f5f9;
+    text-align: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.06);
+}
+
+.h2h-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: rgba(139, 92, 246, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(139, 92, 246, 0.02);
+    transition: all 0.2s ease;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.h2h-item:hover {
+    border-color: rgba(139, 92, 246, 0.1);
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.h2h-teams {
+    font-size: 13px;
+    font-weight: 500;
+    color: #e2e8f0;
+    flex: 1;
+    min-width: 80px;
+}
+
+.h2h-score {
+    font-size: 16px;
+    font-weight: 700;
+    color: #a78bfa;
+    padding: 0 8px;
+}
+
+.h2h-date {
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.h2h-tournament {
+    font-size: 11px;
+    color: #6b7280;
+    text-align: right;
+}
+
+.h2h-empty {
+    text-align: center;
+    color: #6b7280;
+    padding: 16px;
+    font-size: 13px;
+}
+
+@media (max-width: 768px) {
+    .h2h-columns {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .h2h-item {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .h2h-teams {
+        min-width: auto;
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .h2h-score {
+        font-size: 18px;
+        padding: 2px 0;
+    }
+
+    .h2h-date {
+        font-size: 10px;
+    }
+
+    .h2h-tournament {
+        text-align: center;
+        font-size: 10px;
+        width: 100%;
+    }
+}

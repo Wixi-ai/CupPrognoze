@@ -21,7 +21,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ========== ПАМЯТЬ ==========
 let forecasts = [];
 const FORECASTS_FILE = path.join(__dirname, 'forecasts.json');
 
@@ -34,7 +33,7 @@ function saveForecasts(data) {
     console.log('💾 Сохранено прогнозов:', data.length);
     try {
         fs.writeFileSync(FORECASTS_FILE, JSON.stringify(data, null, 2), 'utf8');
-    } catch (error) { }
+    } catch (error) {}
     return true;
 }
 
@@ -100,47 +99,51 @@ const MATCHES = [
     { home: 'Эдмонтон Ойлерз', away: 'Флорида Пантерз', league: 'НХЛ', sport: 'hockey' },
 ];
 
-// ========== ГЕНЕРАЦИЯ ИСТОРИИ ==========
-function generateHeadToHead(homeTeam, awayTeam, count = 4) {
+// ========== ВСЕ КОМАНДЫ ДЛЯ ИСТОРИИ ==========
+const ALL_TEAMS = [
+    'Ливерпуль', 'Манчестер Сити', 'Арсенал', 'Челси', 'Реал Мадрид', 'Барселона',
+    'Атлетико', 'Реал Сосьедад', 'Бавария', 'Боруссия Дортмунд', 'Милан', 'Интер',
+    'Ювентус', 'Наполи', 'ПСЖ', 'Марсель', 'Зенит', 'Спартак', 'Динамо', 'ЦСКА',
+    'Карлос Алькарас', 'Новак Джокович', 'Даниил Медведев', 'Янник Синнер',
+    'FaZe Clan', 'Team Vitality', 'NAVI', 'G2 Esports',
+    'Бостон Селтикс', 'Даллас Маверикс', 'Эдмонтон Ойлерз', 'Флорида Пантерз'
+];
+
+const TOURNAMENTS = ['Лига Чемпионов', 'Кубок страны', 'Чемпионат', 'Товарищеский матч', 'Суперкубок', 'Еврокубок'];
+
+// ========== ГЕНЕРАЦИЯ ИСТОРИИ ДЛЯ ОДНОЙ КОМАНДЫ ==========
+function generateTeamHistory(teamName, count = 3) {
     const history = [];
-    const tournaments = ['Лига Чемпионов', 'Кубок страны', 'Чемпионат', 'Товарищеский матч', 'Суперкубок'];
-    const homeAdvantage = Math.random() > 0.5;
-
+    const availableOpponents = ALL_TEAMS.filter(t => t !== teamName);
+    
     for (let i = 0; i < count; i++) {
-        const daysAgo = randomInt(30, 365);
-        let homeScore, awayScore;
-
-        if (homeAdvantage && Math.random() > 0.3) {
-            homeScore = randomInt(1, 4);
-            awayScore = randomInt(0, 2);
-        } else if (!homeAdvantage && Math.random() > 0.3) {
-            homeScore = randomInt(0, 2);
-            awayScore = randomInt(1, 4);
-        } else {
-            homeScore = randomInt(0, 2);
-            awayScore = randomInt(0, 2);
-        }
-
-        if (Math.random() > 0.7) {
-            homeScore = randomInt(1, 2);
-            awayScore = homeScore;
-        }
-
+        const opponent = random(availableOpponents);
+        const daysAgo = randomInt(10, 200) + i * 5;
+        const homeScore = randomInt(0, 4);
+        const awayScore = randomInt(0, 4);
+        
+        // Случайно определяем, была ли команда дома или в гостях
+        const isHome = Math.random() > 0.5;
+        const homeTeam = isHome ? teamName : opponent;
+        const awayTeam = isHome ? opponent : teamName;
+        const score = isHome ? `${homeScore}-${awayScore}` : `${awayScore}-${homeScore}`;
+        
         history.push({
             home: homeTeam,
             away: awayTeam,
-            score: `${homeScore}-${awayScore}`,
-            date: randomPastDate(daysAgo + i * 7),
-            tournament: random(tournaments)
+            score: score,
+            date: randomPastDate(daysAgo),
+            tournament: random(TOURNAMENTS)
         });
     }
-
+    
+    // Сортируем по дате (сначала свежие)
     history.sort((a, b) => {
         const dateA = a.date.split(' ')[0].split('.').reverse().join('');
         const dateB = b.date.split(' ')[0].split('.').reverse().join('');
         return dateB.localeCompare(dateA);
     });
-
+    
     return history;
 }
 
@@ -174,8 +177,11 @@ function generatePost() {
     }
     const daysOffset = randomInt(1, 10);
     const statuses = ['Скоро', 'Скоро', 'Скоро', 'Скоро'];
-    const h2h = generateHeadToHead(match.home, match.away, 4);
-
+    
+    // Генерируем историю для каждой команды отдельно
+    const homeHistory = generateTeamHistory(match.home, 3);
+    const awayHistory = generateTeamHistory(match.away, 3);
+    
     let post = `${match.home} - ${match.away}\n\n`;
     post += `🏆 Турнир: ${match.league}\n\n`;
     post += `Атака: ${match.home} ${attackHome}, ${match.away} ${attackAway}\n`;
@@ -191,16 +197,16 @@ function generatePost() {
     post += `СЧЕТ: ${goalsHome}-${goalsAway}\n\n`;
     post += `СТАТУС: ${random(statuses)}\n\n`;
     post += `⏰ ${randomDate(daysOffset)}`;
-
-    return { post, h2h };
+    
+    return { post, homeHistory, awayHistory };
 }
 
 // ========== ГЕНЕРАЦИЯ И СОХРАНЕНИЕ ==========
 async function generateAndSaveForecast() {
-    const { post, h2h } = generatePost();
+    const { post, homeHistory, awayHistory } = generatePost();
     const lines = post.split('\n');
     const title = lines[0] || 'Новый прогноз';
-
+    
     const teams = extractTeams(post);
     const score = extractScore(post);
     const status = extractStatus(post);
@@ -208,12 +214,12 @@ async function generateAndSaveForecast() {
     const source = extractSource(post);
     const matchTime = extractMatchTime(post);
     const parsedStats = parseStats(post);
-
+    
     const teamStatsDetailed = [];
     for (const [name, stats] of Object.entries(parsedStats.teams)) {
         teamStatsDetailed.push({ name, stats });
     }
-
+    
     let sport = 'football';
     if (tournament) {
         if (tournament.includes('Уимблдон') || tournament.includes('US Open') || tournament.includes('Ролан Гаррос')) sport = 'tennis';
@@ -221,9 +227,9 @@ async function generateAndSaveForecast() {
         else if (tournament.includes('НБА')) sport = 'basketball';
         else if (tournament.includes('НХЛ')) sport = 'hockey';
     }
-
+    
     const id = `generated_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
-
+    
     const forecast = {
         id: id,
         title: title,
@@ -244,13 +250,15 @@ async function generateAndSaveForecast() {
         link: '#',
         teamStatsDetailed: teamStatsDetailed.length > 0 ? teamStatsDetailed : null,
         leagueStats: Object.keys(parsedStats.league).length > 0 ? parsedStats.league : null,
-        headToHead: h2h
+        homeHistory: homeHistory,
+        awayHistory: awayHistory
     };
-
+    
     addForecast(forecast);
     console.log(`💾 СОХРАНЕНО: ${forecast.title}`);
-    console.log(`   📊 История встреч: ${h2h.length} матчей`);
-
+    console.log(`   📊 История ${forecast.homeTeam}: ${homeHistory.length} матчей`);
+    console.log(`   📊 История ${forecast.awayTeam}: ${awayHistory.length} матчей`);
+    
     const url = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
     try {
         const response = await fetch(url, {
@@ -419,7 +427,7 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
 
         let currentForecasts = readForecasts();
         const exists = currentForecasts.some(f => f.id === `${channel.id}_${post.message_id}`);
-
+        
         if (!exists) {
             const teamStatsDetailed = [];
             for (const [name, stats] of Object.entries(parsedStats.teams)) {
@@ -454,7 +462,8 @@ app.post(`/webhook/${TOKEN}`, (req, res) => {
                 link: `https://t.me/${channel.username}/${post.message_id}`,
                 teamStatsDetailed: teamStatsDetailed.length > 0 ? teamStatsDetailed : null,
                 leagueStats: Object.keys(parsedStats.league).length > 0 ? parsedStats.league : null,
-                headToHead: null
+                homeHistory: null,
+                awayHistory: null
             };
 
             currentForecasts.push(forecast);

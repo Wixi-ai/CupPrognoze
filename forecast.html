@@ -239,36 +239,72 @@
       const container = document.getElementById('h2hContainer');
       if (!container) return;
 
-      if (forecast.headToHead && forecast.headToHead.length > 0) {
-        let html = `
-                    <div class="h2h-section">
-                        <div class="h2h-title">🔄 ИСТОРИЯ ВСТРЕЧ</div>
-                        <div class="h2h-list">
-                `;
-        forecast.headToHead.forEach(match => {
-          html += `
-                        <div class="h2h-item">
-                            <span class="h2h-teams">${match.home} — ${match.away}</span>
-                            <span class="h2h-score">${match.score || '—'}</span>
-                            <span class="h2h-date">${match.date || '—'}</span>
-                            <span class="h2h-tournament">${match.tournament || ''}</span>
-                        </div>
-                    `;
-        });
-        html += `
-                        </div>
-                    </div>
-                `;
-        container.innerHTML = html;
-      } else {
+      const homeHistory = forecast.homeHistory || [];
+      const awayHistory = forecast.awayHistory || [];
+
+      if (homeHistory.length === 0 && awayHistory.length === 0) {
         container.innerHTML = `
-                    <div class="h2h-section">
-                        <div class="h2h-title">🔄 ИСТОРИЯ ВСТРЕЧ</div>
-                        <div class="h2h-empty">Нет данных об очных встречах</div>
-                    </div>
-                `;
+            <div class="h2h-section">
+                <div class="h2h-title">🔄 ИСТОРИЯ ВСТРЕЧ</div>
+                <div class="h2h-empty">Нет данных об очных встречах</div>
+            </div>
+        `;
+        return;
       }
+
+      let html = `
+        <div class="h2h-section">
+            <div class="h2h-title">🔄 ИСТОРИЯ МАТЧЕЙ</div>
+            <div class="h2h-columns">
+                <div class="h2h-column">
+                    <div class="h2h-column-title">${forecast.homeTeam || 'Команда 1'}</div>
+    `;
+
+      if (homeHistory.length > 0) {
+        homeHistory.forEach(match => {
+          html += `
+                <div class="h2h-item">
+                    <span class="h2h-teams">${match.home} — ${match.away}</span>
+                    <span class="h2h-score">${match.score || '—'}</span>
+                    <span class="h2h-date">${match.date || '—'}</span>
+                    <span class="h2h-tournament">${match.tournament || ''}</span>
+                </div>
+            `;
+        });
+      } else {
+        html += `<div class="h2h-empty">Нет данных</div>`;
+      }
+
+      html += `
+                </div>
+                <div class="h2h-column">
+                    <div class="h2h-column-title">${forecast.awayTeam || 'Команда 2'}</div>
+    `;
+
+      if (awayHistory.length > 0) {
+        awayHistory.forEach(match => {
+          html += `
+                <div class="h2h-item">
+                    <span class="h2h-teams">${match.home} — ${match.away}</span>
+                    <span class="h2h-score">${match.score || '—'}</span>
+                    <span class="h2h-date">${match.date || '—'}</span>
+                    <span class="h2h-tournament">${match.tournament || ''}</span>
+                </div>
+            `;
+        });
+      } else {
+        html += `<div class="h2h-empty">Нет данных</div>`;
+      }
+
+      html += `
+                </div>
+            </div>
+        </div>
+    `;
+
+      container.innerHTML = html;
     }
+
 
     function renderForecast(forecast) {
       document.title = `${forecast.homeTeam || 'Матч'} — ${forecast.awayTeam || 'Матч'} | CupPrognoze`;
