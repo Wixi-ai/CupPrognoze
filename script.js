@@ -29,8 +29,7 @@ const channels = [
     description: 'Ежедневные прогнозы на топ-матчи. Высокая проходимость, статистика за 3 месяца — 78%.',
     sport: 'football',
     rating: 4.8,
-    subscribers: '12.5K',
-
+    subscribers: '12.5K'
   },
   {
     id: 2,
@@ -39,8 +38,7 @@ const channels = [
     description: 'Аналитика и прогнозы на ATP и WTA. Точные ставки на тоталы и форы.',
     sport: 'tennis',
     rating: 4.6,
-    subscribers: '8.2K',
-
+    subscribers: '8.2K'
   },
   {
     id: 3,
@@ -49,8 +47,7 @@ const channels = [
     description: 'Прогнозы на CS2, Dota 2, Valorant. Экспресс-ставки и лайв-советы.',
     sport: 'cybersport',
     rating: 4.9,
-    subscribers: '23.7K',
-
+    subscribers: '23.7K'
   },
   {
     id: 4,
@@ -59,8 +56,7 @@ const channels = [
     description: 'Настольный теннис: прогнозы на все турниры ITTF. Высокая точность.',
     sport: 'tabletennis',
     rating: 4.3,
-    subscribers: '5.1K',
-
+    subscribers: '5.1K'
   },
   {
     id: 5,
@@ -69,8 +65,7 @@ const channels = [
     description: 'НБА, Евролига, Китай. Ставки на тоталы и форы с детальной статистикой.',
     sport: 'basketball',
     rating: 4.7,
-    subscribers: '9.8K',
-
+    subscribers: '9.8K'
   },
   {
     id: 6,
@@ -79,8 +74,7 @@ const channels = [
     description: 'КХЛ, НХЛ. Прогнозы на матчи дня, анализ вратарей и спецбригад.',
     sport: 'hockey',
     rating: 4.4,
-    subscribers: '6.3K',
-
+    subscribers: '6.3K'
   },
   {
     id: 7,
@@ -89,8 +83,7 @@ const channels = [
     description: 'Волейбольные прогнозы: мужские и женские лиги, плей-офф.',
     sport: 'volleyball',
     rating: 4.2,
-    subscribers: '3.9K',
-
+    subscribers: '3.9K'
   },
   {
     id: 8,
@@ -99,8 +92,7 @@ const channels = [
     description: 'Углубленный анализ футбольных матчей. Эксклюзивные инсайды.',
     sport: 'football',
     rating: 4.9,
-    subscribers: '18.3K',
-
+    subscribers: '18.3K'
   },
   {
     id: 9,
@@ -109,8 +101,7 @@ const channels = [
     description: 'Профессиональные прогнозы на теннис. Стратегии на геймы и сеты.',
     sport: 'tennis',
     rating: 4.5,
-    subscribers: '7.4K',
-
+    subscribers: '7.4K'
   },
   {
     id: 10,
@@ -119,8 +110,7 @@ const channels = [
     description: 'Киберспорт: аналитика коэффициентов, прогнозы на андердогов.',
     sport: 'cybersport',
     rating: 4.1,
-    subscribers: '4.2K',
-
+    subscribers: '4.2K'
   }
 ];
 
@@ -242,62 +232,187 @@ const cappers = [
 ];
 
 // ============================================================
-//  4. СТАТЬИ
+//  4. СТАТЬИ — ПОЛНЫЕ ГАЙДЫ ПО ОТЫГРЫШУ БОНУСОВ
 // ============================================================
 const articles = [
   {
     id: 1,
-    title: 'Как анализировать футбольные матчи: полное руководство',
-    excerpt: 'Узнайте, как профессиональные капперы анализируют матчи, на что обращают внимание и как находить валуйные ставки.',
+    title: 'Стратегия №1: Низкорисковый ординар на фаворита',
+    excerpt: 'Самая простая и безопасная стратегия для отыгрыша бонусов. Идеально подходит для новичков.',
     image: 'images/articles/football-guide.jpg',
-    date: '15 июня 2026',
-    readTime: '12 мин',
-    link: '#'
+    icon: '🛡️',
+    date: '21 июня 2026',
+    readTime: '8 мин',
+    link: '#',
+    content: `
+      <p><strong>Отыгрыш бонуса</strong> — это всегда баланс между минимизацией риска и выполнением условий букмекера.</p>
+
+      <p><strong>Стратегия №1: Низкорисковый ординар на крупного фаворита</strong></p>
+      <p>Это самая простая и наименее рискованная стратегия, идеально подходящая для новичков.</p>
+
+      <p><strong>Суть:</strong> Вы делаете одну ставку-ординар на самого очевидного фаворита с минимальным коэффициентом.</p>
+
+      <p><strong>Как это работает:</strong></p>
+      <ul>
+        <li>У вас бонус 1000 руб. с вейджером x5. Вам нужно сделать оборот 5000 руб.</li>
+        <li>Вы находите событие с фаворитом, чья победа почти не вызывает сомнений.</li>
+        <li>Ставите всю сумму бонуса (1000 руб.) на этого фаворита с коэффициентом, например, 1.15.</li>
+      </ul>
+
+      <p><strong>Результат:</strong></p>
+      <ul>
+        <li>В случае выигрыша: вы получаете 1150 руб. Ваш отыгранный оборот = 1000 руб. (ваша ставка) + 150 руб. (чистый выигрыш).</li>
+        <li>В случае проигрыша: вы теряете бонусные деньги. Свои депозитные средства при этом не страдают.</li>
+      </ul>
+
+      <p><strong>Плюсы:</strong> Минимальный риск, простота.</p>
+      <p><strong>Минусы:</strong> Очень медленный процесс, так как коэффициенты низкие. Всегда есть мизерный шанс сенсации.</p>
+    `
   },
   {
     id: 2,
-    title: 'Топ-5 стратегий ставок на теннис в 2026 году',
-    excerpt: 'Разбираем самые эффективные стратегии для ставок на теннис. От классических флэтов до современных систем.',
+    title: 'Стратегия №2: Ставки на тоталы в статистических видах спорта',
+    excerpt: 'Надежная стратегия, основанная на статистике. Меньше зависит от случайного результата матча.',
     image: 'images/articles/tennis-strategy.jpg',
-    date: '12 июня 2026',
-    readTime: '8 мин',
-    link: '#'
+    icon: '📊',
+    date: '21 июня 2026',
+    readTime: '10 мин',
+    link: '#',
+    content: `
+      <p><strong>Стратегия №2: Ставки на тоталы в статистических видах спорта</strong></p>
+      <p>Более надежная стратегия, чем ставки на победу, так как она меньше зависит от случайного результата.</p>
+
+      <p><strong>Суть:</strong> Вы делаете ставки на то, что в матче будет забито/выиграно больше или меньше определенного количества голов/очков/геймов. Лучше всего подходят виды спорта со стабильной статистикой: волейбол, теннис, баскетбол.</p>
+
+      <p><strong>Как это работает:</strong></p>
+      <ul>
+        <li>Бонус 1000 руб. с вейджером x5.</li>
+        <li>Вы выбираете матч, где ожидается упорная борьба. Например, в теннисе два игрока примерно равны по силе.</li>
+        <li>Ставите на ТБ (21.5) в сете. Даже если один игрок проиграет 6:7, 7:6, 6:7, ваш тотал все равно сыграет.</li>
+      </ul>
+
+      <p><strong>Плюсы:</strong> Высокая проходимость ставок, меньшая зависимость от результата.</p>
+      <p><strong>Минусы:</strong> Требует анализа и понимания вида спорта.</p>
+    `
   },
   {
     id: 3,
-    title: 'Киберспорт: как зарабатывать на CS2 и Dota 2',
-    excerpt: 'Полный гайд по ставкам на киберспорт. Анализ команд, мета-игры и психология игроков.',
+    title: 'Стратегия №3 «Догон» на противоположные исходы',
+    excerpt: 'Более рискованная, но быстрая стратегия. Требует осторожности и четкого плана.',
     image: 'images/articles/cybersport-guide.jpg',
-    date: '10 июня 2026',
-    readTime: '15 мин',
-    link: '#'
+    icon: '🎯',
+    date: '21 июня 2026',
+    readTime: '12 мин',
+    link: '#',
+    content: `
+      <p><strong>Стратегия №3 «Догон» на противоположные исходы (для двух и более событий)</strong></p>
+      <p>Внимание! Эта стратегия требует осторожности и четкого плана. Она более рискованная, но позволяет отыграть бонус быстрее.</p>
+
+      <p><strong>Суть:</strong> Вы находите два события с примерно равными коэффициентами (желательно около 2.00) и ставите на противоположные исходы в разных купонах.</p>
+
+      <p><strong>Как это работает:</strong></p>
+      <ul>
+        <li>Бонус 1000 руб., вейджер x5. Оборот = 5000 руб.</li>
+        <li>Событие 1: Матч Лиги Чемпионов. Исходы: П1 (коэф. 2.10) / П2 (коэф. 1.80).</li>
+        <li>Событие 2: Матч НБА. Исходы: П1 (коэф. 1.90) / П2 (коэф. 1.90).</li>
+        <li>Купон 1: Ставим 600 руб. на П1 (Событие 1) и П2 (Событие 2). Суммарный коэффициент ~ 4.00.</li>
+        <li>Купон 2: Ставим 600 руб. на П2 (Событие 1) и П1 (Событие 2). Суммарный коэффициент ~ 3.50.</li>
+      </ul>
+
+      <p><strong>Результат:</strong> При любом исходе обоих матчей один из ваших купонов сыграет. Вы получите выигрыш (например, 600 * 3.50 = 2100 руб.).</p>
+
+      <p><strong>Плюсы:</strong> Быстрое выполнение части обязательного оборота.</p>
+      <p><strong>Минусы:</strong> Высокий риск, так как для покрытия двух ставок нужно вложить больше денег.</p>
+    `
   },
   {
     id: 4,
-    title: 'Психология ставок: как не проигрывать эмоционально',
-    excerpt: 'Важнейший аспект успешного беттинга — контроль эмоций. Узнайте, как сохранять холодный рассудок.',
+    title: 'Критически важные правила для отыгрыша бонусов',
+    excerpt: '90% успеха — внимательное чтение условий. Собрали самое важное.',
     image: 'images/articles/betting-psychology.jpg',
-    date: '8 июня 2026',
-    readTime: '10 мин',
-    link: '#'
+    icon: '📋',
+    date: '21 июня 2026',
+    readTime: '6 мин',
+    link: '#',
+    content: `
+      <p><strong>Критически важные правила для любой стратегии</strong></p>
+      <p>ВНИМАТЕЛЬНО ЧИТАЙТЕ УСЛОВИЯ! Это 90% успеха. Обратите внимание на:</p>
+
+      <ul>
+        <li><strong>Срок отыгрыша.</strong> Часто он очень короткий (3-7 дней).</li>
+        <li><strong>Максимальный коэффициент для ставок по бонусу.</strong> Часто это 3.00 или ниже. Ставка с более высоким коэффициентом не засчитается в оборот.</li>
+        <li><strong>Виды спорта и рынки.</strong> Некоторые БК не разрешают отыгрывать бонус на киберспорт или определенные турниры.</li>
+        <li><strong>Используйте для ставок только бонусные средства.</strong> Никогда не подключайте к отыгрышу бонуса свои депозитные деньги.</li>
+      </ul>
+
+      <p><strong>Рассчитайте минимальный коэффициент.</strong> Чтобы просто отыграть бонус без потерь, вам нужен коэффициент не меньше, чем 1 / (1 - (1 / Вейджер)).</p>
+
+      <p><strong>Дисциплина — ваш главный козырь.</strong> Не поддавайтесь искушению поставить на высокий коэффициент в надежде быстро все отыграть. Это верный путь к потере и бонуса, и депозита.</p>
+    `
   },
   {
     id: 5,
-    title: 'Самые прибыльные турниры для ставок на хоккей',
-    excerpt: 'Какие хоккейные турниры дают лучшую проходимость? Анализ статистики за последние годы.',
+    title: 'Как рассчитать минимальный коэффициент для отыгрыша',
+    excerpt: 'Формула и примеры расчета, чтобы отыграть бонус без потерь.',
     image: 'images/articles/hockey-tournaments.jpg',
-    date: '5 июня 2026',
-    readTime: '7 мин',
-    link: '#'
+    icon: '🧮',
+    date: '21 июня 2026',
+    readTime: '5 мин',
+    link: '#',
+    content: `
+      <p><strong>Как рассчитать минимальный коэффициент для отыгрыша</strong></p>
+
+      <p><strong>Формула:</strong></p>
+      <p style="background: rgba(139, 92, 246, 0.05); padding: 16px; border-radius: 8px; font-size: 18px; text-align: center;">
+        K = 1 / (1 - (1 / Вейджер))
+      </p>
+
+      <p><strong>Пример для вейджера x5:</strong></p>
+      <p style="background: rgba(139, 92, 246, 0.05); padding: 16px; border-radius: 8px; font-size: 18px; text-align: center;">
+        K = 1 / (1 - (1/5)) = 1 / 0.8 = 1.25
+      </p>
+
+      <p>Это значит, что при среднем коэффициенте 1.25 и выше вы теоретически сможете отыграть бонус без убытка.</p>
+
+      <p><strong>Примеры для разных вейджеров:</strong></p>
+      <ul>
+        <li>Вейджер x3 → Минимальный коэффициент: 1.50</li>
+        <li>Вейджер x5 → Минимальный коэффициент: 1.25</li>
+        <li>Вейджер x10 → Минимальный коэффициент: 1.11</li>
+        <li>Вейджер x20 → Минимальный коэффициент: 1.05</li>
+      </ul>
+
+      <p><strong>Вывод:</strong> Чем выше вейджер, тем ниже минимальный коэффициент, но тем больше ставок нужно сделать.</p>
+    `
   },
   {
     id: 6,
-    title: 'БК с лучшими коэффициентами: рейтинг 2026',
-    excerpt: 'Сравнительный обзор букмекерских контор по коэффициентам на топ-события. Где выгоднее ставить?',
+    title: 'Почему дисциплина — главный козырь в отыгрыше',
+    excerpt: 'Как не поддаться эмоциям и сохранить деньги. Советы от профессионалов.',
     image: 'images/articles/bookmaker-rating.jpg',
-    date: '3 июня 2026',
-    readTime: '9 мин',
-    link: '#'
+    icon: '🧠',
+    date: '21 июня 2026',
+    readTime: '7 мин',
+    link: '#',
+    content: `
+      <p><strong>Почему дисциплина — главный козырь в отыгрыше</strong></p>
+
+      <p><strong>Главное правило:</strong> Не поддавайтесь искушению поставить на высокий коэффициент в надежде быстро все отыграть.</p>
+
+      <p>Это верный путь к потере: И бонуса, и депозита.</p>
+
+      <p><strong>Советы от профессионалов:</strong></p>
+      <ul>
+        <li><strong>Планируйте заранее.</strong> Определите, сколько ставок вы сделаете и на какие суммы.</li>
+        <li><strong>Не гонитесь за быстрым результатом.</strong> Лучше сделать 10 ставок по 1.20, чем одну на 5.00.</li>
+        <li><strong>Контролируйте эмоции.</strong> Если проиграли несколько ставок подряд — сделайте паузу.</li>
+        <li><strong>Ведите учет.</strong> Записывайте все свои ставки и анализируйте результаты.</li>
+      </ul>
+
+      <p><strong>Итог:</strong> Самый безопасный путь — это Стратегия №1 (ординары на фаворитов) или Стратегия №2 (тоталы). Они требуют терпения, но сводят риск к минимуму.</p>
+
+      <p>Помните, что бонус — это инструмент букмекера, чтобы вы больше ставили. Ваша задача — использовать этот инструмент с умом.</p>
+    `
   }
 ];
 
@@ -432,7 +547,7 @@ function renderChannels(filter = 'all') {
 
   if (filtered.length === 0) {
     grid.innerHTML = `
-      <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #6a5a5a; font-size: 18px;">
+      <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #9ca3af; font-size: 18px; background: rgba(31, 35, 44, 0.3); border-radius: 16px; border: 1px solid rgba(139, 92, 246, 0.06);">
         😕 Нет каналов по данному фильтру
       </div>
     `;
@@ -450,7 +565,6 @@ function renderChannels(filter = 'all') {
           <div class="card-title">
             <a href="${ch.link}" target="_blank">${sportIcon} ${ch.name}</a>
           </div>
-
         </div>
         <div class="card-description">${ch.description}</div>
         <div class="card-stats">
@@ -482,7 +596,7 @@ function renderBookmakers() {
     const stars = getStarsHtml(bm.rating);
     const featuresHtml = bm.features.map(f => `<span class="bookmaker-feature">${f}</span>`).join('');
     const logoHtml = bm.logo ?
-      `<img src="${bm.logo}" alt="${bm.name}">` :
+      `<img src="${bm.logo}" alt="${bm.name}" onerror="this.style.display='none'">` :
       `<span class="logo-placeholder">${bm.name.charAt(0).toUpperCase()}</span>`;
 
     html += `
@@ -498,7 +612,7 @@ function renderBookmakers() {
         </div>
         <div class="card-description">${bm.description}</div>
         <div class="bookmaker-features">${featuresHtml}</div>
-        <div style="display:flex; gap:12px; flex-wrap:wrap; margin:6px 0 8px; font-size:13px; color:#8a7a7a;">
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin:6px 0 8px; font-size:13px; color:#9ca3af;">
           <span class="bookmaker-bonus">🎁 ${bm.bonus}</span>
         </div>
         <div class="card-footer">
@@ -545,10 +659,10 @@ function renderCappers() {
           </div>
         </div>
         <div style="display:flex; justify-content:space-between; align-items:center; margin: 8px 0;">
-          <span style="color:#8a7a7a; font-size:13px;">Рейтинг</span>
-          <span style="color:#ffb800; font-size:18px; font-weight:700;">${stars}</span>
+          <span style="color:#9ca3af; font-size:13px;">Рейтинг</span>
+          <span style="color:#a78bfa; font-size:18px; font-weight:700;">${stars}</span>
         </div>
-        <div style="font-size:13px; color:#8a7a7a; margin-bottom:8px; text-align:center;">${capper.description}</div>
+        <div style="font-size:13px; color:#9ca3af; margin-bottom:8px; text-align:center;">${capper.description}</div>
         <a href="${capper.link}" target="_blank" class="capper-link">📲 Подписаться</a>
       </div>
     `;
@@ -557,28 +671,39 @@ function renderCappers() {
   grid.innerHTML = html;
 }
 
+// ============================================================
+//  4. СТАТЬИ — РЕНДЕРИНГ
+// ============================================================
+
 function renderArticles() {
   const grid = document.getElementById('articlesGrid');
   if (!grid) return;
 
   let html = '';
   articles.forEach(article => {
-    const imageHtml = article.image
-      ? `<img src="${article.image}" alt="${article.title}" class="article-img">`
-      : `<div class="article-image">${article.icon || '📰'}</div>`;
+    const hasImage = article.image && article.image !== '';
+
+    const imageHtml = hasImage
+      ? `<img src="${article.image}" alt="${article.title}" class="article-img" onerror="this.style.display='none'; this.parentElement.querySelector('.article-icon').style.display='flex'">`
+      : `<div class="article-icon">${article.icon || '📰'}</div>`;
+
+    const shortExcerpt = article.excerpt.length > 120
+      ? article.excerpt.substring(0, 120) + '...'
+      : article.excerpt;
 
     html += `
-      <div class="article-card">
+      <div class="article-card" data-article-id="${article.id}">
         <div class="article-image-wrapper">
           ${imageHtml}
+          ${hasImage ? `<div class="article-icon" style="display:none;">${article.icon || '📰'}</div>` : ''}
         </div>
         <div class="article-content">
           <div class="article-title">${article.title}</div>
-          <div class="article-excerpt">${article.excerpt}</div>
+          <div class="article-excerpt">${shortExcerpt}</div>
           <div class="article-meta">
             <span>📅 ${article.date}</span>
             <span>⏱️ ${article.readTime}</span>
-            <a href="${article.link}" class="article-read-link">Читать →</a>
+            <span class="article-read-link">Читать →</span>
           </div>
         </div>
       </div>
@@ -586,6 +711,89 @@ function renderArticles() {
   });
 
   grid.innerHTML = html;
+
+  // Добавляем обработчики после рендера
+  document.querySelectorAll('.article-read-link').forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const card = this.closest('.article-card');
+      const id = card.dataset.articleId;
+      if (id) {
+        openArticle(parseInt(id));
+      }
+    });
+  });
+}
+
+// ============================================================
+//  СТАТЬИ — ОТКРЫТИЕ ПОЛНОЙ ВЕРСИИ
+// ============================================================
+
+function openArticle(id) {
+  console.log('openArticle вызвана с ID:', id);
+
+  const article = articles.find(a => a.id === id);
+  if (!article) {
+    console.error('Статья не найдена:', id);
+    return;
+  }
+
+  console.log('Статья найдена:', article.title);
+
+  // Скрываем все основные секции
+  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.filters-section').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+
+  let content = document.getElementById('articleContent');
+  if (!content) {
+    content = document.createElement('div');
+    content.id = 'articleContent';
+    content.className = 'article-detail-page';
+    document.querySelector('.main .container').appendChild(content);
+  }
+
+  content.className = 'article-detail-page active';
+
+  const hasImage = article.image && article.image !== '';
+  const imageHtml = hasImage
+    ? `<img src="${article.image}" alt="${article.title}" class="article-detail-img" onerror="this.style.display='none'">`
+    : `<div class="article-detail-icon">${article.icon || '📰'}</div>`;
+
+  content.innerHTML = `
+    <div class="article-detail">
+      <div class="article-detail-back">
+        <a href="#" onclick="closeArticle()" class="article-back-link">← Назад к статьям</a>
+      </div>
+      ${hasImage ? `<div class="article-detail-image">${imageHtml}</div>` : `<div class="article-detail-icon-wrapper">${imageHtml}</div>`}
+      <div class="article-detail-header">
+        <h1 class="article-detail-title">${article.title}</h1>
+        <div class="article-detail-meta">
+          <span>📅 ${article.date}</span>
+          <span>⏱️ ${article.readTime}</span>
+        </div>
+      </div>
+      <div class="article-detail-body">
+        ${article.content || '<p>Полный текст статьи в разработке...</p>'}
+      </div>
+    </div>
+  `;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeArticle() {
+  const content = document.getElementById('articleContent');
+  if (content) {
+    content.className = 'article-detail-page';
+    content.innerHTML = '';
+  }
+  const articlesTab = document.querySelector('.nav-link[data-tab="articles"]');
+  if (articlesTab) {
+    articlesTab.click();
+  }
+  document.title = 'CupPrognoze — Прогнозы на спорт';
 }
 
 function renderShares() {
@@ -715,24 +923,24 @@ function loadForecasts() {
         renderFilteredForecasts();
       } else {
         container.innerHTML = `
-  <div style="text-align: center; padding: 50px 30px; background: rgba(31, 35, 44, 0.5); border-radius: 16px; border: 1px solid rgba(139, 92, 246, 0.08);">
-    <div style="font-size: 48px; margin-bottom: 20px; opacity: 0.5;">📭</div>
-    <h3 style="color: #f1f5f9; margin-bottom: 10px; font-weight: 600;">Пока нет прогнозов</h3>
-    <p style="font-size: 16px; color: #9ca3af;">Подпишись на каналы, чтобы видеть прогнозы здесь!</p>
-  </div>
-`;
+          <div style="text-align: center; padding: 50px 30px; background: rgba(31, 35, 44, 0.5); border-radius: 16px; border: 1px solid rgba(139, 92, 246, 0.08);">
+            <div style="font-size: 48px; margin-bottom: 20px; opacity: 0.5;">📭</div>
+            <h3 style="color: #f1f5f9; margin-bottom: 10px; font-weight: 600;">Пока нет прогнозов</h3>
+            <p style="font-size: 16px; color: #9ca3af;">Подпишись на каналы, чтобы видеть прогнозы здесь!</p>
+          </div>
+        `;
       }
     })
     .catch(error => {
       console.error('Ошибка загрузки прогнозов:', error);
       container.innerHTML = `
-  <div style="text-align: center; padding: 50px 30px; background: rgba(31, 35, 44, 0.5); border-radius: 16px; border: 1px solid rgba(239, 68, 68, 0.15);">
-    <div style="font-size: 48px; margin-bottom: 20px; opacity: 0.6;">⚠️</div>
-    <h3 style="color: #fca5a5; margin-bottom: 10px; font-weight: 600;">Ошибка загрузки</h3>
-    <p style="font-size: 14px; color: #9ca3af;">Не удалось загрузить прогнозы. Проверь, что сервер запущен.</p>
-    <p style="font-size: 12px; color: #6b7280; margin-top: 10px;">${error.message}</p>
-  </div>
-`;
+        <div style="text-align: center; padding: 50px 30px; background: rgba(31, 35, 44, 0.5); border-radius: 16px; border: 1px solid rgba(239, 68, 68, 0.15);">
+          <div style="font-size: 48px; margin-bottom: 20px; opacity: 0.6;">⚠️</div>
+          <h3 style="color: #fca5a5; margin-bottom: 10px; font-weight: 600;">Ошибка загрузки</h3>
+          <p style="font-size: 14px; color: #9ca3af;">Не удалось загрузить прогнозы. Проверь, что сервер запущен.</p>
+          <p style="font-size: 12px; color: #6b7280; margin-top: 10px;">${error.message}</p>
+        </div>
+      `;
     });
 }
 
@@ -748,10 +956,10 @@ function renderFilteredForecasts() {
 
   if (filtered.length === 0) {
     container.innerHTML = `
-      <div style="text-align: center; padding: 40px 20px; color: #6a5a5a; background: #161010; border-radius: 16px; border: 1px solid #2a1818;">
-        <div style="font-size: 48px; margin-bottom: 20px;">🔍</div>
-        <h3 style="color: #f0e0e0; margin-bottom: 10px;">Нет прогнозов по этому виду спорта</h3>
-        <p style="font-size: 16px; color: #8a7a7a;">Попробуй выбрать другой фильтр</p>
+      <div style="text-align: center; padding: 40px 20px; background: rgba(31, 35, 44, 0.3); border-radius: 16px; border: 1px solid rgba(139, 92, 246, 0.06);">
+        <div style="font-size: 48px; margin-bottom: 20px; opacity: 0.5;">🔍</div>
+        <h3 style="color: #f1f5f9; margin-bottom: 10px; font-weight: 600;">Нет прогнозов по этому виду спорта</h3>
+        <p style="font-size: 16px; color: #9ca3af;">Попробуй выбрать другой фильтр</p>
       </div>
     `;
     return;
@@ -811,45 +1019,45 @@ function renderForecastCards(forecasts) {
     const statsDisplay = f.stats || '';
 
     html += `
-            <div class="forecast-card match-card">
-                <div class="match-header">
-                    <div class="match-tournament">${f.tournament || 'Футбол'}</div>
-                    <div class="match-time">${f.matchTime || 'Время не указано'}</div>
-                </div>
+      <div class="forecast-card match-card">
+        <div class="match-header">
+          <div class="match-tournament">${f.tournament || 'Футбол'}</div>
+          <div class="match-time">${f.matchTime || 'Время не указано'}</div>
+        </div>
 
-                <div class="match-source">Источник: ${f.source || f.channel || '—'}</div>
+        <div class="match-source">Источник: ${f.source || f.channel || '—'}</div>
 
-                <div class="match-main">
-                    <div class="match-teams">
-                        <div class="team home">
-                            <span class="team-name">${f.homeTeam || 'Команда 1'}</span>
-                        </div>
-                        <div class="match-score-wrapper">
-                            <div class="match-score" style="color: ${statusColor}">
-                                ${scoreDisplay}
-                            </div>
-                            <div class="match-status" style="color: ${statusColor}">
-                                ${statusEmojiIcon} ${f.status || 'Скоро'}
-                            </div>
-                        </div>
-                        <div class="team away">
-                            <span class="team-name">${f.awayTeam || 'Команда 2'}</span>
-                        </div>
-                    </div>
-                </div>
-
-                ${statsDisplay ? `
-                <div class="match-stats">
-                    <span>Детальная статистика</span>
-                    <span class="stats-numbers">${statsDisplay}</span>
-                </div>
-                ` : ''}
-
-                <div class="match-footer">
-                    <a href="forecast.html?id=${f.id}" class="match-link">📊 Смотреть прогноз →</a>
-                </div>
+        <div class="match-main">
+          <div class="match-teams">
+            <div class="team home">
+              <span class="team-name">${f.homeTeam || 'Команда 1'}</span>
             </div>
-        `;
+            <div class="match-score-wrapper">
+              <div class="match-score" style="color: ${statusColor}">
+                ${scoreDisplay}
+              </div>
+              <div class="match-status" style="color: ${statusColor}">
+                ${statusEmojiIcon} ${f.status || 'Скоро'}
+              </div>
+            </div>
+            <div class="team away">
+              <span class="team-name">${f.awayTeam || 'Команда 2'}</span>
+            </div>
+          </div>
+        </div>
+
+        ${statsDisplay ? `
+        <div class="match-stats">
+          <span>Детальная статистика</span>
+          <span class="stats-numbers">${statsDisplay}</span>
+        </div>
+        ` : ''}
+
+        <div class="match-footer">
+          <a href="forecast.html?id=${f.id}" class="match-link">📊 Смотреть прогноз →</a>
+        </div>
+      </div>
+    `;
   });
 
   html += '</div>';
@@ -928,7 +1136,7 @@ function getTermsPage() {
     <p>Настоящее Соглашение вступает в силу с момента начала использования сайта Пользователем.</p>
     <p>Все споры и разногласия решаются в соответствии с законодательством Российской Федерации.</p>
 
-    <p style="color:#6a5a5a; font-size:13px; margin-top:30px;">Последнее обновление: 20 июня 2026 года</p>
+    <p style="color:#6b7280; font-size:13px; margin-top:30px;">Последнее обновление: 21 июня 2026 года</p>
 
     <button class="back-btn" onclick="closePage()">← Назад</button>
   `;
@@ -975,9 +1183,9 @@ function getPrivacyPage() {
     </ul>
 
     <p><strong>8. Контакты</strong></p>
-    <p>По всем вопросам, связанным с Политикой конфиденциальности, вы можете обратиться через Telegram: <a href="https://t.me/cup_prognoze_all" style="color:#d42a2a;">@cup_prognoze_all</a></p>
+    <p>По всем вопросам, связанным с Политикой конфиденциальности, вы можете обратиться через Telegram: <a href="https://t.me/cup_prognoze_all" style="color:#a78bfa;">@cup_prognoze_all</a></p>
 
-    <p style="color:#6a5a5a; font-size:13px; margin-top:30px;">Последнее обновление: 20 июня 2026 года</p>
+    <p style="color:#6b7280; font-size:13px; margin-top:30px;">Последнее обновление: 21 июня 2026 года</p>
 
     <button class="back-btn" onclick="closePage()">← Назад</button>
   `;
