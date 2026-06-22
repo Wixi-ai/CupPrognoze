@@ -125,7 +125,7 @@ const bookmakers = [
     rating: 4.8,
     bonus: 'Бонус до 10 000 ₽',
     features: ['⚡ Быстрая регистрация', '📊 Аналитика', '🔒 Надёжность'],
-    link: 'https://trk.ppdu.ru/click?uid=194885&oid=2779&erid=2SDnjdDRjvV&siteId=23676',
+    link: 'https://trk.ppdu.ru/click?uid=194885&oid=1447&erid=*&siteId=23676',
     logo: 'images/bookmakers/pari-logo.png',
     logoBg: 'pari-bg'
   },
@@ -136,7 +136,7 @@ const bookmakers = [
     rating: 4.5,
     bonus: 'Фрибет до 10 000 ₽',
     features: ['🇷🇺 Русский язык', '💳 Быстрый вывод', '🎁 Акции'],
-    link: 'https://trk.ppdu.ru/click?uid=194885&oid=1447&erid=*&siteId=23676',
+    link: 'https://trk.ppdu.ru/click?uid=194885&oid=2779&erid=2SDnjdDRjvV&siteId=23676',
     logo: 'images/bookmakers/winline-logo.png',
     logoBg: 'winline-bg'
   },
